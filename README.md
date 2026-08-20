@@ -79,6 +79,10 @@ actually changed.
 Everything else on those sites — the layout, the capability lookup, the standards
 page — is hand-written and never touched.
 
+One coupling remains: adding a family here also needs a line in the documentation
+repository's `mkdocs.yml` nav, or its page builds but is unreachable. MkDocs
+reports it as an omitted file rather than an error, so check the build output.
+
 ## Standards
 
 Pure Go, `CGO_ENABLED=0`, **zero dependencies**: the two API endpoints needed here

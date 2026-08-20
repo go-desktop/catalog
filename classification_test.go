@@ -11,6 +11,7 @@ const goodClassification = `{
   "readme_standards": "| a | b |\n| --- | --- |\n| CGO | 0 |",
   "reserved_intro": "Held, not built.",
   "readme_outro": "Generated.",
+  "docs_index": "# Home\n\n{{orgs}} orgs, {{repos}} repos.",
   "families": [
     {"key":"desktop","title":"Desktop","blurb":"Widgets.",
      "orgs":[{"org":"go-widgets","role":"The toolkit."}]},
@@ -30,7 +31,7 @@ func TestLoadClassification(t *testing.T) {
 		t.Fatalf("families = %d, want 2", got)
 	}
 	if c.GemsIntro == "" || c.ReadmeIntro == "" || c.ReadmeStandard == "" ||
-		c.ReservedIntro == "" || c.ReadmeOutro == "" {
+		c.ReservedIntro == "" || c.ReadmeOutro == "" || c.DocsIndex == "" {
 		t.Error("a prose section was dropped")
 	}
 	want := []string{"go-widgets", "go-gfx"}
@@ -55,27 +56,28 @@ func TestLoadClassificationErrors(t *testing.T) {
 		{"no standards", `{"gems_intro":"g","readme_intro":"i","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}]}`, "no readme_standards"},
 		{"no reserved intro", `{"gems_intro":"g","readme_intro":"i","readme_standards":"s","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}]}`, "no reserved_intro"},
 		{"no outro", `{"gems_intro":"g","readme_intro":"i","readme_standards":"s","reserved_intro":"r","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}]}`, "no readme_outro"},
-		{"no key", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","families":[{"title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}]}`, "no key"},
-		{"no title", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","families":[{"key":"k","blurb":"B","orgs":[{"org":"o","role":"r"}]}]}`, "no title"},
-		{"no blurb", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","families":[{"key":"k","title":"T","orgs":[{"org":"o","role":"r"}]}]}`, "no blurb"},
-		{"no orgs", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","families":[{"key":"k","title":"T","blurb":"B","orgs":[]}]}`, "no organisations"},
-		{"duplicate family", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","families":[
+		{"no docs index", `{"gems_intro":"g","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}]}`, "no docs_index"},
+		{"no key", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[{"title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}]}`, "no key"},
+		{"no title", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[{"key":"k","blurb":"B","orgs":[{"org":"o","role":"r"}]}]}`, "no title"},
+		{"no blurb", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[{"key":"k","title":"T","orgs":[{"org":"o","role":"r"}]}]}`, "no blurb"},
+		{"no orgs", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[{"key":"k","title":"T","blurb":"B","orgs":[]}]}`, "no organisations"},
+		{"duplicate family", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[
 			{"key":"k","title":"T","blurb":"B","orgs":[{"org":"a","role":"r"}]},
 			{"key":"k","title":"T","blurb":"B","orgs":[{"org":"b","role":"r"}]}]}`, "appears twice"},
-		{"no org name", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"role":"r"}]}]}`, "no organisation"},
-		{"no role", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o"}]}]}`, "no role"},
+		{"no org name", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"role":"r"}]}]}`, "no organisation"},
+		{"no role", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o"}]}]}`, "no role"},
 		// Counted twice is the failure that matters: the page would merely look
 		// odd, but the ecosystem totals would stop adding up.
-		{"org in two families", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","families":[
+		{"org in two families", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[
 			{"key":"a","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]},
 			{"key":"b","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}]}`, "in both"},
-		{"reserved with no name", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}],
+		{"reserved with no name", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}],
 			"reserved":[{"for":"later"}]}`, "reserved entry with no organisation"},
-		{"reserved and classified", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}],
+		{"reserved and classified", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}],
 			"reserved":[{"org":"o","for":"later"}]}`, "reserved but also in"},
-		{"not-go with no name", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}],
+		{"not-go with no name", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}],
 			"not_go":[{"what":"C"}]}`, "not-Go entry with no organisation"},
-		{"not-go with no what", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}],
+		{"not-go with no what", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}],
 			"not_go":[{"org":"libfw"}]}`, "no description"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {

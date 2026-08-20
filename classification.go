@@ -21,6 +21,7 @@ type Classification struct {
 	ReadmeStandard string       `json:"readme_standards"`
 	ReservedIntro  string       `json:"reserved_intro"`
 	ReadmeOutro    string       `json:"readme_outro"`
+	DocsIndex      string       `json:"docs_index"`
 	Families       []Family     `json:"families"`
 	Reserved       []Reserved   `json:"reserved"`
 	NotGo          []NotGoEntry `json:"not_go"`
@@ -78,6 +79,7 @@ func LoadClassification(r io.Reader) (*Classification, error) {
 		{"readme_standards", c.ReadmeStandard},
 		{"reserved_intro", c.ReservedIntro},
 		{"readme_outro", c.ReadmeOutro},
+		{"docs_index", c.DocsIndex},
 	} {
 		if f.value == "" {
 			return nil, fmt.Errorf("classification has no %s", f.name)

@@ -1286,6 +1286,13 @@
     },
     {
       "org": "go-desktop",
+      "name": "catalog",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-desktop",
       "name": "docs",
       "private": false,
       "archived": false,

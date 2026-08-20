@@ -220,3 +220,9 @@ func (c *Catalog) ReservedPage() []byte {
 	}
 	return []byte(b.String())
 }
+
+// DocsIndexPage renders the documentation home page. Its headline is the size of
+// the ecosystem, which is exactly the sentence that must not be hand-kept.
+func (c *Catalog) DocsIndexPage() []byte {
+	return []byte(c.expand(c.DocsIndex) + "\n")
+}
