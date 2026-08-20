@@ -16,6 +16,7 @@ type Catalog struct {
 	ReadmeStandard string
 	ReservedIntro  string
 	ReadmeOutro    string
+	DocsIndex      string
 	Families       []ResolvedFamily
 	Gems           []Gem
 	Reserved       []Reserved
@@ -78,6 +79,7 @@ func Build(c *Classification, inv Inventory) (*Catalog, error) {
 		ReadmeStandard: c.ReadmeStandard,
 		ReservedIntro:  c.ReservedIntro,
 		ReadmeOutro:    c.ReadmeOutro,
+		DocsIndex:      c.DocsIndex,
 		Reserved:       c.Reserved,
 		NotGo:          c.NotGo,
 	}

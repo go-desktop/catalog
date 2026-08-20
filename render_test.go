@@ -141,3 +141,10 @@ func TestReservedPage(t *testing.T) {
 		}
 	}
 }
+
+func TestDocsIndexPage(t *testing.T) {
+	out := string(renderFixture(t).DocsIndexPage())
+	if !strings.Contains(out, "# Home") || !strings.Contains(out, "4 orgs, 6 repos.") {
+		t.Errorf("docs index page = %q", out)
+	}
+}
