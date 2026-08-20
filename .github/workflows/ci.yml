@@ -28,6 +28,37 @@ jobs:
             exit 1
           fi
 
+  # Reconcile the two checked-in inputs on every push.
+  #
+  # The unit tests prove families.json is a *valid* classification; this proves it
+  # still agrees with the ecosystem as last fetched. Editing the curated file is
+  # how a family loses its last organisation or an organisation ends up in two
+  # families at once, and without this lane that is discovered by whoever next
+  # regenerates the map — which is the worst moment to discover it.
+  #
+  # No network and no secret: it reads the committed inventory. Live drift needs a
+  # token that can list every organisation, so it stays a deliberate `catalog
+  # fetch` rather than something CI does behind your back.
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: catalog check
+        run: go run ./cmd/catalog check | tee check.log
+      # `check` exits 0 and prints nothing useful if the inventory were somehow
+      # empty of families, so assert the shape of what it printed.
+      - name: The map is not empty
+        run: |
+          grep -qE '^[0-9]+ organisations, [0-9]+ public code repositories$' check.log || {
+            echo "::error::catalog check printed no summary"; exit 1; }
+          families=$(grep -cE '^  .+ +[0-9]+ orgs$' check.log)
+          echo "families: $families"
+          [ "$families" -ge 10 ] || {
+            echo "::error::only $families families; families.json looks truncated"; exit 1; }
+
   # Build, vet, race-test, and enforce 100% statement coverage on three OSes.
   test:
     name: test (${{ matrix.os }})
