@@ -1,0 +1,596 @@
+{
+  "gems_intro": "A Ruby virtual machine is only useful with a library around it, so each gem the\necosystem needs is reimplemented in pure Go in its own `go-ruby-*` organisation:\nthe standard library, Rails and its dependencies, the testing stack, the Puppet\nstack, database drivers, serialisation formats and template engines.\n\nEvery one of them is byte-compared against MRI where a byte comparison is\nmeaningful — a checksum, a `Marshal` payload, a formatted number. Where it is not\n(a deflate stream, say, whose output is implementation-defined) the requirement is\ninteroperability in both directions instead.\n\nTwo things to know before reaching for one:\n\n- **The gem organisation is the Ruby-facing wrapper, not always the engine.** Some\n  are thin shells over an engine that lives in its own non-Ruby organisation — the\n  regexp gem wraps [`go-regexp/engine`](https://github.com/go-regexp/engine), the\n  sass gem wraps [`go-scss/scss`](https://github.com/go-scss/scss). If you are\n  writing Go rather than Ruby, take the engine.\n- **The repository inside is named after the gem**, not after the organisation:\n  `go-ruby-activerecord/activerecord`.",
+  "families": [
+    {
+      "key": "desktop",
+      "title": "Desktop & widgets",
+      "blurb": "One widget toolkit, every surface it paints on, and the platform plumbing a real desktop needs.",
+      "orgs": [
+        {
+          "org": "go-widgets",
+          "role": "The widget toolkit and every surface it paints on: the painter seam, MVVM, a declarative skin engine, a terminal back-end, a native window on X11, Wayland, Cocoa and Win32, a real Android APK, and a desktop shell."
+        },
+        {
+          "org": "go-freedesktop",
+          "role": "freedesktop.org integration — .desktop entries, icon themes, shared MIME info, application associations, the menu tree, desktop notifications and Secret Service."
+        },
+        {
+          "org": "go-iconoir",
+          "role": "The whole Iconoir set — 1,671 SVGs embedded and rendered to anti-aliased coverage masks for the toolkit painter."
+        },
+        {
+          "org": "go-thumbnail",
+          "role": "The freedesktop Thumbnail Managing Standard cache."
+        },
+        {
+          "org": "go-keyring",
+          "role": "One secret store over macOS Keychain, Windows Credential Manager and Linux Secret Service — no cgo, no CLI exec."
+        },
+        {
+          "org": "go-macos",
+          "role": "The macOS foundation: the shared Objective-C runtime bridge over purego, plus Keychain and notifications."
+        },
+        {
+          "org": "go-mswin",
+          "role": "The Windows foundation: Win32 bindings and WinRT interop on combase — peer of go-macos/objc."
+        },
+        {
+          "org": "wasmdesk",
+          "role": "A desktop in the browser — a Wayland-inspired compositor and window manager, a dock, a login portal, OCI app packaging and a coreutils suite."
+        }
+      ]
+    },
+    {
+      "key": "graphics",
+      "title": "Graphics, images & media",
+      "blurb": "The 2D socle everything above draws through, and the pixels and frames it moves.",
+      "orgs": [
+        {
+          "org": "go-gfx",
+          "role": "The shared 2D socle: an anti-aliased vector rasteriser, a raster surface, colour, geometry, resampling, and SVG to bitmap."
+        },
+        {
+          "org": "go-images",
+          "role": "Image processing at scikit-image scope."
+        },
+        {
+          "org": "go-avkit",
+          "role": "An audio/video toolkit — MP4/ISO-BMFF and Matroska/WebM demuxing."
+        }
+      ]
+    },
+    {
+      "key": "docs",
+      "title": "Documents, typesetting & fonts",
+      "blurb": "Turning a document into pages: fonts, breaking, shaping, TeX, PDF, and one rich-document model.",
+      "orgs": [
+        {
+          "org": "go-tex",
+          "role": "A TeX engine — mouth and gullet, math mode to SVG, a PDF-figure rasteriser, and a fetcher that gets a document the class files it asks for without redistributing any."
+        },
+        {
+          "org": "go-typeset",
+          "role": "The typesetting algorithms on their own, with no TeX vocabulary in the API: Knuth-Plass line breaking, Liang hyphenation, the Unicode bidirectional algorithm."
+        },
+        {
+          "org": "go-opentype",
+          "role": "The font format: TrueType/OpenType parsing and anti-aliased rasterisation, a HarfBuzz-lite complex-text shaper, and legible fonts ready to import."
+        },
+        {
+          "org": "go-synctex",
+          "role": "TeX's SyncTeX — the source-to-PDF correspondence, both ways."
+        },
+        {
+          "org": "go-pdfkit",
+          "role": "A PDF 1.7 writer: font subsetting and embedding for TrueType and CFF, graphics, images, shaped text."
+        },
+        {
+          "org": "go-richdoc",
+          "role": "One rich-document model, and the converters that read and write it."
+        },
+        {
+          "org": "go-odf",
+          "role": "OpenDocument Text, in and out of the richdoc model."
+        },
+        {
+          "org": "go-rtf",
+          "role": "RTF, in and out of the richdoc model."
+        }
+      ]
+    },
+    {
+      "key": "markup",
+      "title": "Markup, templating & text",
+      "blurb": "Reading and writing the formats documents arrive in, and the engines that scan them.",
+      "orgs": [
+        {
+          "org": "go-commonmark",
+          "role": "Strict CommonMark 0.31.2 to HTML — all 652 spec examples."
+        },
+        {
+          "org": "go-kramdown",
+          "role": "kramdown-flavoured Markdown, as Jekyll uses it."
+        },
+        {
+          "org": "go-nokogiri",
+          "role": "HTML and XML: parse, query, mutate, serialise."
+        },
+        {
+          "org": "go-xslt",
+          "role": "XSLT transformation."
+        },
+        {
+          "org": "go-scss",
+          "role": "A Sass/SCSS compiler with Dart-Sass-compatible output — the engine behind the Ruby sass gem."
+        },
+        {
+          "org": "go-mustache",
+          "role": "Logic-less Mustache templating, spec-faithful."
+        },
+        {
+          "org": "go-liquid",
+          "role": "Shopify's Liquid template engine, gem-faithful."
+        },
+        {
+          "org": "go-rouge",
+          "role": "A Rouge/Pygments-class syntax highlighter — per-language lexers, token types, named themes."
+        },
+        {
+          "org": "go-regexp",
+          "role": "An Onigmo engine shaped like the standard library's regexp, with the lookaround and backreferences RE2 cannot do."
+        },
+        {
+          "org": "go-datetime",
+          "role": "A lenient parser for the dates people actually write."
+        }
+      ]
+    },
+    {
+      "key": "web",
+      "title": "Web & transports",
+      "blurb": "Rendering a page without a browser, and carrying gRPC where gRPC does not go.",
+      "orgs": [
+        {
+          "org": "go-webengine",
+          "role": "A headless web engine: HTML and CSS laid out and painted to an image, with no Chromium — plus a service that streams those frames to a thin client."
+        },
+        {
+          "org": "go-browserhttp",
+          "role": "An http.Client that presents a Chrome TLS fingerprint."
+        },
+        {
+          "org": "go-lsp-bridge",
+          "role": "A WebSocket-to-stdio bridge for JSON-RPC language-server traffic."
+        },
+        {
+          "org": "grpc-transports",
+          "role": "gRPC where it is not supposed to go: over SSH, WireGuard, vsock, WebSocket and WebRTC."
+        }
+      ]
+    },
+    {
+      "key": "collab",
+      "title": "Realtime collaboration",
+      "blurb": "Many people, one document, no server deciding who won.",
+      "orgs": [
+        {
+          "org": "go-crdt",
+          "role": "A replicated text document and the service that carries it between the people editing it — the same merge logic on the server and in the browser, via js/wasm."
+        },
+        {
+          "org": "go-yjs-relay",
+          "role": "A Yjs y-websocket relay hub, transport-agnostic."
+        }
+      ]
+    },
+    {
+      "key": "ruby",
+      "title": "Ruby, in Go",
+      "blurb": "A Ruby virtual machine, its object model, and one organisation per gem it needs.",
+      "orgs": [
+        {
+          "org": "go-embedded-ruby",
+          "role": "The Ruby virtual machine — YARV bytecode, the object model, the core library, and the rbgo interpreter."
+        },
+        {
+          "org": "go-composites",
+          "role": "Ruby's numeric tower, collections, time and dates as composition-oriented building blocks: Result-based, Null-Object, never nil."
+        },
+        {
+          "org": "go-ruby-widgets",
+          "role": "MVVM, widgets and a terminal toolkit, addressable from Ruby."
+        },
+        {
+          "org": "go-vet-analyzers",
+          "role": "go vet analyzers that make the ecosystem's invariants a compile-time matter."
+        }
+      ]
+    },
+    {
+      "key": "numerics",
+      "title": "CPU, SIMD & numerics",
+      "blurb": "Getting the machine's width out of pure Go, on all six 64-bit targets.",
+      "orgs": [
+        {
+          "org": "go-asmgen",
+          "role": "Ergonomic generation of Go-compatible Plan 9 assembly for every 64-bit Go target."
+        },
+        {
+          "org": "go-simd",
+          "role": "SIMD kernels on all six of Go's 64-bit targets — codecs, hashes, string scans, bitsets, float and int8 dot products."
+        },
+        {
+          "org": "go-ndarray",
+          "role": "A numpy-shaped n-dimensional array, with GEMM at vecLib parity."
+        },
+        {
+          "org": "go-fft",
+          "role": "Fast Fourier transforms at numpy and scipy accuracy, without FFTW."
+        }
+      ]
+    },
+    {
+      "key": "compress",
+      "title": "Compression, delta & erasure",
+      "blurb": "Making bytes smaller, sending only what changed, and surviving what is lost.",
+      "orgs": [
+        {
+          "org": "go-compressions",
+          "role": "LZFSE, LZ4, deflate and BLAKE3, with the CLIs that go with them."
+        },
+        {
+          "org": "go-deltasync",
+          "role": "Delta transfer: zsync2, rdiff, zchunk, vcdiff, bita — and the one content-defined chunker they all import."
+        },
+        {
+          "org": "go-erasure",
+          "role": "Erasure coding: Reed-Solomon over GF(2^16), and the Mojette transform."
+        }
+      ]
+    },
+    {
+      "key": "storage",
+      "title": "Storage, volumes & filesystems",
+      "blurb": "From a block device to a mounted filesystem, without a C library anywhere.",
+      "orgs": [
+        {
+          "org": "go-volumes",
+          "role": "The block layer — a device contract, NBD, pools, replicas, S3, an OCI image as a block device, GPT and MBR, and parse-hardening guards."
+        },
+        {
+          "org": "go-filesystems",
+          "role": "Filesystem-format drivers — ext4, xfs, btrfs, zfs, apfs, ntfs, exfat, fat32, iso9660, squashfs and more — plus UEFI variable management and a format prober."
+        },
+        {
+          "org": "go-diskimages",
+          "role": "Disk-image formats: qcow2, raw, dmg, tart-oci, in either direction."
+        },
+        {
+          "org": "go-fsctl",
+          "role": "Linux kernel ioctl wrappers — zfs, btrfs, loop, device-mapper, block, copy-on-write clones."
+        },
+        {
+          "org": "go-fde",
+          "role": "Full-disk encryption: LUKS, APFS, and the plumbing that opens them."
+        },
+        {
+          "org": "go-encryptions",
+          "role": "The modes underneath: CCM, XTS, ZFS crypto."
+        }
+      ]
+    },
+    {
+      "key": "boot",
+      "title": "Firmware, boot & trust",
+      "blurb": "What runs before the kernel, and how you prove what ran.",
+      "orgs": [
+        {
+          "org": "go-tpm2",
+          "role": "TPM 2.0 end to end: transports, the command layer, EFI_TCG2, measured boot, event-log replay and remote attestation."
+        },
+        {
+          "org": "go-coff",
+          "role": "PE/COFF for UEFI — an object-to-EFI linker, a signing and conversion CLI, and a self-extracting EFI packer."
+        },
+        {
+          "org": "go-bootloaders",
+          "role": "GRUB and systemd-boot tooling, composed on the storage, UEFI and TPM stacks rather than reimplementing them."
+        },
+        {
+          "org": "cloud-boot",
+          "role": "Booting the machine: a TamaGo UEFI payload, a unified kernel image, an init, kernels, ISOs, SEV-SNP."
+        },
+        {
+          "org": "nano-container-linux",
+          "role": "A minimal container host — OCI initrd and PXE boot, a DNS daemon, an OpenPubKey agent."
+        }
+      ]
+    },
+    {
+      "key": "supply",
+      "title": "Packaging & supply chain",
+      "blurb": "Building every dependency from source, signing it, and saying where it came from.",
+      "orgs": [
+        {
+          "org": "go-pkgx",
+          "role": "A pure-Go pkgx: the package manager, the bottle installer, the bk recipe builder, and the CI factory that publishes signed bottles."
+        },
+        {
+          "org": "go-attest",
+          "role": "SPDX and CycloneDX SBOMs, SLSA provenance, and Ed25519 signing that is minisign- and cosign-interoperable from one keypair."
+        },
+        {
+          "org": "go-versions",
+          "role": "Loose, pkgx-compatible semantic versions and ranges, CalVer included."
+        }
+      ]
+    },
+    {
+      "key": "cloud",
+      "title": "Virtualisation, cloud & network",
+      "blurb": "microVMs, guest drivers, supervision, coordination and the network between them.",
+      "orgs": [
+        {
+          "org": "openweft",
+          "role": "weft — a Go-native microVM cloud: drivers, network, block storage, HA services, runners, clients, native apps, and the loom editor built on it."
+        },
+        {
+          "org": "go-virtio",
+          "role": "Guest virtio drivers: net, blk, gpu with virgl and Venus, console, rng, vsock, balloon, fs, sound, input."
+        },
+        {
+          "org": "go-proc",
+          "role": "A PID-1 subreaper and process supervisor, and the restart state machine that decides when to try again."
+        },
+        {
+          "org": "go-coord",
+          "role": "Cross-host coordination on etcd v3: host liveness, watches, leader election."
+        },
+        {
+          "org": "go-net-dhcp",
+          "role": "A dependency-free DHCPv4 server library."
+        },
+        {
+          "org": "go-net-health",
+          "role": "Active health probes — stateless TCP and HTTP checks folded into a rolling verdict."
+        },
+        {
+          "org": "cloud-pool-managers",
+          "role": "VM pool management."
+        },
+        {
+          "org": "claimward",
+          "role": "A WireGuard VPN with OIDC: the server, the client, and desktop apps for macOS, Linux and Windows."
+        }
+      ]
+    },
+    {
+      "key": "config",
+      "title": "Configuration management",
+      "blurb": "The Puppet stack, in Go, without a Ruby runtime.",
+      "orgs": [
+        {
+          "org": "go-puppet",
+          "role": "The Puppet language and its catalogue compiler."
+        },
+        {
+          "org": "go-pcore",
+          "role": "Puppet's Pcore type system: type calculus, parser, value model, assignability lattice."
+        },
+        {
+          "org": "go-puppetdb",
+          "role": "PuppetDB."
+        },
+        {
+          "org": "go-puppet-bolt",
+          "role": "Bolt — task and plan orchestration over SSH and WinRM."
+        },
+        {
+          "org": "go-facter",
+          "role": "Fact collection."
+        },
+        {
+          "org": "go-hiera",
+          "role": "Hierarchical data lookup."
+        },
+        {
+          "org": "go-eyaml",
+          "role": "eyaml — encrypted values inside Hiera data."
+        },
+        {
+          "org": "go-hocon",
+          "role": "HOCON configuration."
+        },
+        {
+          "org": "go-augeas",
+          "role": "The Augeas engine: a config tree, path expressions and lenses."
+        }
+      ]
+    },
+    {
+      "key": "social",
+      "title": "News, social & feeds",
+      "blurb": "One reader, and a client per source it reads.",
+      "orgs": [
+        {
+          "org": "go-news-reader",
+          "role": "A multi-source news and social aggregator with a go-widgets interface — Reddit, RSS, Hacker News, Usenet, Mastodon, Lemmy, Bluesky and more in one reader."
+        },
+        {
+          "org": "go-syndication",
+          "role": "RSS, Atom and JSON Feed: parse and fetch."
+        },
+        {
+          "org": "go-newsgroups",
+          "role": "Usenet, whole: NNTP, yEnc, Newznab, NZB, PAR2."
+        },
+        {
+          "org": "go-reddit",
+          "role": "A Reddit read client, and a reader built on it."
+        },
+        {
+          "org": "go-mastodon",
+          "role": "A Mastodon read client."
+        },
+        {
+          "org": "go-lemmy",
+          "role": "A Lemmy read client."
+        },
+        {
+          "org": "go-hackernews",
+          "role": "A Hacker News read client."
+        },
+        {
+          "org": "go-atproto",
+          "role": "A Bluesky / AT Protocol read client."
+        },
+        {
+          "org": "go-birdsite",
+          "role": "A best-effort read client for public Twitter/X timelines."
+        },
+        {
+          "org": "go-instagram",
+          "role": "A best-effort read client for public Instagram profiles."
+        },
+        {
+          "org": "go-tiktok",
+          "role": "A best-effort read client for public TikTok profiles."
+        },
+        {
+          "org": "go-dimail",
+          "role": "A client for Dimail, the mail-hosting API of the French government's La Suite numérique."
+        }
+      ]
+    },
+    {
+      "key": "games",
+      "title": "Games",
+      "blurb": "Two engines hand-ported to pure Go, one of them onto bare metal.",
+      "orgs": [
+        {
+          "org": "go-quake1",
+          "role": "Quake 1, hand-ported from tyrquake, with a bare-metal target."
+        },
+        {
+          "org": "go-doom",
+          "role": "DOOM, hand-ported through the gore lineage, with a TamaGo bare-metal back-end."
+        }
+      ]
+    },
+    {
+      "key": "map",
+      "title": "The map itself",
+      "blurb": "The one thing this organisation does hold: the tool that generates every page here.",
+      "orgs": [
+        {
+          "org": "go-desktop",
+          "role": "The generator. It reads the live GitHub organisation list and reconciles it against a curated classification, then writes the landing configuration, the family pages, the gem list and this profile. The reconciliation is the point: an organisation that holds code but is in no family fails the build, so the index cannot quietly omit something that exists."
+        }
+      ]
+    }
+  ],
+  "reserved": [
+    {
+      "org": "go-graphdrawing",
+      "for": "Graph-drawing algorithms — Sugiyama layering, force-directed placement, trees. Measured and deliberately deferred: pgf's graphdrawing is used by 5 documents in a 10,025-talk corpus."
+    },
+    {
+      "org": "go-grub",
+      "for": "Superseded in practice by go-bootloaders/grub."
+    },
+    {
+      "org": "go-quake2",
+      "for": "A Quake II engine, after go-quake1."
+    },
+    {
+      "org": "go-quake3",
+      "for": "A Quake III engine."
+    },
+    {
+      "org": "go-sicp",
+      "for": "Reserved."
+    },
+    {
+      "org": "pocketdesk",
+      "for": "Reserved; carries brand and site repositories only."
+    },
+    {
+      "org": "ssh-tools",
+      "for": "Reserved."
+    },
+    {
+      "org": "configuration-management-tool",
+      "for": "Reserved; the working configuration-management stack is the go-puppet* family."
+    },
+    {
+      "org": "go-ruby-atproto",
+      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
+    },
+    {
+      "org": "go-ruby-birdsite",
+      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
+    },
+    {
+      "org": "go-ruby-hackernews",
+      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
+    },
+    {
+      "org": "go-ruby-instagram",
+      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
+    },
+    {
+      "org": "go-ruby-mastodon",
+      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
+    },
+    {
+      "org": "go-ruby-newsgroups",
+      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
+    },
+    {
+      "org": "go-ruby-syndication",
+      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
+    },
+    {
+      "org": "go-ruby-tiktok",
+      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
+    }
+  ],
+  "not_go": [
+    {
+      "org": "libfw",
+      "what": "A stateful L3/L4 packet filter, in C."
+    },
+    {
+      "org": "libhcl",
+      "what": "HCL and HCL2 parsers, in C."
+    },
+    {
+      "org": "jupytercloud-project",
+      "what": "JupyterHub on OpenStack — images, provisioners and infrastructure, mostly not Go."
+    },
+    {
+      "org": "openstack-continuous-integration",
+      "what": "OpenStack CI images and provisioners (Dockerfile, HCL)."
+    },
+    {
+      "org": "openstack-terraform-modules",
+      "what": "Terraform modules for OpenStack (HCL)."
+    },
+    {
+      "org": "plmteam-mathrice",
+      "what": "Esup-Pod deployment (JavaScript)."
+    },
+    {
+      "org": "resinfo-gt-cloud",
+      "what": "RESINFO cloud working-group material (shell, Groovy)."
+    },
+    {
+      "org": "mash-installers",
+      "what": "A service installer (shell)."
+    }
+  ],
+  "readme_intro": "<p align=\"center\"><img src=\"https://raw.githubusercontent.com/go-desktop/brand/main/social/go-desktop.png\" alt=\"go-desktop\" width=\"720\"></p>\n\n# go-desktop\n\n**A map of one pure-Go ecosystem — {{summary}}, no C anywhere.**\n\nThis organisation holds no library. It holds the index — and the tool that\ngenerates it, so that no number on any of these pages is typed by hand.\n\nEvery library in the map is written in Go and compiled with `CGO_ENABLED=0`. That\nis not a stylistic preference: it is what makes one binary cross-compile to six\narchitectures, run inside a browser as WebAssembly, and boot on bare metal without\na libc. Where a good pure-Go library already exists it is used rather than\nrewritten; where the only option was a C library behind cgo, the capability was\nrebuilt.\n\nThe ecosystem is split into **one organisation per domain and one repository per\ncapability**, so a program that needs an ext4 reader takes an ext4 reader and not a\nstorage framework.\n\n🌐 **[go-desktop.github.io](https://go-desktop.github.io/)** — the same map, browsable · 📚 **[Documentation](https://go-desktop.github.io/docs/)** — with a [capability lookup](https://go-desktop.github.io/docs/latest/finding/): what you need, and the module that already does it.",
+  "readme_standards": "| | |\n| --- | --- |\n| **`CGO_ENABLED=0`** | No cgo, and no shelling out to a command-line tool in place of a library. A dependency is a Go module or it is written. |\n| **Six 64-bit targets** | amd64, arm64, riscv64, loong64, ppc64le, s390x — native where runners exist, under qemu-user otherwise. s390x is big-endian, which keeps every on-disk and on-wire encoding honest. |\n| **100% statement coverage** | A CI gate, error branches included. A skipped test is not a passing one: jobs fail when a toolchain is missing rather than turning green quietly. |\n| **Measured, not asserted** | Performance claims come with a benchmark against the reference implementation; format claims come with a byte comparison against it. Decoders are fuzzed. |\n| **One landing, one docs site** | A Hugo landing at `<org>.github.io` and versioned MkDocs Material docs at `<org>.github.io/docs/`, same brand, light/dark/system theme toggle. |\n| **BSD-3-Clause** | Every repository, every organisation. |",
+  "reserved_intro": "These organisation names are reserved and empty. They are listed so the map has no\nsilent gaps: an empty organisation is not a shipped one, and a name that looks like\na capability is the easiest way to believe a capability exists.",
+  "readme_outro": "Counts are the public repositories that hold code; `.github`, `brand`, `docs` and\n`<org>.github.io` are excluded. This file is generated by\n[`go-desktop/catalog`](https://github.com/go-desktop/catalog) from the live GitHub\norganisation list — edit `families.json` there, not this page. BSD-3-Clause · brand\nassets in [go-desktop/brand](https://github.com/go-desktop/brand)."
+}
