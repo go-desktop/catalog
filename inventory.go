@@ -38,7 +38,13 @@ func WriteInventory(path string, inv Inventory) error {
 	sort.Strings(orgs)
 	sorted := make(Inventory, len(inv))
 	for _, org := range orgs {
-		repos := append([]Repo(nil), inv[org]...)
+		// An organisation holding nothing is written as [], not null. Go treats a
+		// nil slice as empty, so the distinction is invisible here — but the file
+		// is a published artifact, and the whole point of keeping an empty
+		// organisation in the inventory is that "holds nothing" and "does not
+		// exist" are different answers. null blurs exactly that.
+		repos := make([]Repo, 0, len(inv[org]))
+		repos = append(repos, inv[org]...)
 		sort.Slice(repos, func(i, j int) bool { return repos[i].Name < repos[j].Name })
 		sorted[org] = repos
 	}

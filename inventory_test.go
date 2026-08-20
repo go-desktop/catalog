@@ -13,6 +13,7 @@ func TestWriteAndReadInventory(t *testing.T) {
 	in := Inventory{
 		"zeta":  {{Org: "zeta", Name: "b"}, {Org: "zeta", Name: "a"}},
 		"alpha": {{Org: "alpha", Name: "x"}},
+		"empty": nil,
 	}
 	if err := WriteInventory(path, in); err != nil {
 		t.Fatalf("WriteInventory: %v", err)
@@ -30,11 +31,17 @@ func TestWriteAndReadInventory(t *testing.T) {
 		t.Error("repositories are not sorted within an organisation")
 	}
 
+	// An empty organisation is written as [], not null: the file is published, and
+	// a consumer must be able to tell "holds nothing" from "does not exist".
+	if !strings.Contains(string(raw), `"empty": []`) {
+		t.Errorf("an empty organisation was not written as []:\n%s", raw)
+	}
+
 	out, err := ReadInventory(path)
 	if err != nil {
 		t.Fatalf("ReadInventory: %v", err)
 	}
-	if len(out) != 2 || out["zeta"][0].Name != "a" {
+	if len(out) != 3 || out["zeta"][0].Name != "a" {
 		t.Errorf("round trip = %+v", out)
 	}
 }

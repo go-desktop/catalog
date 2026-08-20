@@ -1276,6 +1276,7 @@
     {
       "archived": false,
       "fork": false,
+      "language": "Go",
       "name": "catalog",
       "org": "go-desktop",
       "private": false
@@ -2125,7 +2126,7 @@
       "private": false
     }
   ],
-  "go-grub": null,
+  "go-grub": [],
   "go-hackernews": [
     {
       "archived": false,
@@ -4230,7 +4231,7 @@
       "private": false
     }
   ],
-  "go-ruby-atproto": null,
+  "go-ruby-atproto": [],
   "go-ruby-augeas": [
     {
       "archived": false,
@@ -4468,7 +4469,7 @@
       "private": false
     }
   ],
-  "go-ruby-birdsite": null,
+  "go-ruby-birdsite": [],
   "go-ruby-bleve": [
     {
       "archived": false,
@@ -6157,7 +6158,7 @@
       "private": false
     }
   ],
-  "go-ruby-hackernews": null,
+  "go-ruby-hackernews": [],
   "go-ruby-haml": [
     {
       "archived": false,
@@ -6548,7 +6549,7 @@
       "private": false
     }
   ],
-  "go-ruby-instagram": null,
+  "go-ruby-instagram": [],
   "go-ruby-ipaddr": [
     {
       "archived": false,
@@ -7099,7 +7100,7 @@
       "private": false
     }
   ],
-  "go-ruby-mastodon": null,
+  "go-ruby-mastodon": [],
   "go-ruby-matrix": [
     {
       "archived": false,
@@ -7766,7 +7767,7 @@
       "private": false
     }
   ],
-  "go-ruby-newsgroups": null,
+  "go-ruby-newsgroups": [],
   "go-ruby-nokogiri": [
     {
       "archived": false,
@@ -10478,7 +10479,7 @@
       "private": false
     }
   ],
-  "go-ruby-syndication": null,
+  "go-ruby-syndication": [],
   "go-ruby-syslog": [
     {
       "archived": false,
@@ -10557,7 +10558,7 @@
       "private": false
     }
   ],
-  "go-ruby-tiktok": null,
+  "go-ruby-tiktok": [],
   "go-ruby-time": [
     {
       "archived": false,
@@ -11293,7 +11294,7 @@
       "private": false
     }
   ],
-  "go-sicp": null,
+  "go-sicp": [],
   "go-simd": [
     {
       "archived": false,
@@ -11850,7 +11851,7 @@
     {
       "archived": false,
       "fork": false,
-      "language": "CSS",
+      "language": "HTML",
       "name": "go-typeset.github.io",
       "org": "go-typeset",
       "private": false
