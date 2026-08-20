@@ -261,7 +261,7 @@
       "language": "Go"
     }
   ],
-  "configuration-management-tool": null,
+  "configuration-management-tool": [],
   "deskplan": [
     {
       "org": "deskplan",
@@ -1289,7 +1289,8 @@
       "name": "catalog",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-desktop",
@@ -2175,7 +2176,7 @@
       "language": "CSS"
     }
   ],
-  "go-grub": null,
+  "go-grub": [],
   "go-hackernews": [
     {
       "org": "go-hackernews",
@@ -4280,7 +4281,7 @@
       "language": "HTML"
     }
   ],
-  "go-ruby-atproto": null,
+  "go-ruby-atproto": [],
   "go-ruby-augeas": [
     {
       "org": "go-ruby-augeas",
@@ -4518,7 +4519,7 @@
       "language": "HTML"
     }
   ],
-  "go-ruby-birdsite": null,
+  "go-ruby-birdsite": [],
   "go-ruby-bleve": [
     {
       "org": "go-ruby-bleve",
@@ -6246,7 +6247,7 @@
       "language": "Go"
     }
   ],
-  "go-ruby-hackernews": null,
+  "go-ruby-hackernews": [],
   "go-ruby-haml": [
     {
       "org": "go-ruby-haml",
@@ -6637,7 +6638,7 @@
       "language": "Go"
     }
   ],
-  "go-ruby-instagram": null,
+  "go-ruby-instagram": [],
   "go-ruby-ipaddr": [
     {
       "org": "go-ruby-ipaddr",
@@ -7188,7 +7189,7 @@
       "language": "Go"
     }
   ],
-  "go-ruby-mastodon": null,
+  "go-ruby-mastodon": [],
   "go-ruby-matrix": [
     {
       "org": "go-ruby-matrix",
@@ -7855,7 +7856,7 @@
       "language": "Go"
     }
   ],
-  "go-ruby-newsgroups": null,
+  "go-ruby-newsgroups": [],
   "go-ruby-nokogiri": [
     {
       "org": "go-ruby-nokogiri",
@@ -10567,7 +10568,7 @@
       "language": "Go"
     }
   ],
-  "go-ruby-syndication": null,
+  "go-ruby-syndication": [],
   "go-ruby-syslog": [
     {
       "org": "go-ruby-syslog",
@@ -10646,7 +10647,7 @@
       "language": "Go"
     }
   ],
-  "go-ruby-tiktok": null,
+  "go-ruby-tiktok": [],
   "go-ruby-time": [
     {
       "org": "go-ruby-time",
@@ -11382,7 +11383,7 @@
       "language": "Go"
     }
   ],
-  "go-sicp": null,
+  "go-sicp": [],
   "go-simd": [
     {
       "org": "go-simd",
@@ -11942,7 +11943,7 @@
       "private": false,
       "archived": false,
       "fork": false,
-      "language": "CSS"
+      "language": "HTML"
     },
     {
       "org": "go-typeset",
@@ -13637,7 +13638,7 @@
       "language": "Groovy"
     }
   ],
-  "ssh-tools": null,
+  "ssh-tools": [],
   "wasmdesk": [
     {
       "org": "wasmdesk",
