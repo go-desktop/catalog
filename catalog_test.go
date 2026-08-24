@@ -24,7 +24,7 @@ func fixtureInventory() Inventory {
 		"go-ruby-json":           {{Name: "json"}},
 		"go-ruby-stdlib":         {{Name: "stdlib"}, {Name: "renovate-runner"}},
 		"go-quake2":              {},                                // reserved, empty
-		"example-c":                  {{Name: "c-fw"}},                  // not Go
+		"example-c":              {{Name: "c-fw"}},                  // not Go
 		"go-desktop":             {{Name: "brand"}, {Name: "docs"}}, // infra only
 		"all-private":            {{Name: "thing", Private: true}},  // invisible
 		"go-ruby-empty-reserved": {},                                // a gem name with no code

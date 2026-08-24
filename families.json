@@ -1,9 +1,10 @@
 {
-  "docs_index": "# The pure-Go ecosystem\n\n**{{orgs}} organisations. {{repos}} public code repositories. No C anywhere.**\n\n`go-desktop` holds no library. It holds the index — a way to find a capability\nwithout already knowing which organisation owns it — and\n[the tool](https://github.com/go-desktop/catalog) that generates it, so that no\nnumber on these pages is typed by hand.\n\nEvery library in the map is written in Go and compiled with `CGO_ENABLED=0`. That\nis not a stylistic preference. It is what makes one binary cross-compile to six\narchitectures, run inside a browser as WebAssembly, and boot on bare metal without\na libc — three things a single cgo dependency takes away permanently.\n\n## How the map is organised\n\n**One organisation per domain, one repository per capability.** A program that\nneeds an ext4 reader takes an ext4 reader, not a storage framework. This is why\nthere are {{orgs}} organisations rather than a handful of monorepos: the unit of reuse\nis the capability, and a capability that lives in its own module can be depended\non without dragging in the rest of its family.\n\nThe consequence to be aware of is that the map itself has to be maintained — which\nis what this site is for. Before building anything, look here first: the recurring\nfailure mode in an ecosystem this wide is rebuilding something that already exists\none organisation over.\n\n## Where to start\n\n- **[Find a capability](finding.md)** — a lookup from what you need to where it lives.\n- **[What every repository is held to](standards.md)** — the conformance standard, in full.\n- The {{families}} families, in the navigation on the left.\n- **[Ruby gems](gems.md)** — the {{gems}} per-gem organisations, alphabetically.\n- **[Held, not yet built](reserved.md)** — reserved names, and the stacks that are not Go.\n\n## Reading a count\n\nEvery repository count on this site is the number of **public repositories that\nhold code**. The four infrastructure repositories every organisation carries —\n`.github`, `brand`, `docs` and `<org>.github.io` — are excluded, because counting\nthem would inflate a one-library organisation to five.\n\nCounts were measured against the live GitHub organisation list rather than\nrecalled, and the generated pages carry no hand-typed numbers.",
+  "gems_intro": "A Ruby virtual machine is only useful with a library around it, so each gem the\necosystem needs is reimplemented in pure Go in its own `go-ruby-*` organisation:\nthe standard library, Rails and its dependencies, the testing stack, the Puppet\nstack, database drivers, serialisation formats and template engines.\n\nEvery one of them is byte-compared against MRI where a byte comparison is\nmeaningful — a checksum, a `Marshal` payload, a formatted number. Where it is not\n(a deflate stream, say, whose output is implementation-defined) the requirement is\ninteroperability in both directions instead.\n\nTwo things to know before reaching for one:\n\n- **The gem organisation is the Ruby-facing wrapper, not always the engine.** Some\n  are thin shells over an engine that lives in its own non-Ruby organisation — the\n  regexp gem wraps [`go-regexp/engine`](https://github.com/go-regexp/engine), the\n  sass gem wraps [`go-scss/scss`](https://github.com/go-scss/scss). If you are\n  writing Go rather than Ruby, take the engine.\n- **The repository inside is named after the gem**, not after the organisation:\n  `go-ruby-activerecord/activerecord`.",
   "families": [
     {
-      "blurb": "One widget toolkit, every surface it paints on, and the platform plumbing a real desktop needs.",
       "key": "desktop",
+      "title": "Desktop & widgets",
+      "blurb": "One widget toolkit, every surface it paints on, and the platform plumbing a real desktop needs.",
       "orgs": [
         {
           "org": "go-widgets",
@@ -37,12 +38,12 @@
           "org": "wasmdesk",
           "role": "A desktop in the browser — a Wayland-inspired compositor and window manager, a dock, a login portal, OCI app packaging and a coreutils suite."
         }
-      ],
-      "title": "Desktop & widgets"
+      ]
     },
     {
-      "blurb": "The 2D socle everything above draws through, and the pixels and frames it moves.",
       "key": "graphics",
+      "title": "Graphics, images & media",
+      "blurb": "The 2D socle everything above draws through, and the pixels and frames it moves.",
       "orgs": [
         {
           "org": "go-gfx",
@@ -68,12 +69,12 @@
           "org": "go-xrkit",
           "role": "Immersive video on XR glasses: head orientation, stereo frame packing, flat, equirectangular and fisheye projection, and a player that drives the glasses' own display."
         }
-      ],
-      "title": "Graphics, images & media"
+      ]
     },
     {
-      "blurb": "Turning a document into pages: fonts, breaking, shaping, TeX, PDF, and one rich-document model.",
       "key": "docs",
+      "title": "Documents, typesetting & fonts",
+      "blurb": "Turning a document into pages: fonts, breaking, shaping, TeX, PDF, and one rich-document model.",
       "orgs": [
         {
           "org": "go-tex",
@@ -107,12 +108,12 @@
           "org": "go-rtf",
           "role": "RTF, in and out of the richdoc model."
         }
-      ],
-      "title": "Documents, typesetting & fonts"
+      ]
     },
     {
-      "blurb": "Reading and writing the formats documents arrive in, and the engines that scan them.",
       "key": "markup",
+      "title": "Markup, templating & text",
+      "blurb": "Reading and writing the formats documents arrive in, and the engines that scan them.",
       "orgs": [
         {
           "org": "go-commonmark",
@@ -154,12 +155,12 @@
           "org": "go-datetime",
           "role": "A lenient parser for the dates people actually write."
         }
-      ],
-      "title": "Markup, templating & text"
+      ]
     },
     {
-      "blurb": "Rendering a page without a browser, and carrying gRPC where gRPC does not go.",
       "key": "web",
+      "title": "Web & transports",
+      "blurb": "Rendering a page without a browser, and carrying gRPC where gRPC does not go.",
       "orgs": [
         {
           "org": "go-webengine",
@@ -177,12 +178,12 @@
           "org": "grpc-transports",
           "role": "gRPC where it is not supposed to go: over SSH, WireGuard, vsock, WebSocket and WebRTC."
         }
-      ],
-      "title": "Web & transports"
+      ]
     },
     {
-      "blurb": "Many people, one document, no server deciding who won.",
       "key": "collab",
+      "title": "Realtime collaboration",
+      "blurb": "Many people, one document, no server deciding who won.",
       "orgs": [
         {
           "org": "go-crdt",
@@ -192,12 +193,12 @@
           "org": "go-yjs-relay",
           "role": "A Yjs y-websocket relay hub, transport-agnostic."
         }
-      ],
-      "title": "Realtime collaboration"
+      ]
     },
     {
-      "blurb": "A Ruby virtual machine, its object model, and one organisation per gem it needs.",
       "key": "ruby",
+      "title": "Ruby, in Go",
+      "blurb": "A Ruby virtual machine, its object model, and one organisation per gem it needs.",
       "orgs": [
         {
           "org": "go-embedded-ruby",
@@ -215,12 +216,12 @@
           "org": "go-vet-analyzers",
           "role": "go vet analyzers that make the ecosystem's invariants a compile-time matter."
         }
-      ],
-      "title": "Ruby, in Go"
+      ]
     },
     {
-      "blurb": "Getting the machine's width out of pure Go, on all six 64-bit targets.",
       "key": "numerics",
+      "title": "CPU, SIMD & numerics",
+      "blurb": "Getting the machine's width out of pure Go, on all six 64-bit targets.",
       "orgs": [
         {
           "org": "go-asmgen",
@@ -238,12 +239,12 @@
           "org": "go-fft",
           "role": "Fast Fourier transforms at numpy and scipy accuracy, without FFTW."
         }
-      ],
-      "title": "CPU, SIMD & numerics"
+      ]
     },
     {
-      "blurb": "Making bytes smaller, sending only what changed, and surviving what is lost.",
       "key": "compress",
+      "title": "Compression, delta & erasure",
+      "blurb": "Making bytes smaller, sending only what changed, and surviving what is lost.",
       "orgs": [
         {
           "org": "go-compressions",
@@ -257,12 +258,12 @@
           "org": "go-erasure",
           "role": "Erasure coding: Reed-Solomon over GF(2^16), and the Mojette transform."
         }
-      ],
-      "title": "Compression, delta & erasure"
+      ]
     },
     {
-      "blurb": "From a block device to a mounted filesystem, without a C library anywhere.",
       "key": "storage",
+      "title": "Storage, volumes & filesystems",
+      "blurb": "From a block device to a mounted filesystem, without a C library anywhere.",
       "orgs": [
         {
           "org": "go-volumes",
@@ -288,12 +289,12 @@
           "org": "go-encryptions",
           "role": "The modes underneath: CCM, XTS, ZFS crypto."
         }
-      ],
-      "title": "Storage, volumes & filesystems"
+      ]
     },
     {
-      "blurb": "What runs before the kernel, and how you prove what ran.",
       "key": "boot",
+      "title": "Firmware, boot & trust",
+      "blurb": "What runs before the kernel, and how you prove what ran.",
       "orgs": [
         {
           "org": "go-tpm2",
@@ -315,12 +316,12 @@
           "org": "nano-container-linux",
           "role": "A minimal container host — OCI initrd and PXE boot, a DNS daemon, an OpenPubKey agent."
         }
-      ],
-      "title": "Firmware, boot & trust"
+      ]
     },
     {
-      "blurb": "Building every dependency from source, signing it, and saying where it came from.",
       "key": "supply",
+      "title": "Packaging & supply chain",
+      "blurb": "Building every dependency from source, signing it, and saying where it came from.",
       "orgs": [
         {
           "org": "go-pkgx",
@@ -334,12 +335,12 @@
           "org": "go-versions",
           "role": "Loose, pkgx-compatible semantic versions and ranges, CalVer included."
         }
-      ],
-      "title": "Packaging & supply chain"
+      ]
     },
     {
-      "blurb": "microVMs, guest drivers, supervision, coordination and the network between them.",
       "key": "cloud",
+      "title": "Virtualisation, cloud & network",
+      "blurb": "microVMs, guest drivers, supervision, coordination and the network between them.",
       "orgs": [
         {
           "org": "openweft",
@@ -373,12 +374,12 @@
           "org": "claimward",
           "role": "A WireGuard VPN with OIDC: the server, the client, and desktop apps for macOS, Linux and Windows."
         }
-      ],
-      "title": "Virtualisation, cloud & network"
+      ]
     },
     {
-      "blurb": "The Puppet stack, in Go, without a Ruby runtime.",
       "key": "config",
+      "title": "Configuration management",
+      "blurb": "The Puppet stack, in Go, without a Ruby runtime.",
       "orgs": [
         {
           "org": "go-puppet",
@@ -416,12 +417,12 @@
           "org": "go-augeas",
           "role": "The Augeas engine: a config tree, path expressions and lenses."
         }
-      ],
-      "title": "Configuration management"
+      ]
     },
     {
-      "blurb": "One reader, and a client per source it reads.",
       "key": "social",
+      "title": "News, social & feeds",
+      "blurb": "One reader, and a client per source it reads.",
       "orgs": [
         {
           "org": "go-news-reader",
@@ -467,12 +468,12 @@
           "org": "go-tiktok",
           "role": "A best-effort read client for public TikTok profiles."
         }
-      ],
-      "title": "News, social & feeds"
+      ]
     },
     {
-      "blurb": "Two engines hand-ported to pure Go, one of them onto bare metal.",
       "key": "games",
+      "title": "Games",
+      "blurb": "Two engines hand-ported to pure Go, one of them onto bare metal.",
       "orgs": [
         {
           "org": "go-quake1",
@@ -482,79 +483,78 @@
           "org": "go-doom",
           "role": "DOOM, hand-ported through the gore lineage, with a TamaGo bare-metal back-end."
         }
-      ],
-      "title": "Games"
+      ]
     },
     {
-      "blurb": "The one thing this organisation does hold: the tool that generates every page here.",
       "key": "map",
+      "title": "The map itself",
+      "blurb": "The one thing this organisation does hold: the tool that generates every page here.",
       "orgs": [
         {
           "org": "go-desktop",
           "role": "The generator. It reads the live GitHub organisation list and reconciles it against a curated classification, then writes the landing configuration, the family pages, the gem list and this profile. The reconciliation is the point: an organisation that holds code but is in no family fails the build, so the index cannot quietly omit something that exists."
         }
-      ],
-      "title": "The map itself"
+      ]
     }
   ],
-  "gems_intro": "A Ruby virtual machine is only useful with a library around it, so each gem the\necosystem needs is reimplemented in pure Go in its own `go-ruby-*` organisation:\nthe standard library, Rails and its dependencies, the testing stack, the Puppet\nstack, database drivers, serialisation formats and template engines.\n\nEvery one of them is byte-compared against MRI where a byte comparison is\nmeaningful — a checksum, a `Marshal` payload, a formatted number. Where it is not\n(a deflate stream, say, whose output is implementation-defined) the requirement is\ninteroperability in both directions instead.\n\nTwo things to know before reaching for one:\n\n- **The gem organisation is the Ruby-facing wrapper, not always the engine.** Some\n  are thin shells over an engine that lives in its own non-Ruby organisation — the\n  regexp gem wraps [`go-regexp/engine`](https://github.com/go-regexp/engine), the\n  sass gem wraps [`go-scss/scss`](https://github.com/go-scss/scss). If you are\n  writing Go rather than Ruby, take the engine.\n- **The repository inside is named after the gem**, not after the organisation:\n  `go-ruby-activerecord/activerecord`.",
-  "not_go": [],
-  "readme_intro": "<p align=\"center\"><img src=\"https://raw.githubusercontent.com/go-desktop/brand/main/social/go-desktop.png\" alt=\"go-desktop\" width=\"720\"></p>\n\n# go-desktop\n\n**A map of one pure-Go ecosystem — {{summary}}, no C anywhere.**\n\nThis organisation holds no library. It holds the index — and the tool that\ngenerates it, so that no number on any of these pages is typed by hand.\n\nEvery library in the map is written in Go and compiled with `CGO_ENABLED=0`. That\nis not a stylistic preference: it is what makes one binary cross-compile to six\narchitectures, run inside a browser as WebAssembly, and boot on bare metal without\na libc. Where a good pure-Go library already exists it is used rather than\nrewritten; where the only option was a C library behind cgo, the capability was\nrebuilt.\n\nThe ecosystem is split into **one organisation per domain and one repository per\ncapability**, so a program that needs an ext4 reader takes an ext4 reader and not a\nstorage framework.\n\n🌐 **[go-desktop.github.io](https://go-desktop.github.io/)** — the same map, browsable · 📚 **[Documentation](https://go-desktop.github.io/docs/)** — with a [capability lookup](https://go-desktop.github.io/docs/latest/finding/): what you need, and the module that already does it.",
-  "readme_outro": "Counts are the public repositories that hold code; `.github`, `brand`, `docs` and\n`<org>.github.io` are excluded. This file is generated by\n[`go-desktop/catalog`](https://github.com/go-desktop/catalog) from the live GitHub\norganisation list — edit `families.json` there, not this page. BSD-3-Clause · brand\nassets in [go-desktop/brand](https://github.com/go-desktop/brand).",
-  "readme_standards": "| | |\n| --- | --- |\n| **`CGO_ENABLED=0`** | No cgo, and no shelling out to a command-line tool in place of a library. A dependency is a Go module or it is written. |\n| **Six 64-bit targets** | amd64, arm64, riscv64, loong64, ppc64le, s390x — native where runners exist, under qemu-user otherwise. s390x is big-endian, which keeps every on-disk and on-wire encoding honest. |\n| **100% statement coverage** | A CI gate, error branches included. A skipped test is not a passing one: jobs fail when a toolchain is missing rather than turning green quietly. |\n| **Measured, not asserted** | Performance claims come with a benchmark against the reference implementation; format claims come with a byte comparison against it. Decoders are fuzzed. |\n| **One landing, one docs site** | A Hugo landing at `<org>.github.io` and versioned MkDocs Material docs at `<org>.github.io/docs/`, same brand, light/dark/system theme toggle. |\n| **BSD-3-Clause** | Every repository, every organisation. |",
   "reserved": [
     {
-      "for": "Graph-drawing algorithms — Sugiyama layering, force-directed placement, trees. Measured and deliberately deferred: pgf's graphdrawing is used by 5 documents in a 10,025-talk corpus.",
-      "org": "go-graphdrawing"
+      "org": "go-graphdrawing",
+      "for": "Graph-drawing algorithms — Sugiyama layering, force-directed placement, trees. Measured and deliberately deferred: pgf's graphdrawing is used by 5 documents in a 10,025-talk corpus."
     },
     {
-      "for": "Superseded in practice by go-bootloaders/grub.",
-      "org": "go-grub"
+      "org": "go-grub",
+      "for": "Superseded in practice by go-bootloaders/grub."
     },
     {
-      "for": "A Quake II engine, after go-quake1.",
-      "org": "go-quake2"
+      "org": "go-quake2",
+      "for": "A Quake II engine, after go-quake1."
     },
     {
-      "for": "A Quake III engine.",
-      "org": "go-quake3"
+      "org": "go-quake3",
+      "for": "A Quake III engine."
     },
     {
-      "for": "Reserved.",
-      "org": "go-sicp"
+      "org": "go-sicp",
+      "for": "Reserved."
     },
     {
-      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go.",
-      "org": "go-ruby-atproto"
+      "org": "go-ruby-atproto",
+      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
     },
     {
-      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go.",
-      "org": "go-ruby-birdsite"
+      "org": "go-ruby-birdsite",
+      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
     },
     {
-      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go.",
-      "org": "go-ruby-hackernews"
+      "org": "go-ruby-hackernews",
+      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
     },
     {
-      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go.",
-      "org": "go-ruby-instagram"
+      "org": "go-ruby-instagram",
+      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
     },
     {
-      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go.",
-      "org": "go-ruby-mastodon"
+      "org": "go-ruby-mastodon",
+      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
     },
     {
-      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go.",
-      "org": "go-ruby-newsgroups"
+      "org": "go-ruby-newsgroups",
+      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
     },
     {
-      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go.",
-      "org": "go-ruby-syndication"
+      "org": "go-ruby-syndication",
+      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
     },
     {
-      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go.",
-      "org": "go-ruby-tiktok"
+      "org": "go-ruby-tiktok",
+      "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
     }
   ],
-  "reserved_intro": "These organisation names are reserved and empty. They are listed so the map has no\nsilent gaps: an empty organisation is not a shipped one, and a name that looks like\na capability is the easiest way to believe a capability exists."
+  "not_go": [],
+  "readme_intro": "<p align=\"center\"><img src=\"https://raw.githubusercontent.com/go-desktop/brand/main/social/go-desktop.png\" alt=\"go-desktop\" width=\"720\"></p>\n\n# go-desktop\n\n**A map of one pure-Go ecosystem — {{summary}}, no C anywhere.**\n\nThis organisation holds no library. It holds the index — and the tool that\ngenerates it, so that no number on any of these pages is typed by hand.\n\nEvery library in the map is written in Go and compiled with `CGO_ENABLED=0`. That\nis not a stylistic preference: it is what makes one binary cross-compile to six\narchitectures, run inside a browser as WebAssembly, and boot on bare metal without\na libc. Where a good pure-Go library already exists it is used rather than\nrewritten; where the only option was a C library behind cgo, the capability was\nrebuilt.\n\nThe ecosystem is split into **one organisation per domain and one repository per\ncapability**, so a program that needs an ext4 reader takes an ext4 reader and not a\nstorage framework.\n\n🌐 **[go-desktop.github.io](https://go-desktop.github.io/)** — the same map, browsable · 📚 **[Documentation](https://go-desktop.github.io/docs/)** — with a [capability lookup](https://go-desktop.github.io/docs/latest/finding/): what you need, and the module that already does it.",
+  "readme_standards": "| | |\n| --- | --- |\n| **`CGO_ENABLED=0`** | No cgo, and no shelling out to a command-line tool in place of a library. A dependency is a Go module or it is written. |\n| **Six 64-bit targets** | amd64, arm64, riscv64, loong64, ppc64le, s390x — native where runners exist, under qemu-user otherwise. s390x is big-endian, which keeps every on-disk and on-wire encoding honest. |\n| **100% statement coverage** | A CI gate, error branches included. A skipped test is not a passing one: jobs fail when a toolchain is missing rather than turning green quietly. |\n| **Measured, not asserted** | Performance claims come with a benchmark against the reference implementation; format claims come with a byte comparison against it. Decoders are fuzzed. |\n| **One landing, one docs site** | A Hugo landing at `<org>.github.io` and versioned MkDocs Material docs at `<org>.github.io/docs/`, same brand, light/dark/system theme toggle. |\n| **BSD-3-Clause** | Every repository, every organisation. |",
+  "reserved_intro": "These organisation names are reserved and empty. They are listed so the map has no\nsilent gaps: an empty organisation is not a shipped one, and a name that looks like\na capability is the easiest way to believe a capability exists.",
+  "readme_outro": "Counts are the public repositories that hold code; `.github`, `brand`, `docs` and\n`<org>.github.io` are excluded. This file is generated by\n[`go-desktop/catalog`](https://github.com/go-desktop/catalog) from the live GitHub\norganisation list — edit `families.json` there, not this page. BSD-3-Clause · brand\nassets in [go-desktop/brand](https://github.com/go-desktop/brand).",
+  "docs_index": "# The pure-Go ecosystem\n\n**{{orgs}} organisations. {{repos}} public code repositories. No C anywhere.**\n\n`go-desktop` holds no library. It holds the index — a way to find a capability\nwithout already knowing which organisation owns it — and\n[the tool](https://github.com/go-desktop/catalog) that generates it, so that no\nnumber on these pages is typed by hand.\n\nEvery library in the map is written in Go and compiled with `CGO_ENABLED=0`. That\nis not a stylistic preference. It is what makes one binary cross-compile to six\narchitectures, run inside a browser as WebAssembly, and boot on bare metal without\na libc — three things a single cgo dependency takes away permanently.\n\n## How the map is organised\n\n**One organisation per domain, one repository per capability.** A program that\nneeds an ext4 reader takes an ext4 reader, not a storage framework. This is why\nthere are {{orgs}} organisations rather than a handful of monorepos: the unit of reuse\nis the capability, and a capability that lives in its own module can be depended\non without dragging in the rest of its family.\n\nThe consequence to be aware of is that the map itself has to be maintained — which\nis what this site is for. Before building anything, look here first: the recurring\nfailure mode in an ecosystem this wide is rebuilding something that already exists\none organisation over.\n\n## Where to start\n\n- **[Find a capability](finding.md)** — a lookup from what you need to where it lives.\n- **[What every repository is held to](standards.md)** — the conformance standard, in full.\n- The {{families}} families, in the navigation on the left.\n- **[Ruby gems](gems.md)** — the {{gems}} per-gem organisations, alphabetically.\n- **[Held, not yet built](reserved.md)** — the names that are held but hold nothing.\n\n## Reading a count\n\nEvery repository count on this site is the number of **public repositories that\nhold code**. The four infrastructure repositories every organisation carries —\n`.github`, `brand`, `docs` and `<org>.github.io` — are excluded, because counting\nthem would inflate a one-library organisation to five.\n\nCounts were measured against the live GitHub organisation list rather than\nrecalled, and the generated pages carry no hand-typed numbers."
 }

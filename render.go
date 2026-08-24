@@ -192,9 +192,14 @@ func (c *Catalog) ProfileREADME() []byte {
 		fmt.Fprintf(&b, "| [`%s`](https://github.com/%s) | %s |\n", r.Org, r.Org, r.For)
 	}
 
-	b.WriteString("\n## Not in this map\n\n| Organisation | What it is |\n| --- | --- |\n")
-	for _, n := range c.NotGo {
-		fmt.Fprintf(&b, "| [`%s`](https://github.com/%s) | %s |\n", n.Org, n.Org, n.What)
+	// The section is written only when it has entries. An empty "Not in this
+	// map" table would state that something is missing from the map without
+	// saying what, which is worse than not raising the question.
+	if len(c.NotGo) > 0 {
+		b.WriteString("\n## Not in this map\n\n| Organisation | What it is |\n| --- | --- |\n")
+		for _, n := range c.NotGo {
+			fmt.Fprintf(&b, "| [`%s`](https://github.com/%s) | %s |\n", n.Org, n.Org, n.What)
+		}
 	}
 
 	b.WriteString("\n---\n\n")
@@ -213,12 +218,14 @@ func (c *Catalog) ReservedPage() []byte {
 	for _, r := range c.Reserved {
 		fmt.Fprintf(&b, "| [`%s`](https://github.com/%s) | %s |\n", r.Org, r.Org, r.For)
 	}
-	b.WriteString("\n## Not in this map\n\n")
-	b.WriteString("These are real and maintained; they are simply not part of the Go library\n")
-	b.WriteString("ecosystem this site maps, and are counted nowhere on it.\n\n")
-	b.WriteString("| Organisation | What it is |\n| --- | --- |\n")
-	for _, n := range c.NotGo {
-		fmt.Fprintf(&b, "| [`%s`](https://github.com/%s) | %s |\n", n.Org, n.Org, n.What)
+	if len(c.NotGo) > 0 {
+		b.WriteString("\n## Not in this map\n\n")
+		b.WriteString("These are real and maintained; they are simply not part of the Go library\n")
+		b.WriteString("ecosystem this site maps, and are counted nowhere on it.\n\n")
+		b.WriteString("| Organisation | What it is |\n| --- | --- |\n")
+		for _, n := range c.NotGo {
+			fmt.Fprintf(&b, "| [`%s`](https://github.com/%s) | %s |\n", n.Org, n.Org, n.What)
+		}
 	}
 	return []byte(b.String())
 }

@@ -142,6 +142,26 @@ func TestReservedPage(t *testing.T) {
 	}
 }
 
+// With no sibling stack outside the map, neither surface carries the section at
+// all: an empty "Not in this map" table says something is missing without saying
+// what, which raises the question it exists to answer.
+func TestNoNotGoSection(t *testing.T) {
+	c := renderFixture(t)
+	c.NotGo = nil
+	for name, page := range map[string][]byte{
+		"profile README": c.ProfileREADME(),
+		"reserved page":  c.ReservedPage(),
+	} {
+		if strings.Contains(string(page), "Not in this map") {
+			t.Errorf("%s still carries the section with nothing to put in it", name)
+		}
+	}
+	// The section it follows must survive intact.
+	if !strings.Contains(string(c.ReservedPage()), "# Held, not yet built") {
+		t.Error("the reserved section went with it")
+	}
+}
+
 func TestDocsIndexPage(t *testing.T) {
 	out := string(renderFixture(t).DocsIndexPage())
 	// {{gems}} and {{families}} are substituted too: the two counts a prose

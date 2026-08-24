@@ -37,7 +37,7 @@ const inventory = `{
   "go-gfx":     [{"org":"go-gfx","name":"gfx"}],
   "go-ruby-json":[{"org":"go-ruby-json","name":"json"}],
   "go-quake2":  [],
-  "example-c":      [{"org":"example-c","name":"c-fw"}]
+  "example-c":  [{"org":"example-c","name":"c-fw"}]
 }`
 
 // inputs writes the two input files into a temp dir and returns their paths.
