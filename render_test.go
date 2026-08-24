@@ -144,7 +144,9 @@ func TestReservedPage(t *testing.T) {
 
 func TestDocsIndexPage(t *testing.T) {
 	out := string(renderFixture(t).DocsIndexPage())
-	if !strings.Contains(out, "# Home") || !strings.Contains(out, "4 orgs, 6 repos.") {
+	// {{gems}} and {{families}} are substituted too: the two counts a prose
+	// sentence is most likely to state and least likely to be re-measured.
+	if !strings.Contains(out, "# Home") || !strings.Contains(out, "4 orgs, 6 repos, 2 gems, 2 families.") {
 		t.Errorf("docs index page = %q", out)
 	}
 }

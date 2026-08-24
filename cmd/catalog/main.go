@@ -1,6 +1,6 @@
 // Command catalog regenerates the go-desktop ecosystem map.
 //
-//	catalog fetch    -out inventory.json [-token-file ~/.github-token]
+//	catalog fetch    -out inventory.json [-token-file ~/.github-token] [-exclude-file FILE]
 //	catalog check    [-inventory inventory.json] [-classification families.json]
 //	catalog generate [-site ../go-desktop.github.io] [-docs ../docs] [-profile ../.github]
 //
@@ -29,7 +29,8 @@ func main() { osExit(run(os.Args[1:], os.Stdout, os.Stderr)) }
 
 const usage = `catalog regenerates the go-desktop ecosystem map.
 
-  catalog fetch    -out FILE [-token-file FILE]   read GitHub into an inventory
+  catalog fetch    -out FILE [-token-file FILE] [-exclude-file FILE]
+                                                  read GitHub into an inventory
   catalog check                                   reconcile the two inputs
   catalog generate -site DIR -docs DIR -profile DIR
                                                   write the published files
@@ -74,6 +75,7 @@ func cmdFetch(args []string, out io.Writer) error {
 	dest := fs.String("out", "inventory.json", "write the inventory here")
 	tokenFile := fs.String("token-file", "", "read the API token from this file")
 	baseURL := fs.String("api", catalog.DefaultBaseURL, "GitHub API root")
+	excludeFile := fs.String("exclude-file", "", "skip the organisations named in this file, one login per line")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -88,7 +90,19 @@ func cmdFetch(args []string, out io.Writer) error {
 	if token == "" {
 		return fmt.Errorf("no token: pass -token-file or set GITHUB_TOKEN")
 	}
-	c := &catalog.Client{BaseURL: *baseURL, Token: token}
+	var skip catalog.Exclusions
+	if *excludeFile != "" {
+		f, err := os.Open(*excludeFile)
+		if err != nil {
+			return fmt.Errorf("read exclusions: %w", err)
+		}
+		skip, err = catalog.LoadExclusions(f)
+		f.Close()
+		if err != nil {
+			return err
+		}
+	}
+	c := &catalog.Client{BaseURL: *baseURL, Token: token, Skip: skip}
 	inv, err := c.FetchInventory(context.Background())
 	if err != nil {
 		return err
@@ -101,6 +115,9 @@ func cmdFetch(args []string, out io.Writer) error {
 		repos += len(inv[org])
 	}
 	fmt.Fprintf(out, "%d organisations, %d repositories -> %s\n", len(inv), repos, *dest)
+	if len(skip) > 0 {
+		fmt.Fprintf(out, "%d organisation names excluded by %s\n", len(skip), *excludeFile)
+	}
 	return nil
 }
 

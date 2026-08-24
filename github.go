@@ -21,6 +21,7 @@ type Client struct {
 	BaseURL string       // defaults to DefaultBaseURL
 	Token   string       // a personal access token; required, the endpoints are authenticated
 	HTTP    *http.Client // defaults to a client with a timeout
+	Skip    Exclusions   // organisations to leave out of the inventory entirely
 }
 
 func (c *Client) base() string {
@@ -127,7 +128,9 @@ func (c *Client) Repos(ctx context.Context, org string) ([]Repo, error) {
 	return out, nil
 }
 
-// FetchInventory reads every organisation and its repositories.
+// FetchInventory reads every organisation and its repositories, apart from the
+// ones in Skip: those are not fetched at all, so their repositories are never
+// held in memory, let alone written to the inventory.
 //
 // The walk is sequential. It is a few hundred requests against a 5000-per-hour
 // budget and runs when the map is regenerated, not in a request path; fanning it
@@ -140,6 +143,9 @@ func (c *Client) FetchInventory(ctx context.Context) (Inventory, error) {
 	}
 	inv := Inventory{}
 	for _, org := range orgs {
+		if c.Skip.Excludes(org) {
+			continue
+		}
 		repos, err := c.Repos(ctx, org)
 		if err != nil {
 			return nil, err

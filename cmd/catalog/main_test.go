@@ -311,6 +311,55 @@ func TestFetch(t *testing.T) {
 	}
 }
 
+// An exclusion file keeps an organisation out of the inventory, and the count
+// printed is the one written rather than the one GitHub returned.
+func TestFetchExcludes(t *testing.T) {
+	dir := t.TempDir()
+	api := fakeAPI(t)
+	t.Setenv("GITHUB_TOKEN", "t0ken")
+
+	excl := filepath.Join(dir, "retired")
+	if err := os.WriteFile(excl, []byte("# retired\nGO-GFX\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	dest := filepath.Join(dir, "inventory.json")
+	code, out, errs := exec("fetch", "-api", api, "-out", dest, "-exclude-file", excl)
+	if code != 0 {
+		t.Fatalf("fetch failed: code=%d stderr=%q", code, errs)
+	}
+	if !strings.Contains(out, "0 organisations, 0 repositories") {
+		t.Errorf("fetch output = %q, want the excluded organisation gone", out)
+	}
+	if !strings.Contains(out, "1 organisation names excluded") {
+		t.Errorf("fetch output = %q, want the exclusion reported", out)
+	}
+	b, err := os.ReadFile(dest)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(b), "go-gfx") {
+		t.Errorf("the excluded organisation is named in the inventory: %s", b)
+	}
+}
+
+func TestFetchExcludeFileErrors(t *testing.T) {
+	dir := t.TempDir()
+	api := fakeAPI(t)
+	t.Setenv("GITHUB_TOKEN", "t0ken")
+
+	if code, _, errs := exec("fetch", "-api", api, "-out", filepath.Join(dir, "x.json"),
+		"-exclude-file", filepath.Join(dir, "nope")); code != 1 ||
+		!strings.Contains(errs, "read exclusions") {
+		t.Errorf("missing exclusion file: code=%d stderr=%q", code, errs)
+	}
+	// A directory opens but cannot be read, which is the only way the scan
+	// itself fails once the file is open.
+	if code, _, errs := exec("fetch", "-api", api, "-out", filepath.Join(dir, "x.json"),
+		"-exclude-file", dir); code != 1 || !strings.Contains(errs, "exclusions") {
+		t.Errorf("unreadable exclusion file: code=%d stderr=%q", code, errs)
+	}
+}
+
 func TestFetchErrors(t *testing.T) {
 	dir := t.TempDir()
 	api := fakeAPI(t)

@@ -145,6 +145,8 @@ func (c *Catalog) expand(s string) string {
 		"{{summary}}", c.Summary(),
 		"{{orgs}}", strconv.Itoa(c.TotalOrgs),
 		"{{repos}}", strconv.Itoa(c.TotalRepos),
+		"{{gems}}", strconv.Itoa(len(c.Gems)),
+		"{{families}}", strconv.Itoa(len(c.Families)),
 	)
 	return r.Replace(strings.TrimSpace(s))
 }

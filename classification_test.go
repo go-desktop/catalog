@@ -11,7 +11,7 @@ const goodClassification = `{
   "readme_standards": "| a | b |\n| --- | --- |\n| CGO | 0 |",
   "reserved_intro": "Held, not built.",
   "readme_outro": "Generated.",
-  "docs_index": "# Home\n\n{{orgs}} orgs, {{repos}} repos.",
+  "docs_index": "# Home\n\n{{orgs}} orgs, {{repos}} repos, {{gems}} gems, {{families}} families.",
   "families": [
     {"key":"desktop","title":"Desktop","blurb":"Widgets.",
      "orgs":[{"org":"go-widgets","role":"The toolkit."}]},

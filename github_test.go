@@ -171,6 +171,34 @@ func TestFetchInventory(t *testing.T) {
 	}
 }
 
+// An excluded organisation is not fetched at all. The proof is that the server
+// has no handler for it: were it fetched, the 404 would fail the walk.
+func TestFetchInventorySkips(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/user/orgs", func(w http.ResponseWriter, _ *http.Request) {
+		fmt.Fprint(w, `[{"login":"go-gfx"},{"login":"Retired-Org"}]`)
+	})
+	mux.HandleFunc("/orgs/go-gfx/repos", func(w http.ResponseWriter, _ *http.Request) {
+		fmt.Fprint(w, `[{"name":"gfx"}]`)
+	})
+	srv := httptest.NewServer(mux)
+	defer srv.Close()
+
+	c := &Client{BaseURL: srv.URL, Skip: Exclusions{"retired-org": true}}
+	inv, err := c.FetchInventory(context.Background())
+	if err != nil {
+		t.Fatalf("FetchInventory: %v", err)
+	}
+	if len(inv) != 1 || !inv.Has("go-gfx") {
+		t.Fatalf("inventory = %v, want go-gfx alone", inv)
+	}
+	// Absent, not empty: an excluded organisation must leave no trace at all,
+	// because an empty entry is still its name in a published file.
+	if inv.Has("Retired-Org") {
+		t.Error("the excluded organisation is in the inventory")
+	}
+}
+
 func TestFetchInventoryErrors(t *testing.T) {
 	ctx := context.Background()
 
