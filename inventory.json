@@ -1995,7 +1995,23 @@
     },
     {
       "org": "go-freedesktop",
+      "name": "screencast",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-freedesktop",
       "name": "secretservice",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-freedesktop",
+      "name": "x11",
       "private": false,
       "archived": false,
       "fork": false,
@@ -2118,6 +2134,14 @@
       "archived": false,
       "fork": false,
       "language": "HTML"
+    },
+    {
+      "org": "go-gfx",
+      "name": "qr",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     }
   ],
   "go-graphdrawing": [
@@ -2549,6 +2573,14 @@
   "go-macos": [
     {
       "org": "go-macos",
+      "name": "audiotoolbox",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
       "name": "avfoundation",
       "private": false,
       "archived": false,
@@ -2562,6 +2594,13 @@
       "archived": false,
       "fork": false,
       "language": "HTML"
+    },
+    {
+      "org": "go-macos",
+      "name": "hotkey",
+      "private": false,
+      "archived": false,
+      "fork": false
     },
     {
       "org": "go-macos",
@@ -2597,7 +2636,23 @@
     },
     {
       "org": "go-macos",
+      "name": "screencapture",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
       "name": "videotoolbox",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
+      "name": "virtualdisplay",
       "private": false,
       "archived": false,
       "fork": false,
@@ -2651,6 +2706,14 @@
       "archived": false,
       "fork": false,
       "language": "HTML"
+    },
+    {
+      "org": "go-mswin",
+      "name": "screencapture",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-mswin",
@@ -3081,10 +3144,26 @@
     },
     {
       "org": "go-pdfkit",
+      "name": "app",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-pdfkit",
       "name": "docs",
       "private": false,
       "archived": false,
       "fork": false
+    },
+    {
+      "org": "go-pdfkit",
+      "name": "extract",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-pdfkit",
@@ -3096,7 +3175,39 @@
     },
     {
       "org": "go-pdfkit",
+      "name": "ops",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-pdfkit",
+      "name": "pdffont",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-pdfkit",
       "name": "pdfkit",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-pdfkit",
+      "name": "reader",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-pdfkit",
+      "name": "render",
       "private": false,
       "archived": false,
       "fork": false,
@@ -12294,6 +12405,14 @@
     },
     {
       "org": "go-widgets",
+      "name": "bricolint",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-widgets",
       "name": "data",
       "private": false,
       "archived": false,
@@ -12406,6 +12525,14 @@
     },
     {
       "org": "go-widgets",
+      "name": "webcanvas",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-widgets",
       "name": "window",
       "private": false,
       "archived": false,
@@ -12423,10 +12550,26 @@
     },
     {
       "org": "go-xrkit",
+      "name": "android",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-xrkit",
       "name": "brand",
       "private": false,
       "archived": false,
       "fork": false
+    },
+    {
+      "org": "go-xrkit",
+      "name": "desk",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-xrkit",

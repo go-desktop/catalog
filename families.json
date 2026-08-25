@@ -12,7 +12,7 @@
         },
         {
           "org": "go-freedesktop",
-          "role": "freedesktop.org integration — .desktop entries, icon themes, shared MIME info, application associations, the menu tree, desktop notifications and Secret Service."
+          "role": "freedesktop.org integration — .desktop entries, icon themes, shared MIME info, application associations, the menu tree, desktop notifications and Secret Service — over an owned X11 protocol core that also serves screen capture and the toolkit's window back-end."
         },
         {
           "org": "go-iconoir",
@@ -28,11 +28,11 @@
         },
         {
           "org": "go-macos",
-          "role": "The macOS foundation: the shared Objective-C runtime bridge over purego, plus Keychain and notifications."
+          "role": "The macOS foundation, all of it CGO-free through purego: the shared Objective-C runtime bridge, Keychain, notifications, IOKit HID, hardware audio and video decode, ScreenCaptureKit capture, and virtual displays the desktop extends onto."
         },
         {
           "org": "go-mswin",
-          "role": "The Windows foundation: Win32 bindings and WinRT interop on combase — peer of go-macos/objc."
+          "role": "The Windows foundation: Win32 bindings and WinRT interop on combase — peer of go-macos/objc — plus DXGI Desktop Duplication and GDI screen capture built on them."
         },
         {
           "org": "wasmdesk",
@@ -67,7 +67,7 @@
         },
         {
           "org": "go-xrkit",
-          "role": "Immersive video on XR glasses: head orientation, stereo frame packing, flat, equirectangular and fisheye projection, and a player that drives the glasses' own display."
+          "role": "XR glasses: head orientation, stereo frame packing, flat, equirectangular and fisheye projection, a 360° screen ribbon, a graded catalogue of what each headset can show — plus a player, a virtual desktop on the ribbon, and Android capture."
         }
       ]
     },
