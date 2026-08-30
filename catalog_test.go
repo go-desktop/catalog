@@ -20,8 +20,10 @@ func fixtureInventory() Inventory {
 			{Name: "toolkit"}, {Name: "painter"},
 			{Name: "go-widgets.github.io"}, {Name: "docs"},
 		},
-		"go-gfx":                 {{Name: "gfx"}},
-		"go-ruby-json":           {{Name: "json"}},
+		"go-gfx":       {{Name: "gfx"}},
+		"go-ruby-json": {{Name: "json"}},
+		// renovate-runner is org plumbing, so this organisation holds one library,
+		// not two — the fixture keeps it precisely to pin that down.
 		"go-ruby-stdlib":         {{Name: "stdlib"}, {Name: "renovate-runner"}},
 		"go-quake2":              {},                                // reserved, empty
 		"example-c":              {{Name: "c-fw"}},                  // not Go
@@ -40,12 +42,12 @@ func TestBuild(t *testing.T) {
 	if c.TotalOrgs != 4 {
 		t.Errorf("TotalOrgs = %d, want 4", c.TotalOrgs)
 	}
-	// go-widgets 2 + go-gfx 1 + json 1 + stdlib 2.
-	if c.TotalRepos != 6 {
-		t.Errorf("TotalRepos = %d, want 6", c.TotalRepos)
+	// go-widgets 2 + go-gfx 1 + json 1 + stdlib 1 (its renovate-runner is plumbing).
+	if c.TotalRepos != 5 {
+		t.Errorf("TotalRepos = %d, want 5", c.TotalRepos)
 	}
-	if got := c.GemRepos(); got != 3 {
-		t.Errorf("GemRepos() = %d, want 3", got)
+	if got := c.GemRepos(); got != 2 {
+		t.Errorf("GemRepos() = %d, want 2", got)
 	}
 	if len(c.Gems) != 2 || c.Gems[0].Name != "json" || c.Gems[1].Name != "stdlib" {
 		t.Errorf("gems = %+v, want json then stdlib (sorted)", c.Gems)
@@ -70,7 +72,7 @@ func TestBuild(t *testing.T) {
 	if got.Name != "go-widgets" || got.Repos != 2 || !got.Site || !got.Docs {
 		t.Errorf("go-widgets resolved to %+v, want 2 repos with site and docs", got)
 	}
-	if !strings.Contains(c.Summary(), "4 organisations, 6 public code repositories") {
+	if !strings.Contains(c.Summary(), "4 organisations, 5 public code repositories") {
 		t.Errorf("Summary() = %q", c.Summary())
 	}
 	if _, ok := c.Family("nope"); ok {

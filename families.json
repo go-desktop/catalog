@@ -19,6 +19,10 @@
           "role": "The whole Iconoir set — 1,671 SVGs embedded and rendered to anti-aliased coverage masks for the toolkit painter."
         },
         {
+          "org": "go-icons",
+          "role": "Icon and logo packs as embedded pure-Go SVG data — Simple Icons brand marks, Devicon, Material and Seti file types, vscode-icons, and Iconoir. One repository per pack, so a program embeds the set it draws and not the other five. Distinct from go-iconoir, which rasterises Iconoir to coverage masks for the painter: take this one for the SVG, that one to draw a button glyph."
+        },
+        {
           "org": "go-thumbnail",
           "role": "The freedesktop Thumbnail Managing Standard cache."
         },
@@ -28,7 +32,7 @@
         },
         {
           "org": "go-macos",
-          "role": "The macOS foundation, all of it CGO-free through purego: the shared Objective-C runtime bridge, Keychain, notifications, IOKit HID, hardware audio and video decode, ScreenCaptureKit capture, and virtual displays the desktop extends onto."
+          "role": "The macOS foundation, all of it CGO-free through purego: the shared Objective-C runtime bridge, Keychain and Touch ID, notifications and menu-bar items, accessibility, global hotkeys, login items and launch agents, IOKit HID, hardware audio and video decode, ScreenCaptureKit capture, and virtual displays the desktop extends onto."
         },
         {
           "org": "go-mswin",
@@ -94,11 +98,15 @@
         },
         {
           "org": "go-pdfkit",
-          "role": "A PDF 1.7 writer: font subsetting and embedding for TrueType and CFF, graphics, images, shaped text."
+          "role": "The PDF stack, both directions: a 1.7 writer with TrueType and CFF subsetting, a reader and renderer, AcroForm fields, text and structure extraction, a conformance suite judged against poppler, and a co-editable reader application built on all of it."
+        },
+        {
+          "org": "go-docutils",
+          "role": "A reStructuredText engine — docutils' core in pure Go: the parser and the doctree it produces, which the LaTeX and PDF path is built on."
         },
         {
           "org": "go-richdoc",
-          "role": "One rich-document model, and the converters that read and write it."
+          "role": "One rich-document model, and the converters that read and write it — Markdown, LaTeX and reStructuredText."
         },
         {
           "org": "go-odf",

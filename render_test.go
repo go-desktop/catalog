@@ -52,7 +52,7 @@ func TestHugoTOML(t *testing.T) {
 
 func TestEcosystemTOML(t *testing.T) {
 	out := string(renderFixture(t).EcosystemTOML())
-	for _, want := range []string{`"json",`, `"stdlib",`, `"go-quake2",`, "gem_repos = 3"} {
+	for _, want := range []string{`"json",`, `"stdlib",`, `"go-quake2",`, "gem_repos = 2"} {
 		if !strings.Contains(out, want) {
 			t.Errorf("ecosystem.toml is missing %q", want)
 		}
@@ -93,7 +93,7 @@ func TestGemsPage(t *testing.T) {
 		"# Ruby gems",
 		"One organisation per gem.",
 		"| `json` | [`go-ruby-json`](https://github.com/go-ruby-json) |",
-		"2 gem organisations, 3 public code repositories.",
+		"2 gem organisations, 2 public code repositories.",
 	} {
 		if !strings.Contains(out, want) {
 			t.Errorf("gems page is missing %q", want)
@@ -107,7 +107,7 @@ func TestProfileREADME(t *testing.T) {
 		"# Map",
 		// {{summary}}, {{orgs}} and {{repos}} are substituted, so a sentence
 		// naming the size of the ecosystem cannot go stale.
-		"4 organisations, 6 public code repositories in 4 orgs and 6 repos.",
+		"4 organisations, 5 public code repositories in 4 orgs and 5 repos.",
 		"## What every repository is held to",
 		"| CGO | 0 |",
 		"## Desktop",
@@ -166,7 +166,7 @@ func TestDocsIndexPage(t *testing.T) {
 	out := string(renderFixture(t).DocsIndexPage())
 	// {{gems}} and {{families}} are substituted too: the two counts a prose
 	// sentence is most likely to state and least likely to be re-measured.
-	if !strings.Contains(out, "# Home") || !strings.Contains(out, "4 orgs, 6 repos, 2 gems, 2 families.") {
+	if !strings.Contains(out, "# Home") || !strings.Contains(out, "4 orgs, 5 repos, 2 gems, 2 families.") {
 		t.Errorf("docs index page = %q", out)
 	}
 }

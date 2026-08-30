@@ -21,6 +21,11 @@ var infraNames = map[string]bool{
 	"brand":      true,
 	"docs":       true,
 	"benchmarks": true,
+	// A self-hosted Renovate runner is a scheduled job's configuration — a few
+	// kilobytes of JavaScript that watches other repositories. It is the same
+	// category as docs: per-organisation plumbing nobody imports. Counting it
+	// would report an organisation as holding one more library than it does.
+	"renovate-runner": true,
 }
 
 // IsInfra reports whether r is one of its organisation's publishing

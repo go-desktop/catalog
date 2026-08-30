@@ -12,6 +12,7 @@ func TestRepoIsInfra(t *testing.T) {
 		{"docs", true},
 		{"benchmarks", true},
 		{"go-widgets.github.io", true},
+		{"renovate-runner", true},
 		{"toolkit", false},
 		{"documentation", false}, // not "docs"
 		{"githubio", false},

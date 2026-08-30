@@ -2,6 +2,14 @@
   "apple-vz": [
     {
       "org": "apple-vz",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "apple-vz",
       "name": "ext4",
       "private": true,
       "archived": true,
@@ -56,7 +64,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "claimward",
@@ -133,7 +142,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "cloud-boot",
@@ -218,7 +228,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "cloud-pool-managers",
@@ -257,7 +268,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "deskplan",
@@ -305,7 +317,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-asmgen",
@@ -344,7 +357,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-atproto",
@@ -380,11 +394,27 @@
   "go-attest": [
     {
       "org": "go-attest",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-attest",
       "name": "go-attest.github.io",
       "private": false,
       "archived": false,
       "fork": false,
       "language": "HTML"
+    },
+    {
+      "org": "go-attest",
+      "name": "renovate-runner",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-attest",
@@ -409,7 +439,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-augeas",
@@ -445,6 +476,14 @@
   "go-avkit": [
     {
       "org": "go-avkit",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-avkit",
       "name": "avkit",
       "private": false,
       "archived": false,
@@ -466,7 +505,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-birdsite",
@@ -500,6 +540,14 @@
     }
   ],
   "go-bootloaders": [
+    {
+      "org": "go-bootloaders",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
     {
       "org": "go-bootloaders",
       "name": "brand",
@@ -545,7 +593,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-browserhttp",
@@ -592,7 +641,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-coff",
@@ -655,7 +705,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-commonmark",
@@ -694,7 +745,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-composites",
@@ -980,7 +1032,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-compressions",
@@ -1075,7 +1128,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-coord",
@@ -1114,7 +1168,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-crdt",
@@ -1161,7 +1216,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-datetime",
@@ -1193,7 +1249,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-deltasync",
@@ -1272,7 +1329,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-desktop",
@@ -1306,6 +1364,14 @@
     }
   ],
   "go-diskimages": [
+    {
+      "org": "go-diskimages",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
     {
       "org": "go-diskimages",
       "name": "brand",
@@ -1377,13 +1443,24 @@
       "language": "Go"
     }
   ],
+  "go-docutils": [
+    {
+      "org": "go-docutils",
+      "name": "docutils",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    }
+  ],
   "go-doom": [
     {
       "org": "go-doom",
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-doom",
@@ -1422,7 +1499,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-embedded-ruby",
@@ -1461,7 +1539,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-encryptions",
@@ -1516,7 +1595,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-erasure",
@@ -1560,6 +1640,14 @@
   "go-extractors": [
     {
       "org": "go-extractors",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-extractors",
       "name": "extractors",
       "private": false,
       "archived": false,
@@ -1573,7 +1661,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-eyaml",
@@ -1612,7 +1701,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-facter",
@@ -1646,6 +1736,14 @@
     }
   ],
   "go-fde": [
+    {
+      "org": "go-fde",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
     {
       "org": "go-fde",
       "name": "apfs",
@@ -1707,7 +1805,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-fft",
@@ -1746,7 +1845,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-filesystems",
@@ -1913,7 +2013,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-freedesktop",
@@ -2024,7 +2125,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-fsctl",
@@ -2103,7 +2205,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-gfx",
@@ -2150,7 +2253,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-graphdrawing",
@@ -2168,14 +2272,24 @@
       "language": "CSS"
     }
   ],
-  "go-grub": [],
+  "go-grub": [
+    {
+      "org": "go-grub",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    }
+  ],
   "go-hackernews": [
     {
       "org": "go-hackernews",
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-hackernews",
@@ -2214,7 +2328,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-hiera",
@@ -2253,7 +2368,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-hocon",
@@ -2291,27 +2407,101 @@
       "org": "go-iconoir",
       "name": ".github",
       "private": false,
-      "archived": false,
-      "fork": false
+      "archived": true,
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-iconoir",
       "name": "brand",
       "private": false,
-      "archived": false,
+      "archived": true,
       "fork": false
     },
     {
       "org": "go-iconoir",
       "name": "go-iconoir.github.io",
       "private": false,
-      "archived": false,
+      "archived": true,
       "fork": false,
       "language": "HTML"
     },
     {
       "org": "go-iconoir",
       "name": "iconoir",
+      "private": false,
+      "archived": true,
+      "fork": false,
+      "language": "Go"
+    }
+  ],
+  "go-icons": [
+    {
+      "org": "go-icons",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-icons",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-icons",
+      "name": "devicon",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-icons",
+      "name": "go-icons.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    },
+    {
+      "org": "go-icons",
+      "name": "iconoir",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-icons",
+      "name": "material",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-icons",
+      "name": "seti",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-icons",
+      "name": "simple-icons",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-icons",
+      "name": "vscode-icons",
       "private": false,
       "archived": false,
       "fork": false,
@@ -2324,7 +2514,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-images",
@@ -2363,7 +2554,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-instagram",
@@ -2399,6 +2591,14 @@
   "go-keyring": [
     {
       "org": "go-keyring",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-keyring",
       "name": "go-keyring.github.io",
       "private": false,
       "archived": false,
@@ -2420,7 +2620,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-kramdown",
@@ -2459,7 +2660,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-lemmy",
@@ -2498,7 +2700,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-liquid",
@@ -2537,7 +2740,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-lsp-bridge",
@@ -2573,6 +2777,38 @@
   "go-macos": [
     {
       "org": "go-macos",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-macos",
+      "name": "accessibility",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
+      "name": "appbundle",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
+      "name": "appicon",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
       "name": "audiotoolbox",
       "private": false,
       "archived": false,
@@ -2582,6 +2818,22 @@
     {
       "org": "go-macos",
       "name": "avfoundation",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
+      "name": "brightness",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
+      "name": "fileprogress",
       "private": false,
       "archived": false,
       "fork": false,
@@ -2600,7 +2852,8 @@
       "name": "hotkey",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-macos",
@@ -2620,9 +2873,24 @@
     },
     {
       "org": "go-macos",
-      "name": "notify",
+      "name": "launchagent",
       "private": false,
       "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
+      "name": "localauthentication",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-macos",
+      "name": "notify",
+      "private": false,
+      "archived": true,
       "fork": false,
       "language": "Go"
     },
@@ -2636,7 +2904,31 @@
     },
     {
       "org": "go-macos",
+      "name": "pointer",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
       "name": "screencapture",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
+      "name": "servicemanagement",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
+      "name": "statusitem",
       "private": false,
       "archived": false,
       "fork": false,
@@ -2665,7 +2957,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-mastodon",
@@ -2699,6 +2992,14 @@
     }
   ],
   "go-mswin": [
+    {
+      "org": "go-mswin",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
     {
       "org": "go-mswin",
       "name": "go-mswin.github.io",
@@ -2738,7 +3039,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-mustache",
@@ -2772,6 +3074,14 @@
     }
   ],
   "go-ndarray": [
+    {
+      "org": "go-ndarray",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
     {
       "org": "go-ndarray",
       "name": "brand",
@@ -2809,7 +3119,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-net-dhcp",
@@ -2848,7 +3159,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-net-health",
@@ -2887,7 +3199,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-news-reader",
@@ -2926,7 +3239,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-newsgroups",
@@ -2997,7 +3311,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-nokogiri",
@@ -3033,6 +3348,14 @@
   "go-odf": [
     {
       "org": "go-odf",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-odf",
       "name": "odf",
       "private": false,
       "archived": false,
@@ -3046,7 +3369,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-opentype",
@@ -3101,7 +3425,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-pcore",
@@ -3140,11 +3465,28 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-pdfkit",
       "name": "app",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-pdfkit",
+      "name": "coedit",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-pdfkit",
+      "name": "conformance",
       "private": false,
       "archived": false,
       "fork": false,
@@ -3167,11 +3509,27 @@
     },
     {
       "org": "go-pdfkit",
+      "name": "forms",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-pdfkit",
       "name": "go-pdfkit.github.io",
       "private": false,
       "archived": false,
       "fork": false,
       "language": "HTML"
+    },
+    {
+      "org": "go-pdfkit",
+      "name": "latex",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-pdfkit",
@@ -3212,6 +3570,14 @@
       "archived": false,
       "fork": false,
       "language": "Go"
+    },
+    {
+      "org": "go-pdfkit",
+      "name": "renovate-runner",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
     }
   ],
   "go-pkgx": [
@@ -3220,7 +3586,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-pkgx",
@@ -3314,7 +3681,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-proc",
@@ -3361,7 +3729,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-puppet",
@@ -3400,7 +3769,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-puppet-bolt",
@@ -3439,7 +3809,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-puppetdb",
@@ -3478,7 +3849,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-quake1",
@@ -3517,7 +3889,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-quake2",
@@ -3541,7 +3914,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-quake3",
@@ -3565,7 +3939,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-reddit",
@@ -3612,7 +3987,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-regexp",
@@ -3648,6 +4024,14 @@
   "go-richdoc": [
     {
       "org": "go-richdoc",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-richdoc",
       "name": "latex",
       "private": false,
       "archived": false,
@@ -3669,6 +4053,14 @@
       "archived": false,
       "fork": false,
       "language": "Go"
+    },
+    {
+      "org": "go-richdoc",
+      "name": "rst",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     }
   ],
   "go-rouge": [
@@ -3677,7 +4069,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-rouge",
@@ -3711,6 +4104,14 @@
     }
   ],
   "go-rtf": [
+    {
+      "org": "go-rtf",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
     {
       "org": "go-rtf",
       "name": "rtf",
@@ -11432,6 +11833,14 @@
   "go-scss": [
     {
       "org": "go-scss",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-scss",
       "name": "go-scss.github.io",
       "private": false,
       "archived": false,
@@ -11447,14 +11856,24 @@
       "language": "Go"
     }
   ],
-  "go-sicp": [],
+  "go-sicp": [
+    {
+      "org": "go-sicp",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    }
+  ],
   "go-simd": [
     {
       "org": "go-simd",
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-simd",
@@ -11658,6 +12077,14 @@
   "go-streamkit": [
     {
       "org": "go-streamkit",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-streamkit",
       "name": "streamkit",
       "private": false,
       "archived": false,
@@ -11671,7 +12098,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-synctex",
@@ -11711,7 +12139,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-syndication",
@@ -11750,7 +12179,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-tex",
@@ -11821,7 +12251,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-thumbnail",
@@ -11860,7 +12291,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-tiktok",
@@ -11899,7 +12331,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-tpm2",
@@ -11994,7 +12427,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-typeset",
@@ -12039,6 +12473,14 @@
   "go-versions": [
     {
       "org": "go-versions",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-versions",
       "name": "go-versions.github.io",
       "private": false,
       "archived": false,
@@ -12060,7 +12502,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-vet-analyzers",
@@ -12107,7 +12550,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-virtio",
@@ -12242,7 +12686,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-volumes",
@@ -12345,7 +12790,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-webengine",
@@ -12387,6 +12833,14 @@
     }
   ],
   "go-widgets": [
+    {
+      "org": "go-widgets",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
     {
       "org": "go-widgets",
       "name": "android",
@@ -12546,7 +13000,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-xrkit",
@@ -12609,7 +13064,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-xslt",
@@ -12648,7 +13104,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-yjs-relay",
@@ -12682,6 +13139,14 @@
     }
   ],
   "grpc-transports": [
+    {
+      "org": "grpc-transports",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
     {
       "org": "grpc-transports",
       "name": "brand",
@@ -12746,6 +13211,14 @@
     }
   ],
   "nano-container-linux": [
+    {
+      "org": "nano-container-linux",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
     {
       "org": "nano-container-linux",
       "name": "dnsctl",
@@ -13387,7 +13860,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "wasmdesk",
