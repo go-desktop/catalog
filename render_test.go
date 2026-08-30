@@ -52,7 +52,8 @@ func TestHugoTOML(t *testing.T) {
 
 func TestEcosystemTOML(t *testing.T) {
 	out := string(renderFixture(t).EcosystemTOML())
-	for _, want := range []string{`"json",`, `"stdlib",`, `"go-quake2",`, "gem_repos = 2"} {
+	for _, want := range []string{`"json",`, `"stdlib",`, `"go-quake2",`, "gem_repos = 2",
+		`{ org = "go-old", by = "go-new" },`} {
 		if !strings.Contains(out, want) {
 			t.Errorf("ecosystem.toml is missing %q", want)
 		}

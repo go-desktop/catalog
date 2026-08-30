@@ -20,6 +20,7 @@ type Catalog struct {
 	Families       []ResolvedFamily
 	Gems           []Gem
 	Reserved       []Reserved
+	Superseded     []Superseded
 	NotGo          []NotGoEntry
 	TotalOrgs      int
 	TotalRepos     int
@@ -69,6 +70,9 @@ func Build(c *Classification, inv Inventory) (*Catalog, error) {
 	for _, r := range c.Reserved {
 		explicit[r.Org] = true
 	}
+	for _, sup := range c.Superseded {
+		explicit[sup.Org] = true
+	}
 	for _, n := range c.NotGo {
 		explicit[n.Org] = true
 	}
@@ -81,6 +85,7 @@ func Build(c *Classification, inv Inventory) (*Catalog, error) {
 		ReadmeOutro:    c.ReadmeOutro,
 		DocsIndex:      c.DocsIndex,
 		Reserved:       c.Reserved,
+		Superseded:     c.Superseded,
 		NotGo:          c.NotGo,
 	}
 	for _, f := range c.Families {
@@ -89,9 +94,19 @@ func Build(c *Classification, inv Inventory) (*Catalog, error) {
 			if !inv.Has(m.Org) {
 				return nil, fmt.Errorf("%s is classified under %q but does not exist", m.Org, f.Key)
 			}
-			n := len(inv.Code(m.Org))
+			code := inv.Code(m.Org)
+			n := len(code)
 			if n == 0 {
 				return nil, fmt.Errorf("%s is classified under %q but holds no public code; move it to reserved", m.Org, f.Key)
+			}
+			// An organisation whose every repository is archived is not a live
+			// dependency, and presenting it as one is worse than omitting it: a
+			// reader picks it, and only finds out when the module never moves
+			// again. Counts alone cannot catch this — an archived repository
+			// still counts — so the archive state has to be asked about
+			// directly.
+			if allArchived(code) {
+				return nil, fmt.Errorf("%s is classified under %q but every one of its %d public repositories is archived; move it to superseded and name what replaced it", m.Org, f.Key, n)
 			}
 			rf.Orgs = append(rf.Orgs, ResolvedOrg{
 				Name:  m.Org,
@@ -135,6 +150,21 @@ func Build(c *Classification, inv Inventory) (*Catalog, error) {
 	}
 	sort.Slice(out.Gems, func(i, j int) bool { return out.Gems[i].Name < out.Gems[j].Name })
 	return out, nil
+}
+
+// allArchived reports whether every repository in code is archived. An empty
+// slice is not "all archived" — that case is the no-public-code error above,
+// which says something different and more useful.
+func allArchived(code []Repo) bool {
+	if len(code) == 0 {
+		return false
+	}
+	for _, r := range code {
+		if !r.Archived {
+			return false
+		}
+	}
+	return true
 }
 
 // GemRepos is the number of public code repositories across the gem

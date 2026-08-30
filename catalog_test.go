@@ -25,6 +25,7 @@ func fixtureInventory() Inventory {
 		// renovate-runner is org plumbing, so this organisation holds one library,
 		// not two — the fixture keeps it precisely to pin that down.
 		"go-ruby-stdlib":         {{Name: "stdlib"}, {Name: "renovate-runner"}},
+		"go-old":                 {{Name: "old", Archived: true}},
 		"go-quake2":              {},                                // reserved, empty
 		"example-c":              {{Name: "c-fw"}},                  // not Go
 		"go-desktop":             {{Name: "brand"}, {Name: "docs"}}, // infra only
@@ -58,8 +59,9 @@ func TestBuild(t *testing.T) {
 	if c.GemsIntro == "" {
 		t.Error("the gems introduction did not survive Build")
 	}
-	if len(c.Reserved) != 1 || len(c.NotGo) != 1 {
-		t.Errorf("reserved/not-Go = %d/%d, want 1/1", len(c.Reserved), len(c.NotGo))
+	if len(c.Reserved) != 1 || len(c.NotGo) != 1 || len(c.Superseded) != 1 {
+		t.Errorf("reserved/not-Go/superseded = %d/%d/%d, want 1/1/1",
+			len(c.Reserved), len(c.NotGo), len(c.Superseded))
 	}
 	w, ok := c.Family("desktop")
 	if !ok {
@@ -114,5 +116,46 @@ func TestBuildRejectsUnclassifiedOrg(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "go-alsonew, go-newthing") {
 		t.Errorf("error = %q, want both names in sorted order", err)
+	}
+}
+
+func TestBuildRejectsFullyArchivedOrg(t *testing.T) {
+	// An organisation whose every repository is archived is not a live
+	// dependency. Counts cannot catch it — an archived repository still counts —
+	// so the failure has to come from asking about the archive state, and the
+	// message has to name the category to move it to.
+	inv := fixtureInventory()
+	inv["go-gfx"] = []Repo{{Name: "gfx", Archived: true}}
+	_, err := buildFixture(t, goodClassification, inv)
+	if err == nil {
+		t.Fatal("Build accepted an organisation whose every repository is archived")
+	}
+	if !strings.Contains(err.Error(), "archived") || !strings.Contains(err.Error(), "superseded") {
+		t.Errorf("error = %q, want it to name the archive state and the superseded list", err)
+	}
+	// One live repository among archived ones is still a live organisation.
+	inv["go-gfx"] = []Repo{{Name: "gfx", Archived: true}, {Name: "qr"}}
+	if _, err := buildFixture(t, goodClassification, inv); err != nil {
+		t.Errorf("Build rejected an organisation that still has a live repository: %v", err)
+	}
+}
+
+func TestAllArchived(t *testing.T) {
+	// Its own contract, tested directly: Build never reaches it with an empty
+	// slice, but "no repositories at all" must not answer "all of them are
+	// archived" — that would turn a different, better-worded error into this one.
+	for _, tc := range []struct {
+		name string
+		in   []Repo
+		want bool
+	}{
+		{"empty", nil, false},
+		{"all archived", []Repo{{Archived: true}, {Archived: true}}, true},
+		{"one live", []Repo{{Archived: true}, {}}, false},
+		{"none archived", []Repo{{}}, false},
+	} {
+		if got := allArchived(tc.in); got != tc.want {
+			t.Errorf("allArchived(%s) = %v, want %v", tc.name, got, tc.want)
+		}
 	}
 }

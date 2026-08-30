@@ -24,6 +24,7 @@ type Classification struct {
 	DocsIndex      string       `json:"docs_index"`
 	Families       []Family     `json:"families"`
 	Reserved       []Reserved   `json:"reserved"`
+	Superseded     []Superseded `json:"superseded"`
 	NotGo          []NotGoEntry `json:"not_go"`
 }
 
@@ -39,6 +40,19 @@ type Family struct {
 type MemberEntry struct {
 	Org  string `json:"org"`
 	Role string `json:"role"`
+}
+
+// Superseded is an organisation that was built, then archived because its
+// content moved elsewhere.
+//
+// It is a category of its own because the two neighbouring ones would both lie
+// about it. Leaving it in a family presents a dead organisation as a live
+// dependency; filing it under Reserved says it was never built. Naming the
+// successor is the whole value: a reader who knows the old name has to be able
+// to find the new one, which is exactly what an index is for.
+type Superseded struct {
+	Org string `json:"org"`
+	By  string `json:"by"`
 }
 
 // Reserved is an organisation name held but holding no code. Listing these is
@@ -122,6 +136,18 @@ func LoadClassification(r io.Reader) (*Classification, error) {
 			return nil, fmt.Errorf("%s is reserved but also in %q", r.Org, prev)
 		}
 		seenOrg[r.Org] = "reserved"
+	}
+	for _, sup := range c.Superseded {
+		switch {
+		case sup.Org == "":
+			return nil, fmt.Errorf("superseded entry with no organisation")
+		case sup.By == "":
+			return nil, fmt.Errorf("%s is superseded by nothing; name the successor", sup.Org)
+		}
+		if prev, dup := seenOrg[sup.Org]; dup {
+			return nil, fmt.Errorf("%s is superseded but also in %q", sup.Org, prev)
+		}
+		seenOrg[sup.Org] = "superseded"
 	}
 	for _, n := range c.NotGo {
 		if n.Org == "" {

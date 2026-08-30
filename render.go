@@ -77,6 +77,12 @@ func (c *Catalog) EcosystemTOML() []byte {
 		fmt.Fprintf(&b, "  %s,\n", quoteTOML(r.Org))
 	}
 	b.WriteString("]\n\n")
+	b.WriteString("# Archived organisations, each followed by what replaced it.\n")
+	b.WriteString("superseded = [\n")
+	for _, sup := range c.Superseded {
+		fmt.Fprintf(&b, "  { org = %s, by = %s },\n", quoteTOML(sup.Org), quoteTOML(sup.By))
+	}
+	b.WriteString("]\n\n")
 	fmt.Fprintf(&b, "# Public repositories holding code across the %d gem organisations.\n", len(c.Gems))
 	fmt.Fprintf(&b, "gem_repos = %d\n", c.GemRepos())
 	return []byte(b.String())
@@ -202,10 +208,30 @@ func (c *Catalog) ProfileREADME() []byte {
 		}
 	}
 
+	c.supersededTable(&b)
+
 	b.WriteString("\n---\n\n")
 	b.WriteString(c.expand(c.ReadmeOutro))
 	b.WriteString("\n")
 	return []byte(b.String())
+}
+
+// supersededTable renders the archived organisations and their successors. The
+// heading is deliberately not "reserved": one was never built, the other was
+// built and retired, and a reader who confuses them goes looking in the wrong
+// place.
+func (c *Catalog) supersededTable(b *strings.Builder) {
+	if len(c.Superseded) == 0 {
+		return
+	}
+	b.WriteString("\n## Archived, and where it went\n\n")
+	b.WriteString("These organisations were built and are now archived. They are listed, rather\n")
+	b.WriteString("than removed, because a reader who knows the old name has to be able to find\n")
+	b.WriteString("the new one. They are counted nowhere.\n\n")
+	b.WriteString("| Organisation | Replaced by |\n| --- | --- |\n")
+	for _, sup := range c.Superseded {
+		fmt.Fprintf(b, "| [`%s`](https://github.com/%s) | %s |\n", sup.Org, sup.Org, sup.By)
+	}
 }
 
 // ReservedPage renders the documentation page for the reserved names and the
@@ -218,6 +244,7 @@ func (c *Catalog) ReservedPage() []byte {
 	for _, r := range c.Reserved {
 		fmt.Fprintf(&b, "| [`%s`](https://github.com/%s) | %s |\n", r.Org, r.Org, r.For)
 	}
+	c.supersededTable(&b)
 	if len(c.NotGo) > 0 {
 		b.WriteString("\n## Not in this map\n\n")
 		b.WriteString("These are real and maintained; they are simply not part of the Go library\n")

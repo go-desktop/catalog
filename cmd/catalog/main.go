@@ -161,6 +161,7 @@ func cmdCheck(args []string, out io.Writer) error {
 	}
 	fmt.Fprintf(out, "  %-34s %2d orgs, %d repos\n", "Ruby gems", len(c.Gems), c.GemRepos())
 	fmt.Fprintf(out, "  %-34s %2d\n", "reserved (no code)", len(c.Reserved))
+	fmt.Fprintf(out, "  %-34s %2d\n", "superseded (archived)", len(c.Superseded))
 	return nil
 }
 

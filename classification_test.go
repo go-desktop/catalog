@@ -19,6 +19,7 @@ const goodClassification = `{
      "orgs":[{"org":"go-gfx","role":"The socle."}]}
   ],
   "reserved": [{"org":"go-quake2","for":"Later."}],
+  "superseded": [{"org":"go-old","by":"go-new"}],
   "not_go": [{"org":"example-c","what":"C."}]
 }`
 
@@ -71,6 +72,12 @@ func TestLoadClassificationErrors(t *testing.T) {
 		{"org in two families", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[
 			{"key":"a","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]},
 			{"key":"b","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}]}`, "in both"},
+		{"superseded with no name", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}],
+			"superseded":[{"by":"something"}]}`, "superseded entry with no organisation"},
+		{"superseded by nothing", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}],
+			"superseded":[{"org":"go-old"}]}`, "name the successor"},
+		{"superseded and classified", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}],
+			"superseded":[{"org":"o","by":"x"}]}`, "superseded but also in"},
 		{"reserved with no name", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}],
 			"reserved":[{"for":"later"}]}`, "reserved entry with no organisation"},
 		{"reserved and classified", `{"gems_intro":"x","readme_intro":"i","readme_standards":"s","reserved_intro":"r","readme_outro":"o","docs_index":"d","families":[{"key":"k","title":"T","blurb":"B","orgs":[{"org":"o","role":"r"}]}],
