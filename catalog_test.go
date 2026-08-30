@@ -25,7 +25,6 @@ func fixtureInventory() Inventory {
 		// renovate-runner is org plumbing, so this organisation holds one library,
 		// not two — the fixture keeps it precisely to pin that down.
 		"go-ruby-stdlib":         {{Name: "stdlib"}, {Name: "renovate-runner"}},
-		"go-old":                 {{Name: "old", Archived: true}},
 		"go-quake2":              {},                                // reserved, empty
 		"example-c":              {{Name: "c-fw"}},                  // not Go
 		"go-desktop":             {{Name: "brand"}, {Name: "docs"}}, // infra only
@@ -59,9 +58,8 @@ func TestBuild(t *testing.T) {
 	if c.GemsIntro == "" {
 		t.Error("the gems introduction did not survive Build")
 	}
-	if len(c.Reserved) != 1 || len(c.NotGo) != 1 || len(c.Superseded) != 1 {
-		t.Errorf("reserved/not-Go/superseded = %d/%d/%d, want 1/1/1",
-			len(c.Reserved), len(c.NotGo), len(c.Superseded))
+	if len(c.Reserved) != 1 || len(c.NotGo) != 1 {
+		t.Errorf("reserved/not-Go = %d/%d, want 1/1", len(c.Reserved), len(c.NotGo))
 	}
 	w, ok := c.Family("desktop")
 	if !ok {
@@ -123,15 +121,15 @@ func TestBuildRejectsFullyArchivedOrg(t *testing.T) {
 	// An organisation whose every repository is archived is not a live
 	// dependency. Counts cannot catch it — an archived repository still counts —
 	// so the failure has to come from asking about the archive state, and the
-	// message has to name the category to move it to.
+	// message has to say what to do about it.
 	inv := fixtureInventory()
 	inv["go-gfx"] = []Repo{{Name: "gfx", Archived: true}}
 	_, err := buildFixture(t, goodClassification, inv)
 	if err == nil {
 		t.Fatal("Build accepted an organisation whose every repository is archived")
 	}
-	if !strings.Contains(err.Error(), "archived") || !strings.Contains(err.Error(), "superseded") {
-		t.Errorf("error = %q, want it to name the archive state and the superseded list", err)
+	if !strings.Contains(err.Error(), "archived") || !strings.Contains(err.Error(), "retire it") {
+		t.Errorf("error = %q, want it to name the archive state and what to do", err)
 	}
 	// One live repository among archived ones is still a live organisation.
 	inv["go-gfx"] = []Repo{{Name: "gfx", Archived: true}, {Name: "qr"}}

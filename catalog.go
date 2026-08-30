@@ -20,7 +20,6 @@ type Catalog struct {
 	Families       []ResolvedFamily
 	Gems           []Gem
 	Reserved       []Reserved
-	Superseded     []Superseded
 	NotGo          []NotGoEntry
 	TotalOrgs      int
 	TotalRepos     int
@@ -70,9 +69,6 @@ func Build(c *Classification, inv Inventory) (*Catalog, error) {
 	for _, r := range c.Reserved {
 		explicit[r.Org] = true
 	}
-	for _, sup := range c.Superseded {
-		explicit[sup.Org] = true
-	}
 	for _, n := range c.NotGo {
 		explicit[n.Org] = true
 	}
@@ -85,7 +81,6 @@ func Build(c *Classification, inv Inventory) (*Catalog, error) {
 		ReadmeOutro:    c.ReadmeOutro,
 		DocsIndex:      c.DocsIndex,
 		Reserved:       c.Reserved,
-		Superseded:     c.Superseded,
 		NotGo:          c.NotGo,
 	}
 	for _, f := range c.Families {
@@ -106,7 +101,7 @@ func Build(c *Classification, inv Inventory) (*Catalog, error) {
 			// still counts — so the archive state has to be asked about
 			// directly.
 			if allArchived(code) {
-				return nil, fmt.Errorf("%s is classified under %q but every one of its %d public repositories is archived; move it to superseded and name what replaced it", m.Org, f.Key, n)
+				return nil, fmt.Errorf("%s is classified under %q but every one of its %d public repositories is archived; retire it from the map or say what it became", m.Org, f.Key, n)
 			}
 			rf.Orgs = append(rf.Orgs, ResolvedOrg{
 				Name:  m.Org,

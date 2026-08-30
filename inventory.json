@@ -2402,39 +2402,6 @@
       "language": "Go"
     }
   ],
-  "go-iconoir": [
-    {
-      "org": "go-iconoir",
-      "name": ".github",
-      "private": false,
-      "archived": true,
-      "fork": false,
-      "language": "JavaScript"
-    },
-    {
-      "org": "go-iconoir",
-      "name": "brand",
-      "private": false,
-      "archived": true,
-      "fork": false
-    },
-    {
-      "org": "go-iconoir",
-      "name": "go-iconoir.github.io",
-      "private": false,
-      "archived": true,
-      "fork": false,
-      "language": "HTML"
-    },
-    {
-      "org": "go-iconoir",
-      "name": "iconoir",
-      "private": false,
-      "archived": true,
-      "fork": false,
-      "language": "Go"
-    }
-  ],
   "go-icons": [
     {
       "org": "go-icons",
@@ -2884,13 +2851,14 @@
       "name": "localauthentication",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-macos",
       "name": "notify",
       "private": false,
-      "archived": true,
+      "archived": false,
       "fork": false,
       "language": "Go"
     },
@@ -2929,6 +2897,14 @@
     {
       "org": "go-macos",
       "name": "statusitem",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
+      "name": "usernotifications",
       "private": false,
       "archived": false,
       "fork": false,
