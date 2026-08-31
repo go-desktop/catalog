@@ -366,20 +366,24 @@ func TestFetchErrors(t *testing.T) {
 	dir := t.TempDir()
 	api := fakeAPI(t)
 	t.Setenv("GITHUB_TOKEN", "")
+	// -no-exclusions throughout: these cases are about the OTHER failures, and
+	// without it they would all report the missing retirement list instead --
+	// which is what a runner with no home file does, and what my own machine
+	// hid because it has one.
 
 	if code, _, _ := exec("fetch", "-nosuchflag"); code != 1 {
 		t.Error("an unknown flag should be an error")
 	}
-	if code, _, errs := exec("fetch", "-token-file", filepath.Join(dir, "nope")); code != 1 ||
+	if code, _, errs := exec("fetch", "-no-exclusions", "-token-file", filepath.Join(dir, "nope")); code != 1 ||
 		!strings.Contains(errs, "read token") {
 		t.Errorf("missing token file: code=%d stderr=%q", code, errs)
 	}
-	if code, _, errs := exec("fetch", "-api", api, "-out", filepath.Join(dir, "x.json")); code != 1 ||
+	if code, _, errs := exec("fetch", "-no-exclusions", "-api", api, "-out", filepath.Join(dir, "x.json")); code != 1 ||
 		!strings.Contains(errs, "no token") {
 		t.Errorf("no token at all: code=%d stderr=%q", code, errs)
 	}
 	t.Setenv("GITHUB_TOKEN", "t0ken")
-	if code, _, _ := exec("fetch", "-api", "http://\x7f", "-out", filepath.Join(dir, "x.json")); code != 1 {
+	if code, _, _ := exec("fetch", "-no-exclusions", "-api", "http://\x7f", "-out", filepath.Join(dir, "x.json")); code != 1 {
 		t.Error("an unreachable API should be an error")
 	}
 	t.Setenv("GITHUB_TOKEN", "")
@@ -389,7 +393,7 @@ func TestFetchErrors(t *testing.T) {
 	if err := os.WriteFile(tokenFile, []byte("t0ken"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	if code, _, errs := exec("fetch", "-api", api, "-token-file", tokenFile,
+	if code, _, errs := exec("fetch", "-no-exclusions", "-api", api, "-token-file", tokenFile,
 		"-out", filepath.Join(dir, "no", "such", "x.json")); code != 1 ||
 		!strings.Contains(errs, "write") {
 		t.Errorf("unwritable inventory: code=%d stderr=%q", code, errs)
