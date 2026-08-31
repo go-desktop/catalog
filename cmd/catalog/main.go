@@ -1,6 +1,8 @@
 // Command catalog regenerates the go-desktop ecosystem map.
 //
 //	catalog fetch    -out inventory.json [-token-file ~/.github-token] [-exclude-file FILE]
+//	                 the retirement list defaults to ~/.go-desktop-retired and is
+//	                 REQUIRED: -no-exclusions to fetch retired organisations too
 //	catalog check    [-inventory inventory.json] [-classification families.json]
 //	catalog generate [-site ../go-desktop.github.io] [-docs ../docs] [-profile ../.github]
 //
@@ -28,9 +30,15 @@ var osExit = os.Exit
 
 func main() { osExit(run(os.Args[1:], os.Stdout, os.Stderr)) }
 
+// defaultRetired is the retirement list this looks for when none is named. It
+// lives in the home directory rather than the repository because it is the one
+// name list a published map would contradict by carrying it.
+const defaultRetired = ".go-desktop-retired"
+
 const usage = `catalog regenerates the go-desktop ecosystem map.
 
   catalog fetch    -out FILE [-token-file FILE] [-exclude-file FILE]
+                   the retirement list defaults to ~/.go-desktop-retired
                                                   read GitHub into an inventory
   catalog check                                   reconcile the two inputs
   catalog generate -site DIR -docs DIR -profile DIR
@@ -76,9 +84,34 @@ func cmdFetch(args []string, out io.Writer) error {
 	dest := fs.String("out", "inventory.json", "write the inventory here")
 	tokenFile := fs.String("token-file", "", "read the API token from this file")
 	baseURL := fs.String("api", catalog.DefaultBaseURL, "GitHub API root")
-	excludeFile := fs.String("exclude-file", "", "skip the organisations named in this file, one login per line")
+	excludeFile := fs.String("exclude-file", "", "skip the organisations named in this file, one login per line (default "+defaultRetired+")")
+	noExclusions := fs.Bool("no-exclusions", false, "fetch every organisation, retired ones included")
 	if err := fs.Parse(args); err != nil {
 		return err
+	}
+	// THE RETIREMENT LIST IS NOT OPTIONAL, because forgetting it is silent and
+	// expensive. Fetching without it pulls in every organisation that has been
+	// retired, the reconciliation then demands a family for each, and the
+	// published map gains prose about organisations it exists never to name.
+	// That happened: fifteen names, ten of them classified by hand before
+	// anybody noticed the list already said otherwise.
+	//
+	// The list is deliberately not checked in -- it is the one name list a
+	// published map would contradict by carrying it -- so it is invisible from
+	// the repository and easy to forget. Hence a default, and a refusal rather
+	// than a shrug when neither the default nor a flag is there.
+	if *excludeFile == "" && !*noExclusions {
+		home, err := os.UserHomeDir()
+		if err != nil {
+			return fmt.Errorf("no -exclude-file and no home directory to find %s in", defaultRetired)
+		}
+		p := filepath.Join(home, defaultRetired)
+		if _, err := os.Stat(p); err != nil {
+			return fmt.Errorf("no retirement list: %s does not exist.\n"+
+				"Pass -exclude-file, or -no-exclusions to fetch retired organisations too.\n"+
+				"Without it every retired organisation enters the inventory and the map is asked to name it", p)
+		}
+		*excludeFile = p
 	}
 	token := os.Getenv("GITHUB_TOKEN")
 	if *tokenFile != "" {
