@@ -123,9 +123,19 @@ func Build(c *Classification, inv Inventory) (*Catalog, error) {
 		if explicit[org] {
 			continue
 		}
-		n := len(inv.Code(org))
+		code := inv.Code(org)
+		n := len(code)
 		if n == 0 {
 			continue // an empty organisation is reported by the reserved list, not here
+		}
+		// A RETIRED organisation is not a missing one. Every repository archived
+		// means the capability moved or was abandoned, and demanding a family
+		// for it is a demand that cannot be met: classify it and the check above
+		// refuses it for being all-archived, leave it out and this one refuses
+		// it for being unclassified. Measured on go-iconoir, whose icons moved
+		// to go-icons and whose four repositories are all archived.
+		if allArchived(code) {
+			continue
 		}
 		if strings.HasPrefix(org, GemPrefix) {
 			out.Gems = append(out.Gems, Gem{
