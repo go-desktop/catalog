@@ -14,6 +14,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -122,22 +123,27 @@ func cmdFetch(args []string, out io.Writer) error {
 }
 
 // load reads and reconciles both inputs, which is all check does and the first
-// thing generate does.
-func load(inventory, classification string) (*catalog.Catalog, error) {
+// thing generate does. The inventory comes back too: generate reads the
+// published pages against it afterwards.
+func load(inventory, classification string) (*catalog.Catalog, catalog.Inventory, error) {
 	f, err := os.Open(classification)
 	if err != nil {
-		return nil, fmt.Errorf("open classification: %w", err)
+		return nil, nil, fmt.Errorf("open classification: %w", err)
 	}
 	defer f.Close()
 	cl, err := catalog.LoadClassification(f)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	inv, err := catalog.ReadInventory(inventory)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return catalog.Build(cl, inv)
+	c, err := catalog.Build(cl, inv)
+	if err != nil {
+		return nil, nil, err
+	}
+	return c, inv, nil
 }
 
 func addInputFlags(fs *flag.FlagSet) (inv, cl *string) {
@@ -151,7 +157,7 @@ func cmdCheck(args []string, out io.Writer) error {
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
-	c, err := load(*inv, *cl)
+	c, _, err := load(*inv, *cl)
 	if err != nil {
 		return err
 	}
@@ -170,13 +176,14 @@ func cmdGenerate(args []string, out io.Writer) error {
 	site := fs.String("site", "", "the landing-page repository to write into")
 	docs := fs.String("docs", "", "the documentation repository to write into")
 	profile := fs.String("profile", "", "the .github repository to write the profile into")
+	excludeFile := fs.String("exclude-file", "", "the retirement list, so a page still linking to a retired organisation fails")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
 	if *site == "" && *docs == "" && *profile == "" {
 		return fmt.Errorf("nothing to write: pass -site, -docs, -profile, or several")
 	}
-	c, err := load(*inv, *cl)
+	c, inventory, err := load(*inv, *cl)
 	if err != nil {
 		return err
 	}
@@ -221,6 +228,72 @@ func cmdGenerate(args []string, out io.Writer) error {
 			return err
 		}
 	}
+	// Read the pages back — every one of them, generated or not. The generated
+	// ones pass trivially; the hand-written ones are the point, because nothing
+	// else looks at them and a link there outlives what it names.
+	retired, err := loadExclusions(*excludeFile)
+	if err != nil {
+		return err
+	}
+	var problems []catalog.LinkProblem
+	for _, root := range []string{*docs, *site, *profile} {
+		if root == "" {
+			continue
+		}
+		found, err := checkTree(root, inventory, retired)
+		if err != nil {
+			return err
+		}
+		problems = append(problems, found...)
+	}
+	if err := catalog.LinkReport(problems); err != nil {
+		return err
+	}
+
 	fmt.Fprintf(out, "%s\n%d files written\n", c.Summary(), written)
 	return nil
+}
+
+// loadExclusions reads the retirement list, or returns an empty one when no
+// path was given.
+func loadExclusions(path string) (catalog.Exclusions, error) {
+	if path == "" {
+		return catalog.Exclusions{}, nil
+	}
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, fmt.Errorf("open exclusions: %w", err)
+	}
+	defer f.Close()
+	return catalog.LoadExclusions(f)
+}
+
+// checkTree walks a published repository looking at the pages a reader sees.
+func checkTree(root string, inv catalog.Inventory, retired catalog.Exclusions) ([]catalog.LinkProblem, error) {
+	var out []catalog.LinkProblem
+	err := filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() {
+			// A build output or a checkout is not a page anyone reads.
+			switch d.Name() {
+			case ".git", "site", "public", "node_modules", "resources":
+				return filepath.SkipDir
+			}
+			return nil
+		}
+		switch filepath.Ext(path) {
+		case ".md", ".html", ".toml":
+		default:
+			return nil
+		}
+		b, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		out = append(out, inv.CheckLinks(path, b, retired)...)
+		return nil
+	})
+	return out, err
 }

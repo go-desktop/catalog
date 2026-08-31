@@ -412,3 +412,154 @@ func TestMain_exits(t *testing.T) {
 		t.Errorf("main() with no command exited %d, want 2", got)
 	}
 }
+
+// TestGenerateRejectsADeadLink is the reason the check exists. finding.md is
+// hand-written, so no regeneration touches it, and it went on pointing readers
+// at an organisation that had been retired while every other check stayed
+// green.
+func TestGenerateRejectsADeadLink(t *testing.T) {
+	_, cl, inv := inputs(t)
+	dir := t.TempDir()
+	docs := filepath.Join(dir, "docs")
+	if err := os.MkdirAll(filepath.Join(docs, "docs"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	// A hand-written page: generate never writes this name.
+	hand := filepath.Join(docs, "docs", "finding.md")
+	if err := os.WriteFile(hand, []byte("see [x](https://github.com/go-gone/thing)\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	retired := filepath.Join(dir, "retired")
+	if err := os.WriteFile(retired, []byte("go-gone\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	code, _, errs := exec("generate", "-classification", cl, "-inventory", inv,
+		"-docs", docs, "-exclude-file", retired)
+	if code != 1 {
+		t.Fatalf("a retired link must fail the run: code=%d stderr=%q", code, errs)
+	}
+	if !strings.Contains(errs, "finding.md") || !strings.Contains(errs, "retired") {
+		t.Errorf("the message must name the file and the reason: %q", errs)
+	}
+
+	// Without the retirement list the same link is indistinguishable from
+	// somebody else's organisation, which is exactly how it survived.
+	if code, _, _ := exec("generate", "-classification", cl, "-inventory", inv, "-docs", docs); code != 0 {
+		t.Error("without -exclude-file the link is external and must pass")
+	}
+}
+
+// TestGenerateRejectsAnArchivedRepo: the other half of the same failure — the
+// organisation is still in the map, but the repository behind the link is not
+// live.
+func TestGenerateRejectsAnArchivedRepo(t *testing.T) {
+	dir := t.TempDir()
+	cl := filepath.Join(dir, "families.json")
+	if err := os.WriteFile(cl, []byte(classification), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	inv := filepath.Join(dir, "inventory.json")
+	if err := os.WriteFile(inv, []byte(`{
+	  "go-widgets": [{"org":"go-widgets","name":"toolkit"},
+	                 {"org":"go-widgets","name":"retiree","archived":true}],
+	  "go-gfx":     [{"org":"go-gfx","name":"gfx"}],
+	  "go-ruby-json":[{"org":"go-ruby-json","name":"json"}],
+	  "go-quake2":  []
+	}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	docs := filepath.Join(dir, "docs")
+	if err := os.MkdirAll(filepath.Join(docs, "docs"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(docs, "docs", "finding.md"),
+		[]byte("[r](https://github.com/go-widgets/retiree)\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	code, _, errs := exec("generate", "-classification", cl, "-inventory", inv, "-docs", docs)
+	if code != 1 || !strings.Contains(errs, "archived") {
+		t.Errorf("an archived repository must fail the run: code=%d stderr=%q", code, errs)
+	}
+}
+
+// TestGenerateExclusionFileProblems covers reading the retirement list.
+func TestGenerateExclusionFileProblems(t *testing.T) {
+	_, cl, inv := inputs(t)
+	site := t.TempDir()
+	if code, _, errs := exec("generate", "-classification", cl, "-inventory", inv,
+		"-site", site, "-exclude-file", filepath.Join(t.TempDir(), "absent")); code != 1 ||
+		!strings.Contains(errs, "open exclusions") {
+		t.Errorf("a missing exclusion file must be an error: code=%d stderr=%q", code, errs)
+	}
+}
+
+// TestGenerateSkipsBuildOutput: a docs tree carries a built site/ directory and
+// a .git, and neither is a page a reader sees. Walking them would report links
+// out of stale build output as if they were live pages.
+func TestGenerateSkipsBuildOutput(t *testing.T) {
+	_, cl, inv := inputs(t)
+	dir := t.TempDir()
+	docs := filepath.Join(dir, "docs")
+	for _, sub := range []string{"site", ".git", "public"} {
+		if err := os.MkdirAll(filepath.Join(docs, sub), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(filepath.Join(docs, sub, "stale.md"),
+			[]byte("[x](https://github.com/go-gone/thing)\n"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	// Nor is a file that is not a page: an asset, a licence, a lock file. Only
+	// the extensions a reader's page actually has are opened.
+	if err := os.WriteFile(filepath.Join(docs, "notes.txt"),
+		[]byte("[x](https://github.com/go-gone/thing)\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	retired := filepath.Join(dir, "retired")
+	if err := os.WriteFile(retired, []byte("go-gone\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if code, _, errs := exec("generate", "-classification", cl, "-inventory", inv,
+		"-docs", docs, "-exclude-file", retired); code != 0 {
+		t.Errorf("build output and non-pages must not be walked: code=%d stderr=%q", code, errs)
+	}
+}
+
+// TestGenerateSurfacesUnreadablePages: a page the check cannot read is not a
+// page that passed. Both failures are real file-system conditions, so they are
+// produced rather than mocked.
+func TestGenerateSurfacesUnreadablePages(t *testing.T) {
+	_, cl, inv := inputs(t)
+
+	t.Run("unreadable file", func(t *testing.T) {
+		dir := t.TempDir()
+		docs := filepath.Join(dir, "docs")
+		if err := os.MkdirAll(filepath.Join(docs, "docs"), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		locked := filepath.Join(docs, "docs", "locked.md")
+		if err := os.WriteFile(locked, []byte("x"), 0o000); err != nil {
+			t.Fatal(err)
+		}
+		t.Cleanup(func() { _ = os.Chmod(locked, 0o644) })
+		if code, _, errs := exec("generate", "-classification", cl, "-inventory", inv, "-docs", docs); code != 1 {
+			t.Errorf("an unreadable page must fail the run: code=%d stderr=%q", code, errs)
+		}
+	})
+
+	t.Run("unreadable directory", func(t *testing.T) {
+		dir := t.TempDir()
+		docs := filepath.Join(dir, "docs")
+		sub := filepath.Join(docs, "docs", "shut")
+		if err := os.MkdirAll(sub, 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.Chmod(sub, 0o000); err != nil {
+			t.Fatal(err)
+		}
+		t.Cleanup(func() { _ = os.Chmod(sub, 0o755) })
+		if code, _, errs := exec("generate", "-classification", cl, "-inventory", inv, "-docs", docs); code != 1 {
+			t.Errorf("an unreadable directory must fail the run: code=%d stderr=%q", code, errs)
+		}
+	})
+}

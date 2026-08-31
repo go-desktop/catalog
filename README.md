@@ -57,7 +57,8 @@ catalog check
 catalog generate \
   -site    ../go-desktop.github.io \
   -docs    ../docs \
-  -profile ../.github
+  -profile ../.github \
+  -exclude-file ~/.go-desktop-retired
 ```
 
 `fetch` is separate from `generate` so that a regeneration is reproducible from a
@@ -78,6 +79,28 @@ actually changed.
 
 Everything else on those sites — the layout, the capability lookup, the standards
 page — is hand-written and never touched.
+
+## The hand-written pages are read back
+
+Never touching them is how they go stale. The capability lookup went on sending
+readers to an organisation that had been archived and then retired from the map,
+while every other check stayed green: nothing regenerates that page, so nothing
+looked at it.
+
+So `generate` reads back **every** page under the directories it writes into,
+generated or not, and fails on a GitHub link that no longer resolves — a
+repository that is gone, private or archived, or an organisation that has been
+retired. An organisation the inventory does not know is left alone; it is
+somebody else's.
+
+Pass `-exclude-file` for the retirement check to mean anything: without the list,
+a retired organisation is indistinguishable from an external one, which is
+exactly how the dead link survived.
+
+```sh
+catalog generate -site ../go-desktop.github.io -docs ../docs -profile ../.github \
+  -exclude-file ~/.go-desktop-retired
+```
 
 One coupling remains: adding a family here also needs a line in the documentation
 repository's `mkdocs.yml` nav, or its page builds but is unreachable. MkDocs
