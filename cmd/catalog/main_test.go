@@ -295,7 +295,7 @@ func TestFetch(t *testing.T) {
 		t.Fatal(err)
 	}
 	dest := filepath.Join(dir, "inventory.json")
-	code, out, errs := exec("fetch", "-api", api, "-token-file", tokenFile, "-out", dest)
+	code, out, errs := exec("fetch", "-api", api, "-token-file", tokenFile, "-out", dest, "-no-exclusions")
 	if code != 0 {
 		t.Fatalf("fetch failed: code=%d stderr=%q", code, errs)
 	}
@@ -308,7 +308,7 @@ func TestFetch(t *testing.T) {
 
 	// The token may also come from the environment.
 	t.Setenv("GITHUB_TOKEN", "env-token")
-	if code, _, errs := exec("fetch", "-api", api, "-out", filepath.Join(dir, "b.json")); code != 0 {
+	if code, _, errs := exec("fetch", "-api", api, "-out", filepath.Join(dir, "b.json"), "-no-exclusions"); code != 0 {
 		t.Errorf("fetch with GITHUB_TOKEN: code=%d stderr=%q", code, errs)
 	}
 }
@@ -366,20 +366,24 @@ func TestFetchErrors(t *testing.T) {
 	dir := t.TempDir()
 	api := fakeAPI(t)
 	t.Setenv("GITHUB_TOKEN", "")
+	// -no-exclusions throughout: these cases are about the OTHER failures, and
+	// without it they would all report the missing retirement list instead --
+	// which is what a runner with no home file does, and what my own machine
+	// hid because it has one.
 
 	if code, _, _ := exec("fetch", "-nosuchflag"); code != 1 {
 		t.Error("an unknown flag should be an error")
 	}
-	if code, _, errs := exec("fetch", "-token-file", filepath.Join(dir, "nope")); code != 1 ||
+	if code, _, errs := exec("fetch", "-no-exclusions", "-token-file", filepath.Join(dir, "nope")); code != 1 ||
 		!strings.Contains(errs, "read token") {
 		t.Errorf("missing token file: code=%d stderr=%q", code, errs)
 	}
-	if code, _, errs := exec("fetch", "-api", api, "-out", filepath.Join(dir, "x.json")); code != 1 ||
+	if code, _, errs := exec("fetch", "-no-exclusions", "-api", api, "-out", filepath.Join(dir, "x.json")); code != 1 ||
 		!strings.Contains(errs, "no token") {
 		t.Errorf("no token at all: code=%d stderr=%q", code, errs)
 	}
 	t.Setenv("GITHUB_TOKEN", "t0ken")
-	if code, _, _ := exec("fetch", "-api", "http://\x7f", "-out", filepath.Join(dir, "x.json")); code != 1 {
+	if code, _, _ := exec("fetch", "-no-exclusions", "-api", "http://\x7f", "-out", filepath.Join(dir, "x.json")); code != 1 {
 		t.Error("an unreachable API should be an error")
 	}
 	t.Setenv("GITHUB_TOKEN", "")
@@ -389,7 +393,7 @@ func TestFetchErrors(t *testing.T) {
 	if err := os.WriteFile(tokenFile, []byte("t0ken"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	if code, _, errs := exec("fetch", "-api", api, "-token-file", tokenFile,
+	if code, _, errs := exec("fetch", "-no-exclusions", "-api", api, "-token-file", tokenFile,
 		"-out", filepath.Join(dir, "no", "such", "x.json")); code != 1 ||
 		!strings.Contains(errs, "write") {
 		t.Errorf("unwritable inventory: code=%d stderr=%q", code, errs)
@@ -569,3 +573,64 @@ func (r refusingFS) Open(name string) (fs.File, error) {
 	}
 	return r.FS.Open(name)
 }
+
+// TestFetchWantsTheRetirementList is the guard on a mistake that is silent and
+// expensive: fetching without the list pulls in every retired organisation, the
+// reconciliation then demands a family for each, and the published map gains
+// prose about organisations it exists never to name. Fifteen names, ten of them
+// classified by hand before anybody noticed the list already said otherwise.
+func TestFetchWantsTheRetirementList(t *testing.T) {
+	dir := t.TempDir()
+	api := fakeAPI(t)
+	tokenFile := filepath.Join(dir, "token")
+	if err := os.WriteFile(tokenFile, []byte("t0ken\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	// A home with no list: refused, and the refusal says what to do. The path
+	// goes through the seam rather than the environment: os.UserHomeDir reads
+	// HOME on unix and USERPROFILE on Windows, and a test that set one passed
+	// on two platforms and failed on the third.
+	home := t.TempDir()
+	was := retiredPath
+	t.Cleanup(func() { retiredPath = was })
+	retiredPath = func() (string, error) { return filepath.Join(home, defaultRetired), nil }
+	code, _, errs := exec("fetch", "-api", api, "-token-file", tokenFile,
+		"-out", filepath.Join(dir, "a.json"))
+	if code == 0 {
+		t.Error("fetched with no retirement list at all")
+	}
+	for _, want := range []string{"no retirement list", "-no-exclusions"} {
+		if !strings.Contains(errs, want) {
+			t.Errorf("the refusal does not mention %q: %s", want, errs)
+		}
+	}
+
+	// The same home with the list: found without being named.
+	if err := os.WriteFile(filepath.Join(home, defaultRetired), []byte("retired-org\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	code, out, errs := exec("fetch", "-api", api, "-token-file", tokenFile,
+		"-out", filepath.Join(dir, "b.json"))
+	if code != 0 {
+		t.Fatalf("fetch with the default list: code=%d stderr=%q", code, errs)
+	}
+	if !strings.Contains(out, defaultRetired) {
+		t.Errorf("it did not say which list it used: %q", out)
+	}
+}
+
+// TestFetchWithNoHomeAtAll: a machine that cannot say where home is gets an
+// error naming the list, not a nil path quietly turning into ".go-desktop-retired"
+// in the working directory.
+func TestFetchWithNoHomeAtAll(t *testing.T) {
+	was := retiredPath
+	t.Cleanup(func() { retiredPath = was })
+	retiredPath = func() (string, error) { return "", errUnhomed }
+	code, _, errs := exec("fetch", "-api", fakeAPI(t), "-out", filepath.Join(t.TempDir(), "x.json"))
+	if code == 0 || !strings.Contains(errs, defaultRetired) {
+		t.Errorf("code=%d stderr=%q, want it to name the list it could not find", code, errs)
+	}
+}
+
+var errUnhomed = fmt.Errorf("no home directory on this machine")
