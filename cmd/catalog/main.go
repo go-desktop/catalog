@@ -35,6 +35,18 @@ func main() { osExit(run(os.Args[1:], os.Stdout, os.Stderr)) }
 // name list a published map would contradict by carrying it.
 const defaultRetired = ".go-desktop-retired"
 
+// retiredPath answers where the default retirement list lives, as a seam. A test
+// cannot get there through the environment: os.UserHomeDir reads HOME on unix
+// and USERPROFILE on Windows, so a test that set one passed on two platforms and
+// failed on the third.
+var retiredPath = func() (string, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(home, defaultRetired), nil
+}
+
 const usage = `catalog regenerates the go-desktop ecosystem map.
 
   catalog fetch    -out FILE [-token-file FILE] [-exclude-file FILE]
@@ -101,11 +113,10 @@ func cmdFetch(args []string, out io.Writer) error {
 	// the repository and easy to forget. Hence a default, and a refusal rather
 	// than a shrug when neither the default nor a flag is there.
 	if *excludeFile == "" && !*noExclusions {
-		home, err := os.UserHomeDir()
+		p, err := retiredPath()
 		if err != nil {
-			return fmt.Errorf("no -exclude-file and no home directory to find %s in", defaultRetired)
+			return fmt.Errorf("no -exclude-file and no home directory to find %s in: %w", defaultRetired, err)
 		}
-		p := filepath.Join(home, defaultRetired)
 		if _, err := os.Stat(p); err != nil {
 			return fmt.Errorf("no retirement list: %s does not exist.\n"+
 				"Pass -exclude-file, or -no-exclusions to fetch retired organisations too.\n"+

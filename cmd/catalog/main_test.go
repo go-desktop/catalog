@@ -587,9 +587,14 @@ func TestFetchWantsTheRetirementList(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	// A home with no list: refused, and the refusal says what to do.
+	// A home with no list: refused, and the refusal says what to do. The path
+	// goes through the seam rather than the environment: os.UserHomeDir reads
+	// HOME on unix and USERPROFILE on Windows, and a test that set one passed
+	// on two platforms and failed on the third.
 	home := t.TempDir()
-	t.Setenv("HOME", home)
+	was := retiredPath
+	t.Cleanup(func() { retiredPath = was })
+	retiredPath = func() (string, error) { return filepath.Join(home, defaultRetired), nil }
 	code, _, errs := exec("fetch", "-api", api, "-token-file", tokenFile,
 		"-out", filepath.Join(dir, "a.json"))
 	if code == 0 {
@@ -614,3 +619,18 @@ func TestFetchWantsTheRetirementList(t *testing.T) {
 		t.Errorf("it did not say which list it used: %q", out)
 	}
 }
+
+// TestFetchWithNoHomeAtAll: a machine that cannot say where home is gets an
+// error naming the list, not a nil path quietly turning into ".go-desktop-retired"
+// in the working directory.
+func TestFetchWithNoHomeAtAll(t *testing.T) {
+	was := retiredPath
+	t.Cleanup(func() { retiredPath = was })
+	retiredPath = func() (string, error) { return "", errUnhomed }
+	code, _, errs := exec("fetch", "-api", fakeAPI(t), "-out", filepath.Join(t.TempDir(), "x.json"))
+	if code == 0 || !strings.Contains(errs, defaultRetired) {
+		t.Errorf("code=%d stderr=%q, want it to name the list it could not find", code, errs)
+	}
+}
+
+var errUnhomed = fmt.Errorf("no home directory on this machine")
