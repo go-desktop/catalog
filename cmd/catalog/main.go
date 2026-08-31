@@ -240,11 +240,7 @@ func cmdGenerate(args []string, out io.Writer) error {
 		if root == "" {
 			continue
 		}
-		found, err := checkTree(root, inventory, retired)
-		if err != nil {
-			return err
-		}
-		problems = append(problems, found...)
+		problems = append(problems, checkTree(os.DirFS(root), root, inventory, retired)...)
 	}
 	if err := catalog.LinkReport(problems); err != nil {
 		return err
@@ -269,17 +265,31 @@ func loadExclusions(path string) (catalog.Exclusions, error) {
 }
 
 // checkTree walks a published repository looking at the pages a reader sees.
-func checkTree(root string, inv catalog.Inventory, retired catalog.Exclusions) ([]catalog.LinkProblem, error) {
+//
+// It takes an fs.FS rather than a path so that its two failure paths — a
+// directory it cannot walk and a file it cannot read — are reachable from a test
+// on every OS. Reaching them through file permissions worked on Linux and macOS
+// and did nothing on Windows, where the coverage gate then failed; a seam the
+// standard library already provides is better than a test that only runs on
+// two thirds of the matrix.
+func checkTree(fsys fs.FS, label string, inv catalog.Inventory, retired catalog.Exclusions) []catalog.LinkProblem {
 	var out []catalog.LinkProblem
-	err := filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+	// A page that cannot be read is reported alongside the dead links rather
+	// than returned as an error: it is the same kind of finding — something
+	// wrong with the published pages — and one report is easier to act on than
+	// an error that hides whatever the walk had already found.
+	_ = fs.WalkDir(fsys, ".", func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
-			return err
+			out = append(out, catalog.LinkProblem{
+				File: filepath.Join(label, path), Target: "(the page itself)",
+				Reason: "could not be read: " + err.Error()})
+			return nil
 		}
 		if d.IsDir() {
 			// A build output or a checkout is not a page anyone reads.
 			switch d.Name() {
 			case ".git", "site", "public", "node_modules", "resources":
-				return filepath.SkipDir
+				return fs.SkipDir
 			}
 			return nil
 		}
@@ -288,12 +298,15 @@ func checkTree(root string, inv catalog.Inventory, retired catalog.Exclusions) (
 		default:
 			return nil
 		}
-		b, err := os.ReadFile(path)
+		b, err := fs.ReadFile(fsys, path)
 		if err != nil {
-			return err
+			out = append(out, catalog.LinkProblem{
+				File: filepath.Join(label, path), Target: "(the page itself)",
+				Reason: "could not be read: " + err.Error()})
+			return nil
 		}
-		out = append(out, inv.CheckLinks(path, b, retired)...)
+		out = append(out, inv.CheckLinks(filepath.Join(label, path), b, retired)...)
 		return nil
 	})
-	return out, err
+	return out
 }

@@ -3,12 +3,14 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"io/fs"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+	"testing/fstest"
 )
 
 // classification is the smallest input Build accepts: two families, one
@@ -525,41 +527,45 @@ func TestGenerateSkipsBuildOutput(t *testing.T) {
 	}
 }
 
-// TestGenerateSurfacesUnreadablePages: a page the check cannot read is not a
-// page that passed. Both failures are real file-system conditions, so they are
-// produced rather than mocked.
-func TestGenerateSurfacesUnreadablePages(t *testing.T) {
-	_, cl, inv := inputs(t)
-
-	t.Run("unreadable file", func(t *testing.T) {
-		dir := t.TempDir()
-		docs := filepath.Join(dir, "docs")
-		if err := os.MkdirAll(filepath.Join(docs, "docs"), 0o755); err != nil {
-			t.Fatal(err)
-		}
-		locked := filepath.Join(docs, "docs", "locked.md")
-		if err := os.WriteFile(locked, []byte("x"), 0o000); err != nil {
-			t.Fatal(err)
-		}
-		t.Cleanup(func() { _ = os.Chmod(locked, 0o644) })
-		if code, _, errs := exec("generate", "-classification", cl, "-inventory", inv, "-docs", docs); code != 1 {
-			t.Errorf("an unreadable page must fail the run: code=%d stderr=%q", code, errs)
+// TestCheckTreeSurfacesReadFailures: a page the check cannot read is not a page
+// that passed.
+//
+// Both failures go through an fs.FS that refuses, rather than through file
+// permissions: chmod 0000 makes a file unreadable on Linux and macOS and does
+// nothing on Windows, where the same test went green while leaving these error
+// paths uncovered — and the coverage gate, which runs on all three, went red.
+func TestCheckTreeSurfacesReadFailures(t *testing.T) {
+	t.Run("a directory that will not open", func(t *testing.T) {
+		got := checkTree(refusingFS{fail: "."}, "docs", nil, nil)
+		if len(got) != 1 || !strings.Contains(got[0].Reason, "could not be read") {
+			t.Fatalf("a walk that fails must be reported, not swallowed: %v", got)
 		}
 	})
-
-	t.Run("unreadable directory", func(t *testing.T) {
-		dir := t.TempDir()
-		docs := filepath.Join(dir, "docs")
-		sub := filepath.Join(docs, "docs", "shut")
-		if err := os.MkdirAll(sub, 0o755); err != nil {
-			t.Fatal(err)
+	t.Run("a page that will not read", func(t *testing.T) {
+		fsys := fstest.MapFS{"finding.md": &fstest.MapFile{Data: []byte("x")}}
+		got := checkTree(refusingFS{FS: fsys, fail: "finding.md"}, "docs", nil, nil)
+		if len(got) != 1 || !strings.Contains(got[0].Reason, "could not be read") {
+			t.Fatalf("a page that cannot be read must be reported: %v", got)
 		}
-		if err := os.Chmod(sub, 0o000); err != nil {
-			t.Fatal(err)
-		}
-		t.Cleanup(func() { _ = os.Chmod(sub, 0o755) })
-		if code, _, errs := exec("generate", "-classification", cl, "-inventory", inv, "-docs", docs); code != 1 {
-			t.Errorf("an unreadable directory must fail the run: code=%d stderr=%q", code, errs)
+		if !strings.Contains(got[0].File, "finding.md") {
+			t.Errorf("the report must name the page: %q", got[0].File)
 		}
 	})
+}
+
+// refusingFS fails to open one named path and delegates the rest, so a walk
+// error and a read error are both producible on any OS.
+type refusingFS struct {
+	fs.FS
+	fail string
+}
+
+func (r refusingFS) Open(name string) (fs.File, error) {
+	if name == r.fail {
+		return nil, fmt.Errorf("refusing to open %s", name)
+	}
+	if r.FS == nil {
+		return nil, fs.ErrNotExist
+	}
+	return r.FS.Open(name)
 }
