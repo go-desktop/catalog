@@ -157,3 +157,31 @@ func TestAllArchived(t *testing.T) {
 		}
 	}
 }
+
+// TestBuildIgnoresARetiredOrg is the other side of TestBuildRejectsUnclassifiedOrg,
+// and it exists because the two checks contradicted each other.
+//
+// An organisation whose every repository is archived cannot be indexed: classify
+// it and Build refuses it for being all-archived, leave it out and Build refuses
+// it for being unclassified. Measured on go-iconoir, whose icons moved to
+// go-icons and whose four repositories are now all archived — it could neither
+// enter the map nor leave it.
+//
+// A retired organisation is not a missing one. It is simply gone.
+func TestBuildIgnoresARetiredOrg(t *testing.T) {
+	inv := fixtureInventory()
+	inv["go-retired"] = []Repo{
+		{Name: "moved-elsewhere", Archived: true},
+		{Name: "also-gone", Archived: true},
+	}
+	if _, err := buildFixture(t, goodClassification, inv); err != nil {
+		t.Fatalf("Build = %v, want a retired organisation to be ignored", err)
+	}
+
+	// And one that is only PARTLY archived is still live, so it is still
+	// demanded: a family that lost a repository has not stopped existing.
+	inv["go-retired"] = append(inv["go-retired"], Repo{Name: "still-here"})
+	if _, err := buildFixture(t, goodClassification, inv); err == nil {
+		t.Error("Build succeeded with an organisation that still holds live code")
+	}
+}

@@ -7,6 +7,10 @@
       "blurb": "One widget toolkit, every surface it paints on, and the platform plumbing a real desktop needs.",
       "orgs": [
         {
+          "org": "go-gtk",
+          "role": "GTK4 driven from pure Go over purego, CGO=0 — the Linux native-toolkit bridge for go-widgets, sibling of go-macos/objc."
+        },
+        {
           "org": "go-widgets",
           "role": "The widget toolkit and every surface it paints on: the painter seam, MVVM, a declarative skin engine, a terminal back-end, a native window on X11, Wayland, Cocoa and Win32, application lifecycle with a system tray, a real Android APK, and a desktop shell."
         },
@@ -338,6 +342,10 @@
         {
           "org": "go-versions",
           "role": "Loose, pkgx-compatible semantic versions and ranges, CalVer included."
+        },
+        {
+          "org": "go-gitsafe",
+          "role": "Guards on what leaves a machine: a global git hook that refuses a credential in a remote URL and a write to the branch pull requests land on, a credential helper that never lets a token reach a command line, and a scope checker that reads a token's powers without printing it."
         }
       ]
     },
@@ -346,6 +354,10 @@
       "title": "Virtualisation, cloud & network",
       "blurb": "microVMs, guest drivers, supervision, coordination and the network between them.",
       "orgs": [
+        {
+          "org": "go-dimail",
+          "role": "A client for the Dimail API — mail hosting for the French government's La Suite numérique — generated from its OpenAPI description."
+        },
         {
           "org": "openweft",
           "role": "weft — a Go-native microVM cloud: drivers, network, block storage, HA services, runners, clients, native apps, and the loom editor built on it."
@@ -555,7 +567,40 @@
       "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
     }
   ],
-  "not_go": [],
+  "not_go": [
+    {
+      "org": "libfw",
+      "what": "A layer 3/4 packet filter, in C. It is on this account and it is not part of this map: the map is what is pure Go."
+    },
+    {
+      "org": "libhcl",
+      "what": "An HCL2 parser, in C, for consumers that cannot take a Go one."
+    },
+    {
+      "org": "mash-installers",
+      "what": "Service installers, packaged rather than written."
+    },
+    {
+      "org": "jupytercloud-project",
+      "what": "Work: JupyterHub on a research cloud."
+    },
+    {
+      "org": "openstack-continuous-integration",
+      "what": "Work: CI for an OpenStack deployment."
+    },
+    {
+      "org": "openstack-terraform-modules",
+      "what": "Work: Terraform modules for the same."
+    },
+    {
+      "org": "plmteam-mathrice",
+      "what": "Work: the Mathrice PLM team's infrastructure."
+    },
+    {
+      "org": "resinfo-gt-cloud",
+      "what": "Work: the RESINFO cloud working group."
+    }
+  ],
   "readme_intro": "<p align=\"center\"><img src=\"https://raw.githubusercontent.com/go-desktop/brand/main/social/go-desktop.png\" alt=\"go-desktop\" width=\"720\"></p>\n\n# go-desktop\n\n**A map of one pure-Go ecosystem — {{summary}}, no C anywhere.**\n\nThis organisation holds no library. It holds the index — and the tool that\ngenerates it, so that no number on any of these pages is typed by hand.\n\nEvery library in the map is written in Go and compiled with `CGO_ENABLED=0`. That\nis not a stylistic preference: it is what makes one binary cross-compile to six\narchitectures, run inside a browser as WebAssembly, and boot on bare metal without\na libc. Where a good pure-Go library already exists it is used rather than\nrewritten; where the only option was a C library behind cgo, the capability was\nrebuilt.\n\nThe ecosystem is split into **one organisation per domain and one repository per\ncapability**, so a program that needs an ext4 reader takes an ext4 reader and not a\nstorage framework.\n\n🌐 **[go-desktop.github.io](https://go-desktop.github.io/)** — the same map, browsable · 📚 **[Documentation](https://go-desktop.github.io/docs/)** — with a [capability lookup](https://go-desktop.github.io/docs/latest/finding/): what you need, and the module that already does it.",
   "readme_standards": "| | |\n| --- | --- |\n| **`CGO_ENABLED=0`** | No cgo, and no shelling out to a command-line tool in place of a library. A dependency is a Go module or it is written. |\n| **Six 64-bit targets** | amd64, arm64, riscv64, loong64, ppc64le, s390x — native where runners exist, under qemu-user otherwise. s390x is big-endian, which keeps every on-disk and on-wire encoding honest. |\n| **100% statement coverage** | A CI gate, error branches included. A skipped test is not a passing one: jobs fail when a toolchain is missing rather than turning green quietly. |\n| **Measured, not asserted** | Performance claims come with a benchmark against the reference implementation; format claims come with a byte comparison against it. Decoders are fuzzed. |\n| **One landing, one docs site** | A Hugo landing at `<org>.github.io` and versioned MkDocs Material docs at `<org>.github.io/docs/`, same brand, light/dark/system theme toggle. |\n| **BSD-3-Clause** | Every repository, every organisation. |",
   "reserved_intro": "These organisation names are reserved and empty. They are listed so the map has no\nsilent gaps: an empty organisation is not a shipped one, and a name that looks like\na capability is the easiest way to believe a capability exists.",

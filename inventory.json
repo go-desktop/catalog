@@ -1,4 +1,22 @@
 {
+  "Polytechnique-IDCS": [
+    {
+      "org": "Polytechnique-IDCS",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "Polytechnique-IDCS",
+      "name": "dashboard",
+      "private": true,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    }
+  ],
   "apple-vz": [
     {
       "org": "apple-vz",
@@ -260,6 +278,16 @@
       "archived": false,
       "fork": false,
       "language": "Go"
+    }
+  ],
+  "configuration-management-tool": [
+    {
+      "org": "configuration-management-tool",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
     }
   ],
   "deskplan": [
@@ -1363,6 +1391,46 @@
       "language": "HTML"
     }
   ],
+  "go-dimail": [
+    {
+      "org": "go-dimail",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-dimail",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-dimail",
+      "name": "dimail",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-dimail",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-dimail",
+      "name": "go-dimail.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    }
+  ],
   "go-diskimages": [
     {
       "org": "go-diskimages",
@@ -1449,7 +1517,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-docutils",
@@ -2286,6 +2355,23 @@
       "language": "Go"
     }
   ],
+  "go-gitsafe": [
+    {
+      "org": "go-gitsafe",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-gitsafe",
+      "name": "gitsafe",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    }
+  ],
   "go-graphdrawing": [
     {
       "org": "go-graphdrawing",
@@ -2319,6 +2405,16 @@
       "archived": false,
       "fork": false,
       "language": "JavaScript"
+    }
+  ],
+  "go-gtk": [
+    {
+      "org": "go-gtk",
+      "name": "gtk4",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     }
   ],
   "go-hackernews": [
@@ -2437,6 +2533,39 @@
       "name": "hocon",
       "private": false,
       "archived": false,
+      "fork": false,
+      "language": "Go"
+    }
+  ],
+  "go-iconoir": [
+    {
+      "org": "go-iconoir",
+      "name": ".github",
+      "private": false,
+      "archived": true,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-iconoir",
+      "name": "brand",
+      "private": false,
+      "archived": true,
+      "fork": false
+    },
+    {
+      "org": "go-iconoir",
+      "name": "go-iconoir.github.io",
+      "private": false,
+      "archived": true,
+      "fork": false,
+      "language": "HTML"
+    },
+    {
+      "org": "go-iconoir",
+      "name": "iconoir",
+      "private": false,
+      "archived": true,
       "fork": false,
       "language": "Go"
     }
@@ -5844,6 +5973,45 @@
     {
       "org": "go-ruby-digest",
       "name": "go-ruby-digest.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    }
+  ],
+  "go-ruby-dimail": [
+    {
+      "org": "go-ruby-dimail",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-ruby-dimail",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-ruby-dimail",
+      "name": "dimail",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-ruby-dimail",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-ruby-dimail",
+      "name": "go-ruby-dimail.github.io",
       "private": false,
       "archived": false,
       "fork": false,
@@ -13257,6 +13425,276 @@
       "language": "Go"
     }
   ],
+  "jupytercloud-project": [
+    {
+      "org": "jupytercloud-project",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "Jupyterhub-k3s-V1",
+      "private": true,
+      "archived": false,
+      "fork": false,
+      "language": "HCL"
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "build-container",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Dockerfile"
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "file_server",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "fileserver_instance",
+      "private": true,
+      "archived": false,
+      "fork": false,
+      "language": "HCL"
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "fileserver_provisioner",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "image_build",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HCL"
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "image_deploy",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HCL"
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "infra",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HCL"
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "jupytercloud-project.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "jupyterhub-libcloudspawner",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Python"
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "jupyterhub_image",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "jupyterhub_instance",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "jupyterhub_provisioner",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Shell"
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "openstack-alpine-image",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Shell"
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "openstack-jupytercloud-image",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Shell"
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "qemu-alpine-image",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Shell"
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "singleuser_image",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "singleuser_provisioner",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "jupytercloud-project",
+      "name": "vm_pool_manager",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    }
+  ],
+  "libfw": [
+    {
+      "org": "libfw",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "libfw",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "libfw",
+      "name": "c-fw",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "C"
+    },
+    {
+      "org": "libfw",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    },
+    {
+      "org": "libfw",
+      "name": "fw-ui",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "libfw",
+      "name": "libfw.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    }
+  ],
+  "libhcl": [
+    {
+      "org": "libhcl",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "libhcl",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "libhcl",
+      "name": "c-hcl",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "C"
+    },
+    {
+      "org": "libhcl",
+      "name": "c-hcl2",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "C"
+    },
+    {
+      "org": "libhcl",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "libhcl",
+      "name": "libhcl.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "CSS"
+    }
+  ],
+  "mash-installers": [
+    {
+      "org": "mash-installers",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "mash-installers",
+      "name": "sftpgo-service-installer",
+      "private": false,
+      "archived": false,
+      "fork": true,
+      "language": "Shell"
+    }
+  ],
   "nano-container-linux": [
     {
       "org": "nano-container-linux",
@@ -13327,6 +13765,127 @@
       "archived": false,
       "fork": false,
       "language": "Swift"
+    }
+  ],
+  "openstack-continuous-integration": [
+    {
+      "org": "openstack-continuous-integration",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "openstack-continuous-integration",
+      "name": "ci_provisioner",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Dockerfile"
+    },
+    {
+      "org": "openstack-continuous-integration",
+      "name": "ga_provisioner",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "openstack-continuous-integration",
+      "name": "github-actions-runner-images",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "openstack-continuous-integration",
+      "name": "image_build",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HCL"
+    },
+    {
+      "org": "openstack-continuous-integration",
+      "name": "openstack-continuous-integration.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    },
+    {
+      "org": "openstack-continuous-integration",
+      "name": "ubuntu-24.04",
+      "private": false,
+      "archived": false,
+      "fork": false
+    }
+  ],
+  "openstack-terraform-modules": [
+    {
+      "org": "openstack-terraform-modules",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "openstack-terraform-modules",
+      "name": "computes",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HCL"
+    },
+    {
+      "org": "openstack-terraform-modules",
+      "name": "deployment",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HCL"
+    },
+    {
+      "org": "openstack-terraform-modules",
+      "name": "filter-volumes",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HCL"
+    },
+    {
+      "org": "openstack-terraform-modules",
+      "name": "get-volumes",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HCL"
+    },
+    {
+      "org": "openstack-terraform-modules",
+      "name": "images",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HCL"
+    },
+    {
+      "org": "openstack-terraform-modules",
+      "name": "network",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HCL"
+    },
+    {
+      "org": "openstack-terraform-modules",
+      "name": "volumes",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HCL"
     }
   ],
   "openweft": [
@@ -13899,6 +14458,93 @@
       "archived": false,
       "fork": false,
       "language": "Dockerfile"
+    }
+  ],
+  "plmteam-mathrice": [
+    {
+      "org": "plmteam-mathrice",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "plmteam-mathrice",
+      "name": "Esup-Pod",
+      "private": false,
+      "archived": false,
+      "fork": true,
+      "language": "JavaScript"
+    }
+  ],
+  "pocketdesk": [
+    {
+      "org": "pocketdesk",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "pocketdesk",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "pocketdesk",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "CSS"
+    },
+    {
+      "org": "pocketdesk",
+      "name": "pocketdesk.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    }
+  ],
+  "resinfo-gt-cloud": [
+    {
+      "org": "resinfo-gt-cloud",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "resinfo-gt-cloud",
+      "name": "aio-ceph",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Shell"
+    },
+    {
+      "org": "resinfo-gt-cloud",
+      "name": "aio-cloud",
+      "private": true,
+      "archived": false,
+      "fork": false,
+      "language": "Groovy"
+    }
+  ],
+  "ssh-tools": [
+    {
+      "org": "ssh-tools",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
     }
   ],
   "wasmdesk": [
