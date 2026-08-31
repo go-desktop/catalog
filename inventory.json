@@ -402,6 +402,13 @@
     },
     {
       "org": "go-attest",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-attest",
       "name": "go-attest.github.io",
       "private": false,
       "archived": false,
@@ -489,6 +496,13 @@
       "archived": false,
       "fork": false,
       "language": "Go"
+    },
+    {
+      "org": "go-avkit",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
     },
     {
       "org": "go-avkit",
@@ -1236,6 +1250,13 @@
     },
     {
       "org": "go-datetime",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-datetime",
       "name": "go-datetime.github.io",
       "private": false,
       "archived": false,
@@ -1469,11 +1490,26 @@
     },
     {
       "org": "go-docutils",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-docutils",
       "name": "docutils",
       "private": false,
       "archived": false,
       "fork": false,
       "language": "Go"
+    },
+    {
+      "org": "go-docutils",
+      "name": "go-docutils.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "CSS"
     }
   ],
   "go-doom": [
@@ -1678,11 +1714,26 @@
     },
     {
       "org": "go-extractors",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-extractors",
       "name": "extractors",
       "private": false,
       "archived": false,
       "fork": false,
       "language": "Go"
+    },
+    {
+      "org": "go-extractors",
+      "name": "go-extractors.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "CSS"
     }
   ],
   "go-eyaml": [
@@ -2509,6 +2560,13 @@
     },
     {
       "org": "go-icons",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-icons",
       "name": "go-icons.github.io",
       "private": false,
       "archived": false,
@@ -2644,6 +2702,13 @@
       "archived": false,
       "fork": false,
       "language": "JavaScript"
+    },
+    {
+      "org": "go-keyring",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
     },
     {
       "org": "go-keyring",
@@ -2897,6 +2962,13 @@
     },
     {
       "org": "go-macos",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-macos",
       "name": "fileprogress",
       "private": false,
       "archived": false,
@@ -2946,6 +3018,14 @@
     {
       "org": "go-macos",
       "name": "localauthentication",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
+      "name": "multitouch",
       "private": false,
       "archived": false,
       "fork": false,
@@ -3072,6 +3152,13 @@
       "archived": false,
       "fork": false,
       "language": "JavaScript"
+    },
+    {
+      "org": "go-mswin",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
     },
     {
       "org": "go-mswin",
@@ -3433,6 +3520,21 @@
       "private": false,
       "archived": false,
       "fork": false
+    },
+    {
+      "org": "go-odf",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-odf",
+      "name": "go-odf.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "CSS"
     },
     {
       "org": "go-odf",
@@ -4127,6 +4229,21 @@
     },
     {
       "org": "go-richdoc",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-richdoc",
+      "name": "go-richdoc.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "CSS"
+    },
+    {
+      "org": "go-richdoc",
       "name": "latex",
       "private": false,
       "archived": false,
@@ -4213,6 +4330,21 @@
       "private": false,
       "archived": false,
       "fork": false
+    },
+    {
+      "org": "go-rtf",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-rtf",
+      "name": "go-rtf.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "CSS"
     },
     {
       "org": "go-rtf",
@@ -11943,6 +12075,13 @@
     },
     {
       "org": "go-scss",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-scss",
       "name": "go-scss.github.io",
       "private": false,
       "archived": false,
@@ -12191,6 +12330,21 @@
       "private": false,
       "archived": false,
       "fork": false
+    },
+    {
+      "org": "go-streamkit",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-streamkit",
+      "name": "go-streamkit.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "CSS"
     },
     {
       "org": "go-streamkit",
@@ -12556,6 +12710,13 @@
     },
     {
       "org": "go-typeset",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-typeset",
       "name": "go-typeset.github.io",
       "private": false,
       "archived": false,
@@ -12587,6 +12748,13 @@
       "archived": false,
       "fork": false,
       "language": "JavaScript"
+    },
+    {
+      "org": "go-versions",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
     },
     {
       "org": "go-versions",
@@ -13000,6 +13168,13 @@
     },
     {
       "org": "go-widgets",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-widgets",
       "name": "gallery",
       "private": false,
       "archived": false,
@@ -13351,6 +13526,13 @@
       "archived": false,
       "fork": false,
       "language": "Go"
+    },
+    {
+      "org": "nano-container-linux",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
     },
     {
       "org": "nano-container-linux",
@@ -13994,6 +14176,13 @@
       "archived": false,
       "fork": false,
       "language": "Go"
+    },
+    {
+      "org": "wasmdesk",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
     },
     {
       "org": "wasmdesk",
