@@ -14,6 +14,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -122,22 +123,27 @@ func cmdFetch(args []string, out io.Writer) error {
 }
 
 // load reads and reconciles both inputs, which is all check does and the first
-// thing generate does.
-func load(inventory, classification string) (*catalog.Catalog, error) {
+// thing generate does. The inventory comes back too: generate reads the
+// published pages against it afterwards.
+func load(inventory, classification string) (*catalog.Catalog, catalog.Inventory, error) {
 	f, err := os.Open(classification)
 	if err != nil {
-		return nil, fmt.Errorf("open classification: %w", err)
+		return nil, nil, fmt.Errorf("open classification: %w", err)
 	}
 	defer f.Close()
 	cl, err := catalog.LoadClassification(f)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	inv, err := catalog.ReadInventory(inventory)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return catalog.Build(cl, inv)
+	c, err := catalog.Build(cl, inv)
+	if err != nil {
+		return nil, nil, err
+	}
+	return c, inv, nil
 }
 
 func addInputFlags(fs *flag.FlagSet) (inv, cl *string) {
@@ -151,7 +157,7 @@ func cmdCheck(args []string, out io.Writer) error {
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
-	c, err := load(*inv, *cl)
+	c, _, err := load(*inv, *cl)
 	if err != nil {
 		return err
 	}
@@ -170,13 +176,14 @@ func cmdGenerate(args []string, out io.Writer) error {
 	site := fs.String("site", "", "the landing-page repository to write into")
 	docs := fs.String("docs", "", "the documentation repository to write into")
 	profile := fs.String("profile", "", "the .github repository to write the profile into")
+	excludeFile := fs.String("exclude-file", "", "the retirement list, so a page still linking to a retired organisation fails")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
 	if *site == "" && *docs == "" && *profile == "" {
 		return fmt.Errorf("nothing to write: pass -site, -docs, -profile, or several")
 	}
-	c, err := load(*inv, *cl)
+	c, inventory, err := load(*inv, *cl)
 	if err != nil {
 		return err
 	}
@@ -221,6 +228,85 @@ func cmdGenerate(args []string, out io.Writer) error {
 			return err
 		}
 	}
+	// Read the pages back — every one of them, generated or not. The generated
+	// ones pass trivially; the hand-written ones are the point, because nothing
+	// else looks at them and a link there outlives what it names.
+	retired, err := loadExclusions(*excludeFile)
+	if err != nil {
+		return err
+	}
+	var problems []catalog.LinkProblem
+	for _, root := range []string{*docs, *site, *profile} {
+		if root == "" {
+			continue
+		}
+		problems = append(problems, checkTree(os.DirFS(root), root, inventory, retired)...)
+	}
+	if err := catalog.LinkReport(problems); err != nil {
+		return err
+	}
+
 	fmt.Fprintf(out, "%s\n%d files written\n", c.Summary(), written)
 	return nil
+}
+
+// loadExclusions reads the retirement list, or returns an empty one when no
+// path was given.
+func loadExclusions(path string) (catalog.Exclusions, error) {
+	if path == "" {
+		return catalog.Exclusions{}, nil
+	}
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, fmt.Errorf("open exclusions: %w", err)
+	}
+	defer f.Close()
+	return catalog.LoadExclusions(f)
+}
+
+// checkTree walks a published repository looking at the pages a reader sees.
+//
+// It takes an fs.FS rather than a path so that its two failure paths — a
+// directory it cannot walk and a file it cannot read — are reachable from a test
+// on every OS. Reaching them through file permissions worked on Linux and macOS
+// and did nothing on Windows, where the coverage gate then failed; a seam the
+// standard library already provides is better than a test that only runs on
+// two thirds of the matrix.
+func checkTree(fsys fs.FS, label string, inv catalog.Inventory, retired catalog.Exclusions) []catalog.LinkProblem {
+	var out []catalog.LinkProblem
+	// A page that cannot be read is reported alongside the dead links rather
+	// than returned as an error: it is the same kind of finding — something
+	// wrong with the published pages — and one report is easier to act on than
+	// an error that hides whatever the walk had already found.
+	_ = fs.WalkDir(fsys, ".", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			out = append(out, catalog.LinkProblem{
+				File: filepath.Join(label, path), Target: "(the page itself)",
+				Reason: "could not be read: " + err.Error()})
+			return nil
+		}
+		if d.IsDir() {
+			// A build output or a checkout is not a page anyone reads.
+			switch d.Name() {
+			case ".git", "site", "public", "node_modules", "resources":
+				return fs.SkipDir
+			}
+			return nil
+		}
+		switch filepath.Ext(path) {
+		case ".md", ".html", ".toml":
+		default:
+			return nil
+		}
+		b, err := fs.ReadFile(fsys, path)
+		if err != nil {
+			out = append(out, catalog.LinkProblem{
+				File: filepath.Join(label, path), Target: "(the page itself)",
+				Reason: "could not be read: " + err.Error()})
+			return nil
+		}
+		out = append(out, inv.CheckLinks(filepath.Join(label, path), b, retired)...)
+		return nil
+	})
+	return out
 }

@@ -3,12 +3,14 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"io/fs"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+	"testing/fstest"
 )
 
 // classification is the smallest input Build accepts: two families, one
@@ -411,4 +413,159 @@ func TestMain_exits(t *testing.T) {
 	if got != 2 {
 		t.Errorf("main() with no command exited %d, want 2", got)
 	}
+}
+
+// TestGenerateRejectsADeadLink is the reason the check exists. finding.md is
+// hand-written, so no regeneration touches it, and it went on pointing readers
+// at an organisation that had been retired while every other check stayed
+// green.
+func TestGenerateRejectsADeadLink(t *testing.T) {
+	_, cl, inv := inputs(t)
+	dir := t.TempDir()
+	docs := filepath.Join(dir, "docs")
+	if err := os.MkdirAll(filepath.Join(docs, "docs"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	// A hand-written page: generate never writes this name.
+	hand := filepath.Join(docs, "docs", "finding.md")
+	if err := os.WriteFile(hand, []byte("see [x](https://github.com/go-gone/thing)\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	retired := filepath.Join(dir, "retired")
+	if err := os.WriteFile(retired, []byte("go-gone\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	code, _, errs := exec("generate", "-classification", cl, "-inventory", inv,
+		"-docs", docs, "-exclude-file", retired)
+	if code != 1 {
+		t.Fatalf("a retired link must fail the run: code=%d stderr=%q", code, errs)
+	}
+	if !strings.Contains(errs, "finding.md") || !strings.Contains(errs, "retired") {
+		t.Errorf("the message must name the file and the reason: %q", errs)
+	}
+
+	// Without the retirement list the same link is indistinguishable from
+	// somebody else's organisation, which is exactly how it survived.
+	if code, _, _ := exec("generate", "-classification", cl, "-inventory", inv, "-docs", docs); code != 0 {
+		t.Error("without -exclude-file the link is external and must pass")
+	}
+}
+
+// TestGenerateRejectsAnArchivedRepo: the other half of the same failure — the
+// organisation is still in the map, but the repository behind the link is not
+// live.
+func TestGenerateRejectsAnArchivedRepo(t *testing.T) {
+	dir := t.TempDir()
+	cl := filepath.Join(dir, "families.json")
+	if err := os.WriteFile(cl, []byte(classification), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	inv := filepath.Join(dir, "inventory.json")
+	if err := os.WriteFile(inv, []byte(`{
+	  "go-widgets": [{"org":"go-widgets","name":"toolkit"},
+	                 {"org":"go-widgets","name":"retiree","archived":true}],
+	  "go-gfx":     [{"org":"go-gfx","name":"gfx"}],
+	  "go-ruby-json":[{"org":"go-ruby-json","name":"json"}],
+	  "go-quake2":  []
+	}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	docs := filepath.Join(dir, "docs")
+	if err := os.MkdirAll(filepath.Join(docs, "docs"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(docs, "docs", "finding.md"),
+		[]byte("[r](https://github.com/go-widgets/retiree)\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	code, _, errs := exec("generate", "-classification", cl, "-inventory", inv, "-docs", docs)
+	if code != 1 || !strings.Contains(errs, "archived") {
+		t.Errorf("an archived repository must fail the run: code=%d stderr=%q", code, errs)
+	}
+}
+
+// TestGenerateExclusionFileProblems covers reading the retirement list.
+func TestGenerateExclusionFileProblems(t *testing.T) {
+	_, cl, inv := inputs(t)
+	site := t.TempDir()
+	if code, _, errs := exec("generate", "-classification", cl, "-inventory", inv,
+		"-site", site, "-exclude-file", filepath.Join(t.TempDir(), "absent")); code != 1 ||
+		!strings.Contains(errs, "open exclusions") {
+		t.Errorf("a missing exclusion file must be an error: code=%d stderr=%q", code, errs)
+	}
+}
+
+// TestGenerateSkipsBuildOutput: a docs tree carries a built site/ directory and
+// a .git, and neither is a page a reader sees. Walking them would report links
+// out of stale build output as if they were live pages.
+func TestGenerateSkipsBuildOutput(t *testing.T) {
+	_, cl, inv := inputs(t)
+	dir := t.TempDir()
+	docs := filepath.Join(dir, "docs")
+	for _, sub := range []string{"site", ".git", "public"} {
+		if err := os.MkdirAll(filepath.Join(docs, sub), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(filepath.Join(docs, sub, "stale.md"),
+			[]byte("[x](https://github.com/go-gone/thing)\n"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	// Nor is a file that is not a page: an asset, a licence, a lock file. Only
+	// the extensions a reader's page actually has are opened.
+	if err := os.WriteFile(filepath.Join(docs, "notes.txt"),
+		[]byte("[x](https://github.com/go-gone/thing)\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	retired := filepath.Join(dir, "retired")
+	if err := os.WriteFile(retired, []byte("go-gone\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if code, _, errs := exec("generate", "-classification", cl, "-inventory", inv,
+		"-docs", docs, "-exclude-file", retired); code != 0 {
+		t.Errorf("build output and non-pages must not be walked: code=%d stderr=%q", code, errs)
+	}
+}
+
+// TestCheckTreeSurfacesReadFailures: a page the check cannot read is not a page
+// that passed.
+//
+// Both failures go through an fs.FS that refuses, rather than through file
+// permissions: chmod 0000 makes a file unreadable on Linux and macOS and does
+// nothing on Windows, where the same test went green while leaving these error
+// paths uncovered — and the coverage gate, which runs on all three, went red.
+func TestCheckTreeSurfacesReadFailures(t *testing.T) {
+	t.Run("a directory that will not open", func(t *testing.T) {
+		got := checkTree(refusingFS{fail: "."}, "docs", nil, nil)
+		if len(got) != 1 || !strings.Contains(got[0].Reason, "could not be read") {
+			t.Fatalf("a walk that fails must be reported, not swallowed: %v", got)
+		}
+	})
+	t.Run("a page that will not read", func(t *testing.T) {
+		fsys := fstest.MapFS{"finding.md": &fstest.MapFile{Data: []byte("x")}}
+		got := checkTree(refusingFS{FS: fsys, fail: "finding.md"}, "docs", nil, nil)
+		if len(got) != 1 || !strings.Contains(got[0].Reason, "could not be read") {
+			t.Fatalf("a page that cannot be read must be reported: %v", got)
+		}
+		if !strings.Contains(got[0].File, "finding.md") {
+			t.Errorf("the report must name the page: %q", got[0].File)
+		}
+	})
+}
+
+// refusingFS fails to open one named path and delegates the rest, so a walk
+// error and a read error are both producible on any OS.
+type refusingFS struct {
+	fs.FS
+	fail string
+}
+
+func (r refusingFS) Open(name string) (fs.File, error) {
+	if name == r.fail {
+		return nil, fmt.Errorf("refusing to open %s", name)
+	}
+	if r.FS == nil {
+		return nil, fs.ErrNotExist
+	}
+	return r.FS.Open(name)
 }
