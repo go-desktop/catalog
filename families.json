@@ -8,7 +8,7 @@
       "orgs": [
         {
           "org": "go-widgets",
-          "role": "The widget toolkit and every surface it paints on: the painter seam, MVVM, a declarative skin engine, a terminal back-end, a native window on X11, Wayland, Cocoa and Win32, a real Android APK, and a desktop shell."
+          "role": "The widget toolkit and every surface it paints on: the painter seam, MVVM, a declarative skin engine, a terminal back-end, a native window on X11, Wayland, Cocoa and Win32, application lifecycle with a system tray, a real Android APK, and a desktop shell."
         },
         {
           "org": "go-freedesktop",
@@ -28,7 +28,7 @@
         },
         {
           "org": "go-macos",
-          "role": "The macOS foundation, all of it CGO-free through purego: the shared Objective-C runtime bridge, Keychain and Touch ID, notifications and menu-bar items, accessibility, global hotkeys, login items and launch agents, IOKit HID, hardware audio and video decode, ScreenCaptureKit capture, and virtual displays the desktop extends onto."
+          "role": "The macOS foundation, all of it CGO-free through purego: the shared Objective-C runtime bridge, real AppKit controls embedded in a Go-painted window, Keychain and Touch ID, notifications and menu-bar items, accessibility, global hotkeys, login items and launch agents, IOKit HID, DiskArbitration, hardware audio and video decode, ScreenCaptureKit capture, and virtual displays the desktop extends onto."
         },
         {
           "org": "go-mswin",
@@ -94,11 +94,11 @@
         },
         {
           "org": "go-pdfkit",
-          "role": "The PDF stack, both directions: a 1.7 writer with TrueType and CFF subsetting, a reader and renderer, AcroForm fields, text and structure extraction, a conformance suite judged against poppler, and a co-editable reader application built on all of it."
+          "role": "The PDF stack, both directions: a 1.7 writer with TrueType and CFF subsetting, a reader and renderer, AcroForm and XFA form fields, text and structure extraction, a conformance suite judged against poppler, and a co-editable reader application built on all of it."
         },
         {
           "org": "go-docutils",
-          "role": "A reStructuredText engine — docutils' core in pure Go: the parser and the doctree it produces, which the LaTeX and PDF path is built on."
+          "role": "reStructuredText both ways: docutils' core in pure Go — the parser and the doctree the LaTeX and PDF path is built on — and an extractor that renders a Go package's own API documentation as reST to feed it."
         },
         {
           "org": "go-richdoc",
@@ -275,7 +275,7 @@
         },
         {
           "org": "go-filesystems",
-          "role": "Filesystem-format drivers — ext4, xfs, btrfs, zfs, apfs, ntfs, exfat, fat32, iso9660, squashfs and more — plus UEFI variable management and a format prober."
+          "role": "Filesystem-format drivers — ext4, xfs, btrfs, zfs, apfs, ntfs, exfat, fat32, iso9660, squashfs and more — plus UEFI variable management and a format prober. And the other direction: NFSv3, SFTP and WebDAV servers that export any of them, so an image can be mounted by the host rather than only read by a program."
         },
         {
           "org": "go-diskimages",

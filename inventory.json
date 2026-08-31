@@ -1446,6 +1446,21 @@
   "go-docutils": [
     {
       "org": "go-docutils",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-docutils",
+      "name": "autodoc",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-docutils",
       "name": "docutils",
       "private": false,
       "archived": false,
@@ -1952,6 +1967,14 @@
     },
     {
       "org": "go-filesystems",
+      "name": "nfs",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-filesystems",
       "name": "ntfs",
       "private": false,
       "archived": false,
@@ -1961,6 +1984,14 @@
     {
       "org": "go-filesystems",
       "name": "oci",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-filesystems",
+      "name": "sftp",
       "private": false,
       "archived": false,
       "fork": false,
@@ -1985,6 +2016,14 @@
     {
       "org": "go-filesystems",
       "name": "ufs",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-filesystems",
+      "name": "webdav",
       "private": false,
       "archived": false,
       "fork": false,
@@ -2776,6 +2815,14 @@
     },
     {
       "org": "go-macos",
+      "name": "appkit",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
       "name": "audiotoolbox",
       "private": false,
       "archived": false,
@@ -2793,6 +2840,14 @@
     {
       "org": "go-macos",
       "name": "brightness",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
+      "name": "diskarbitration",
       "private": false,
       "archived": false,
       "fork": false,
@@ -3554,6 +3609,14 @@
       "archived": false,
       "fork": false,
       "language": "JavaScript"
+    },
+    {
+      "org": "go-pdfkit",
+      "name": "xfa",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     }
   ],
   "go-pkgx": [
@@ -12828,6 +12891,14 @@
     {
       "org": "go-widgets",
       "name": "app-template",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-widgets",
+      "name": "application",
       "private": false,
       "archived": false,
       "fork": false,
