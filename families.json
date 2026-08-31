@@ -338,6 +338,10 @@
         {
           "org": "go-versions",
           "role": "Loose, pkgx-compatible semantic versions and ranges, CalVer included."
+        },
+        {
+          "org": "go-gitsafe",
+          "role": "Guards on what leaves a machine: a global git hook that refuses a credential in a remote URL and a write to the branch pull requests land on, a credential helper that never lets a token reach a command line, and a scope checker that reads a token's powers without printing it."
         }
       ]
     },
