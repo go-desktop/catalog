@@ -53,6 +53,9 @@ catalog fetch -token-file ~/.github-token -out inventory.json
 # reconcile the two inputs and print what the map contains
 catalog check
 
+# ask whether GitHub has moved since the map was generated (exit 3 if it has)
+catalog drift -token-file ~/.github-token
+
 # write the published files
 catalog generate \
   -site    ../go-desktop.github.io \
@@ -65,6 +68,49 @@ catalog generate \
 file, and so the slow, rate-limited step stays out of the loop being iterated on.
 The saved inventory is sorted, so a re-fetch produces a diff only where GitHub
 actually changed.
+
+## What reconciliation does not catch
+
+The refusals above all fire on a rule being broken. A repository landing in an
+organisation the map already names breaks no rule: every family still has its
+organisations, every organisation still holds code, `check` is green, and the
+only thing wrong is a number on a published page.
+
+That is the commonest way this map goes stale, and it has happened twice. Once
+the published site was two regenerations behind while everything was green. Once
+an organisation and four repositories accumulated over ten days, and of the five
+only the organisation would have been caught — the four repositories were
+invisible until someone ran the tool by hand.
+
+So `drift` compares against the saved inventory rather than re-running the rules,
+and reconciles the fresh view as well:
+
+```
+$ catalog drift -token-file ~/.github-token
+organisations not on the map (1):
+  + go-remoteexec
+repositories the map does not count (1):
+  + go-xrkit/depth3d
+
+the fresh view does not reconcile:
+  holds public code but is in no family: go-remoteexec
+```
+
+It compares only what a reader sees — `IsCode` repositories — so a docs site or
+a repository going private is not a finding. Exit status is **0** for no drift,
+**3** for drift found, **1** for the tool failing. Those are three answers, not
+two, because a scheduled job has to tell "the map is behind" from "the token
+expired". **Build the binary to see it**: `go run` collapses every non-zero
+status to 1 and prints `exit status 3` on stderr instead.
+
+`.github/workflows/drift.yml` runs it every Monday and writes what it finds into
+one issue, reopened and rewritten rather than filed again. It does not fail the
+build: a red scheduled run is the signal nobody sees, since fleet sweeps filter
+`event=schedule` to keep the noise down, and a real finding would be filtered out
+with it. The job needs two repository secrets — `MAP_TOKEN`, which needs no more
+than `read:org` (`/user/orgs` accepts it; listing an organisation's public
+repositories needs no scope at all), and `MAP_RETIRED`, the retirement list,
+which is a secret for the same reason it is not in this repository.
 
 ## What it writes
 

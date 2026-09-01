@@ -634,3 +634,140 @@ func TestFetchWithNoHomeAtAll(t *testing.T) {
 }
 
 var errUnhomed = fmt.Errorf("no home directory on this machine")
+
+// driftInputs writes the saved inventory and classification, plus a second
+// inventory to compare against.
+func driftInputs(t *testing.T, fresh string) (clPath, invPath, freshPath string) {
+	t.Helper()
+	dir, clPath, invPath := inputs(t)
+	freshPath = filepath.Join(dir, "fresh.json")
+	if err := os.WriteFile(freshPath, []byte(fresh), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	return clPath, invPath, freshPath
+}
+
+func TestDriftFindsNothing(t *testing.T) {
+	clPath, invPath, freshPath := driftInputs(t, inventory)
+	code, out, errs := exec("drift", "-inventory", invPath, "-classification", clPath, "-against", freshPath)
+	if code != 0 {
+		t.Fatalf("code = %d, want 0; stderr=%q", code, errs)
+	}
+	if !strings.Contains(out, "no drift") {
+		t.Errorf("stdout = %q, want it to say there is no drift", out)
+	}
+}
+
+// A repository landing in an organisation the map already names breaks no rule:
+// the classification still reconciles, and the ONLY thing wrong is a published
+// number. Exit 3 says "a finding", not "the tool failed".
+func TestDriftFindsANewRepositoryInAKnownOrg(t *testing.T) {
+	fresh := `{
+	  "go-widgets": [{"org":"go-widgets","name":"toolkit"},
+	                 {"org":"go-widgets","name":"go-widgets.github.io"},
+	                 {"org":"go-widgets","name":"docs"}],
+	  "go-gfx":     [{"org":"go-gfx","name":"gfx"},{"org":"go-gfx","name":"raster"}],
+	  "go-ruby-json":[{"org":"go-ruby-json","name":"json"}],
+	  "go-quake2":  [],
+	  "example-c":  [{"org":"example-c","name":"c-fw"}]
+	}`
+	clPath, invPath, freshPath := driftInputs(t, fresh)
+	code, out, errs := exec("drift", "-inventory", invPath, "-classification", clPath, "-against", freshPath)
+	if code != 3 {
+		t.Fatalf("code = %d, want 3; stdout=%q stderr=%q", code, out, errs)
+	}
+	if !strings.Contains(out, "+ go-gfx/raster") {
+		t.Errorf("stdout = %q, want it to name the new repository", out)
+	}
+	// Reconciliation is untouched by this, and saying so would be noise.
+	if strings.Contains(out, "does not reconcile") {
+		t.Errorf("stdout = %q, want no reconciliation complaint", out)
+	}
+}
+
+// An organisation nobody has placed is reported twice on purpose: once as drift,
+// once as the reason the fresh view will not reconcile. Someone reading the
+// issue needs both — what appeared, and what it stops working.
+func TestDriftReportsAnUnclassifiedOrg(t *testing.T) {
+	fresh := `{
+	  "go-widgets": [{"org":"go-widgets","name":"toolkit"}],
+	  "go-gfx":     [{"org":"go-gfx","name":"gfx"}],
+	  "go-ruby-json":[{"org":"go-ruby-json","name":"json"}],
+	  "go-quake2":  [],
+	  "example-c":  [{"org":"example-c","name":"c-fw"}],
+	  "go-newcomer":[{"org":"go-newcomer","name":"thing"}]
+	}`
+	clPath, invPath, freshPath := driftInputs(t, fresh)
+	code, out, _ := exec("drift", "-inventory", invPath, "-classification", clPath, "-against", freshPath)
+	if code != 3 {
+		t.Fatalf("code = %d, want 3; stdout=%q", code, out)
+	}
+	if !strings.Contains(out, "+ go-newcomer") || !strings.Contains(out, "does not reconcile") {
+		t.Errorf("stdout = %q, want both the new organisation and the refusal", out)
+	}
+}
+
+// Without a network the fetch path is still the one CI uses, so it is exercised
+// against the fake API rather than left to the scheduled job to discover.
+func TestDriftReadsGitHubWhenNotGivenAnInventory(t *testing.T) {
+	dir := t.TempDir()
+	// The fake API serves one organisation, so the classification has to name
+	// that one and no other: a family whose organisation is missing is a
+	// different finding, and it would mask the one under test.
+	clPath := filepath.Join(dir, "families.json")
+	cl := strings.Replace(classification,
+		`{"key":"desktop","title":"Desktop","blurb":"Widgets.",
+     "orgs":[{"org":"go-widgets","role":"The toolkit."}]},
+    `, "", 1)
+	cl = strings.Replace(cl, `"reserved": [{"org":"go-quake2","for":"Later."}]`, `"reserved": []`, 1)
+	cl = strings.Replace(cl, `"not_go": [{"org":"example-c","what":"C."}]`, `"not_go": []`, 1)
+	if err := os.WriteFile(clPath, []byte(cl), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	saved := filepath.Join(dir, "saved.json")
+	if err := os.WriteFile(saved, []byte(`{"go-gfx":[{"org":"go-gfx","name":"gfx"}]}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	tokenFile := filepath.Join(dir, "token")
+	if err := os.WriteFile(tokenFile, []byte("t0ken\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	// The fake API serves exactly the saved inventory's code repositories, so a
+	// clean run here means the comparison ran, not that it found nothing to do.
+	code, out, errs := exec("drift", "-inventory", saved, "-classification", clPath,
+		"-api", fakeAPI(t), "-token-file", tokenFile, "-no-exclusions")
+	if code != 0 {
+		t.Fatalf("code = %d, want 0; stdout=%q stderr=%q", code, out, errs)
+	}
+	if !strings.Contains(out, "no drift") {
+		t.Errorf("stdout = %q", out)
+	}
+}
+
+func TestDriftErrors(t *testing.T) {
+	clPath, invPath, freshPath := driftInputs(t, inventory)
+	missing := filepath.Join(t.TempDir(), "nope.json")
+	for _, tc := range []struct {
+		name string
+		args []string
+		want string
+	}{
+		{"bad flag", []string{"drift", "-nope"}, "flag provided but not defined"},
+		{"no saved inventory", []string{"drift", "-inventory", missing, "-against", freshPath}, "read inventory"},
+		{"no fresh inventory", []string{"drift", "-inventory", invPath, "-against", missing}, "read inventory"},
+		{"no classification", []string{"drift", "-inventory", invPath, "-classification", missing, "-against", freshPath}, "open classification"},
+		{"unparsable classification", []string{"drift", "-inventory", invPath, "-classification", invPath, "-against", freshPath}, "catalog:"},
+		{"no token", []string{"drift", "-inventory", invPath, "-classification", clPath, "-no-exclusions"}, "no token"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Setenv("GITHUB_TOKEN", "")
+			code, _, errs := exec(tc.args...)
+			if code != 1 {
+				t.Fatalf("code = %d, want 1; stderr=%q", code, errs)
+			}
+			if !strings.Contains(errs, tc.want) {
+				t.Errorf("stderr = %q, want it to mention %q", errs, tc.want)
+			}
+		})
+	}
+}
