@@ -432,6 +432,10 @@
         {
           "org": "go-ansible",
           "role": "Ansible: inventory, variable precedence, Jinja2-compatible templating, connection and become plugins, the module protocol, and the playbook engine."
+        },
+        {
+          "org": "go-remoteexec",
+          "role": "The layer both orchestrators run commands through: local, SSH and WinRM connections with sudo, su and doas escalation."
         }
       ]
     },

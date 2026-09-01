@@ -314,6 +314,20 @@
   "go-ansible": [
     {
       "org": "go-ansible",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-ansible",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-ansible",
       "name": "cli",
       "private": false,
       "archived": false,
@@ -322,6 +336,13 @@
     {
       "org": "go-ansible",
       "name": "connection",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-ansible",
+      "name": "docs",
       "private": false,
       "archived": false,
       "fork": false
@@ -342,10 +363,18 @@
     },
     {
       "org": "go-ansible",
-      "name": "inventory",
+      "name": "go-ansible.github.io",
       "private": false,
       "archived": false,
       "fork": false
+    },
+    {
+      "org": "go-ansible",
+      "name": "inventory",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-ansible",
@@ -366,21 +395,24 @@
       "name": "template",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-ansible",
       "name": "vars",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-ansible",
       "name": "vault",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "Go"
     }
   ],
   "go-asmgen": [
@@ -4314,6 +4346,16 @@
       "archived": false,
       "fork": false,
       "language": "HTML"
+    }
+  ],
+  "go-remoteexec": [
+    {
+      "org": "go-remoteexec",
+      "name": "transport",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     }
   ],
   "go-richdoc": [
@@ -13422,6 +13464,14 @@
       "private": false,
       "archived": false,
       "fork": false
+    },
+    {
+      "org": "go-xrkit",
+      "name": "depth3d",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-xrkit",

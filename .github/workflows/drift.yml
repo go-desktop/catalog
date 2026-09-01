@@ -126,6 +126,24 @@ jobs:
               --title "$title" --body-file body.md
           fi
 
+      # A finding that has been acted on must stop being reported, or the issue
+      # becomes furniture: still open, still describing something fixed weeks
+      # ago, and read by nobody. Closing it is how the issue stays worth
+      # opening.
+      - name: Close the issue once the map has caught up
+        if: steps.drift.outputs.rc == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          n=$(gh issue list --repo "$GITHUB_REPOSITORY" --label map-drift \
+                --state open --limit 1 --json number --jq '.[0].number // empty')
+          if [ -n "$n" ]; then
+            gh issue close "$n" --repo "$GITHUB_REPOSITORY" \
+              --comment "The map has caught up: \`catalog drift\` finds no difference between GitHub and the inventory \`main\` was generated from. Closed by [run $GITHUB_RUN_ID]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)."
+            echo "closed issue #$n"
+          fi
+
       - name: Fail only when the tool itself failed
         if: steps.drift.outputs.rc != '0' && steps.drift.outputs.rc != '3'
         run: |
