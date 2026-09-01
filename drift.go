@@ -29,12 +29,20 @@ type Drift struct {
 	// organisation is the finding, and repeating its contents buries it.
 	NewRepos  []string // "org/name", counted by the map, newly present
 	GoneRepos []string // "org/name", counted by the map, no longer present
+	// The landing page and the documentation site are not code and never
+	// counted, but the map prints a link to each and a dash where there is
+	// none. An organisation that publishes one afterwards leaves a dash on a
+	// page that is now wrong, and no count moves to say so -- which is exactly
+	// the silence this type exists to break.
+	NewPages  []string // "org/site" or "org/docs", published since
+	GonePages []string // "org/site" or "org/docs", published no longer
 }
 
 // Empty reports whether the two inventories describe the same published map.
 func (d Drift) Empty() bool {
 	return len(d.NewOrgs) == 0 && len(d.GoneOrgs) == 0 &&
-		len(d.NewRepos) == 0 && len(d.GoneRepos) == 0
+		len(d.NewRepos) == 0 && len(d.GoneRepos) == 0 &&
+		len(d.NewPages) == 0 && len(d.GonePages) == 0
 }
 
 // CompareInventories reports how now differs from was.
@@ -69,8 +77,23 @@ func CompareInventories(was, now Inventory) Drift {
 				d.GoneRepos = append(d.GoneRepos, org+"/"+name)
 			}
 		}
+		for _, s := range []struct {
+			kind string
+			had  bool
+			has  bool
+		}{
+			{"site", was.HasSite(org), now.HasSite(org)},
+			{"docs", was.HasDocs(org), now.HasDocs(org)},
+		} {
+			switch {
+			case !s.had && s.has:
+				d.NewPages = append(d.NewPages, org+"/"+s.kind)
+			case s.had && !s.has:
+				d.GonePages = append(d.GonePages, org+"/"+s.kind)
+			}
+		}
 	}
-	for _, s := range []*[]string{&d.NewOrgs, &d.GoneOrgs, &d.NewRepos, &d.GoneRepos} {
+	for _, s := range []*[]string{&d.NewOrgs, &d.GoneOrgs, &d.NewRepos, &d.GoneRepos, &d.NewPages, &d.GonePages} {
 		sort.Strings(*s)
 	}
 	return d
@@ -106,5 +129,7 @@ func (d Drift) Report() string {
 	section("organisations the map names that GitHub no longer has", d.GoneOrgs, '-')
 	section("repositories the map does not count", d.NewRepos, '+')
 	section("repositories the map counts that are gone", d.GoneRepos, '-')
+	section("pages published since, which the map still shows as absent", d.NewPages, '+')
+	section("pages the map links to that are published no longer", d.GonePages, '-')
 	return b.String()
 }
