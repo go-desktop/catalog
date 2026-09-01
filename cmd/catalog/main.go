@@ -4,7 +4,12 @@
 //	                 the retirement list defaults to ~/.go-desktop-retired and is
 //	                 REQUIRED: -no-exclusions to fetch retired organisations too
 //	catalog check    [-inventory inventory.json] [-classification families.json]
+//	catalog drift    [-against FILE] [-token-file FILE] [-exclude-file FILE]
 //	catalog generate [-site ../go-desktop.github.io] [-docs ../docs] [-profile ../.github]
+//
+// drift exits 3 when GitHub and the saved inventory differ, so that a caller
+// can tell a finding from a failure. Build the binary to see it: go run
+// collapses every non-zero status to 1.
 //
 // fetch reads GitHub; check and generate read the saved inventory. Splitting
 // them keeps the slow, rate-limited, network-dependent step out of the loop that
@@ -13,6 +18,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -53,6 +59,10 @@ const usage = `catalog regenerates the go-desktop ecosystem map.
                    the retirement list defaults to ~/.go-desktop-retired
                                                   read GitHub into an inventory
   catalog check                                   reconcile the two inputs
+  catalog drift    [-against FILE] [-token-file FILE]
+                                                  say what GitHub has that the
+                                                  saved inventory does not
+                                                  (exit 3 when it differs)
   catalog generate -site DIR -docs DIR -profile DIR
                                                   write the published files
 `
@@ -68,6 +78,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		err = cmdFetch(args[1:], stdout)
 	case "check":
 		err = cmdCheck(args[1:], stdout)
+	case "drift":
+		err = cmdDrift(args[1:], stdout)
 	case "generate":
 		err = cmdGenerate(args[1:], stdout)
 	case "-h", "--help", "help":
@@ -77,12 +89,22 @@ func run(args []string, stdout, stderr io.Writer) int {
 		fmt.Fprintf(stderr, "catalog: unknown command %q\n\n%s", args[0], usage)
 		return 2
 	}
+	// Drift is a finding, not a failure: the tool worked, and what it found is
+	// the answer. A scheduled job has to tell the two apart -- "the map is
+	// behind" is an issue to open, "the token expired" is not -- and it cannot
+	// if both come back as 1.
+	if errors.Is(err, errDrift) {
+		return 3
+	}
 	if err != nil {
 		fmt.Fprintf(stderr, "catalog: %v\n", err)
 		return 1
 	}
 	return 0
 }
+
+// errDrift is returned when the comparison succeeded and found a difference.
+var errDrift = errors.New("the map is behind GitHub")
 
 // flagSet returns a set that reports errors instead of exiting the process.
 func flagSet(name string) *flag.FlagSet {
@@ -112,43 +134,7 @@ func cmdFetch(args []string, out io.Writer) error {
 	// published map would contradict by carrying it -- so it is invisible from
 	// the repository and easy to forget. Hence a default, and a refusal rather
 	// than a shrug when neither the default nor a flag is there.
-	if *excludeFile == "" && !*noExclusions {
-		p, err := retiredPath()
-		if err != nil {
-			return fmt.Errorf("no -exclude-file and no home directory to find %s in: %w", defaultRetired, err)
-		}
-		if _, err := os.Stat(p); err != nil {
-			return fmt.Errorf("no retirement list: %s does not exist.\n"+
-				"Pass -exclude-file, or -no-exclusions to fetch retired organisations too.\n"+
-				"Without it every retired organisation enters the inventory and the map is asked to name it", p)
-		}
-		*excludeFile = p
-	}
-	token := os.Getenv("GITHUB_TOKEN")
-	if *tokenFile != "" {
-		b, err := os.ReadFile(*tokenFile)
-		if err != nil {
-			return fmt.Errorf("read token: %w", err)
-		}
-		token = strings.TrimSpace(string(b))
-	}
-	if token == "" {
-		return fmt.Errorf("no token: pass -token-file or set GITHUB_TOKEN")
-	}
-	var skip catalog.Exclusions
-	if *excludeFile != "" {
-		f, err := os.Open(*excludeFile)
-		if err != nil {
-			return fmt.Errorf("read exclusions: %w", err)
-		}
-		skip, err = catalog.LoadExclusions(f)
-		f.Close()
-		if err != nil {
-			return err
-		}
-	}
-	c := &catalog.Client{BaseURL: *baseURL, Token: token, Skip: skip}
-	inv, err := c.FetchInventory(context.Background())
+	inv, skip, err := fetchInventory(*baseURL, *tokenFile, excludeFile, *noExclusions)
 	if err != nil {
 		return err
 	}
@@ -164,6 +150,127 @@ func cmdFetch(args []string, out io.Writer) error {
 		fmt.Fprintf(out, "%d organisation names excluded by %s\n", len(skip), *excludeFile)
 	}
 	return nil
+}
+
+// fetchInventory reads GitHub, resolving the retirement list and the token the
+// way every command that touches the network must. It reports the exclusions it
+// applied so a caller can name the file it used.
+//
+// excludeFile is a pointer because resolving the default is part of the job and
+// the caller prints the path that was actually used; returning it separately
+// would give two names for one thing.
+func fetchInventory(baseURL, tokenFile string, excludeFile *string, noExclusions bool) (catalog.Inventory, catalog.Exclusions, error) {
+	// THE RETIREMENT LIST IS NOT OPTIONAL, because forgetting it is silent and
+	// expensive. Fetching without it pulls in every organisation that has been
+	// retired, the reconciliation then demands a family for each, and the
+	// published map gains prose about organisations it exists never to name.
+	// That happened: fifteen names, ten of them classified by hand before
+	// anybody noticed the list already said otherwise.
+	//
+	// The list is deliberately not checked in -- it is the one name list a
+	// published map would contradict by carrying it -- so it is invisible from
+	// the repository and easy to forget. Hence a default, and a refusal rather
+	// than a shrug when neither the default nor a flag is there.
+	if *excludeFile == "" && !noExclusions {
+		p, err := retiredPath()
+		if err != nil {
+			return nil, nil, fmt.Errorf("no -exclude-file and no home directory to find %s in: %w", defaultRetired, err)
+		}
+		if _, err := os.Stat(p); err != nil {
+			return nil, nil, fmt.Errorf("no retirement list: %s does not exist.\n"+
+				"Pass -exclude-file, or -no-exclusions to fetch retired organisations too.\n"+
+				"Without it every retired organisation enters the inventory and the map is asked to name it", p)
+		}
+		*excludeFile = p
+	}
+	token := os.Getenv("GITHUB_TOKEN")
+	if tokenFile != "" {
+		b, err := os.ReadFile(tokenFile)
+		if err != nil {
+			return nil, nil, fmt.Errorf("read token: %w", err)
+		}
+		token = strings.TrimSpace(string(b))
+	}
+	if token == "" {
+		return nil, nil, fmt.Errorf("no token: pass -token-file or set GITHUB_TOKEN")
+	}
+	var skip catalog.Exclusions
+	if *excludeFile != "" {
+		f, err := os.Open(*excludeFile)
+		if err != nil {
+			return nil, nil, fmt.Errorf("read exclusions: %w", err)
+		}
+		skip, err = catalog.LoadExclusions(f)
+		f.Close()
+		if err != nil {
+			return nil, nil, err
+		}
+	}
+	c := &catalog.Client{BaseURL: baseURL, Token: token, Skip: skip}
+	inv, err := c.FetchInventory(context.Background())
+	if err != nil {
+		return nil, nil, err
+	}
+	return inv, skip, nil
+}
+
+// cmdDrift compares GitHub against the inventory the published map was
+// generated from, and reconciles that fresh view as well.
+//
+// Both halves are needed and neither subsumes the other. Reconciliation catches
+// an organisation nobody has placed in a family; the comparison catches a
+// repository landing in an organisation already on the map, which breaks no
+// rule and merely makes a published number wrong. Running only check would have
+// missed four of the five repositories that appeared in the ten days to
+// 2026-09-01.
+func cmdDrift(args []string, out io.Writer) error {
+	fs := flagSet("drift")
+	saved, cl := addInputFlags(fs)
+	against := fs.String("against", "", "compare with this inventory file instead of reading GitHub")
+	tokenFile := fs.String("token-file", "", "read the API token from this file")
+	baseURL := fs.String("api", catalog.DefaultBaseURL, "GitHub API root")
+	excludeFile := fs.String("exclude-file", "", "skip the organisations named in this file (default "+defaultRetired+")")
+	noExclusions := fs.Bool("no-exclusions", false, "compare against every organisation, retired ones included")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	was, err := catalog.ReadInventory(*saved)
+	if err != nil {
+		return err
+	}
+	var now catalog.Inventory
+	if *against != "" {
+		now, err = catalog.ReadInventory(*against)
+	} else {
+		now, _, err = fetchInventory(*baseURL, *tokenFile, excludeFile, *noExclusions)
+	}
+	if err != nil {
+		return err
+	}
+	d := catalog.CompareInventories(was, now)
+	fmt.Fprint(out, d.Report())
+
+	// Reconcile the FRESH view, not the saved one, and report the refusal as
+	// part of the finding rather than as the command failing. A new
+	// organisation shows up here as both a line in the report and a reason
+	// underneath it, which is what someone reading the issue needs.
+	f, err := os.Open(*cl)
+	if err != nil {
+		return fmt.Errorf("open classification: %w", err)
+	}
+	defer f.Close()
+	classification, err := catalog.LoadClassification(f)
+	if err != nil {
+		return err
+	}
+	if _, err := catalog.Build(classification, now); err != nil {
+		fmt.Fprintf(out, "\nthe fresh view does not reconcile:\n  %v\n", err)
+		return errDrift
+	}
+	if d.Empty() {
+		return nil
+	}
+	return errDrift
 }
 
 // load reads and reconciles both inputs, which is all check does and the first

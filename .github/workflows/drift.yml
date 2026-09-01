@@ -1,0 +1,126 @@
+name: drift
+
+# Ask GitHub, once a week, whether the published map still tells the truth.
+#
+# The map went stale twice without anything saying so. Once the published site
+# was two regenerations behind while every check was green; once an entire new
+# organisation and four repositories accumulated over ten days, and were found
+# only because someone happened to run the tool by hand. Nothing here is a
+# build failure, which is exactly the problem: a map that is behind is still a
+# valid map.
+#
+# So this job does not gate anything. It reports, into an issue, because a red
+# scheduled run is the one signal nobody sees -- fleet sweeps filter
+# event=schedule precisely to keep the noise down, and a genuine finding would
+# be filtered out with it.
+on:
+  schedule:
+    # Monday, early. Drift measured at roughly half an organisation a week, so
+    # weekly keeps a finding small enough to act on in one sitting.
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: stable
+
+      - name: Compare GitHub with the inventory the map was generated from
+        id: drift
+        env:
+          # A secret reaches the runner through the environment and nowhere
+          # else: putting it in the run: script would write it into the command
+          # line, which is the one place it must never be. Both are written to
+          # files under umask 077 and removed in the same step.
+          MAP_TOKEN: ${{ secrets.MAP_TOKEN }}
+          MAP_RETIRED: ${{ secrets.MAP_RETIRED }}
+        run: |
+          set -uo pipefail
+          umask 077
+          printf '%s' "$MAP_TOKEN" > "$RUNNER_TEMP/token"
+          # The retirement list is a secret for the same reason it is not in the
+          # repository: it is the one list of names a published map exists never
+          # to carry. The tool looks for it at ~/.go-desktop-retired by default
+          # and REFUSES to fetch without it, so putting it where the default
+          # finds it is also what keeps the refusal meaningful.
+          printf '%s\n' "$MAP_RETIRED" > "$HOME/.go-desktop-retired"
+
+          # BUILT, not `go run`: go run collapses every non-zero exit to 1 and
+          # prints "exit status 3" on stderr instead. The whole point here is
+          # telling 3 (a finding) from 1 (the tool broke), so go run would make
+          # a broken token look exactly like drift, and drift look broken.
+          go build -o "$RUNNER_TEMP/catalog" ./cmd/catalog
+          "$RUNNER_TEMP/catalog" drift -token-file "$RUNNER_TEMP/token" > report.txt 2>&1
+          rc=$?
+          rm -f "$RUNNER_TEMP/token" "$HOME/.go-desktop-retired"
+
+          cat report.txt
+          echo "rc=$rc" >> "$GITHUB_OUTPUT"
+          # 0 clean, 3 drift found, anything else the tool itself failed. Both
+          # of the non-zero cases open an issue; only a failure fails the job.
+          exit 0
+
+      - name: Say what changed, in an issue
+        if: steps.drift.outputs.rc != '0'
+        env:
+          # The default token, not MAP_TOKEN: writing an issue on this one
+          # repository is all this step does, and it is all it can do.
+          GH_TOKEN: ${{ github.token }}
+          RC: ${{ steps.drift.outputs.rc }}
+        run: |
+          set -euo pipefail
+          if [ "$RC" = "3" ]; then
+            title="The map is behind GitHub"
+            head="\`catalog drift\` found a difference between GitHub and the inventory \`main\` was generated from."
+          else
+            title="The drift check could not run"
+            head="\`catalog drift\` exited $RC. Until this is fixed the map can go stale with nothing saying so."
+          fi
+          {
+            echo "$head"
+            echo
+            echo '```'
+            cat report.txt
+            echo '```'
+            echo
+            echo "To act on it: classify anything new in \`families.json\`, then"
+            echo
+            echo '```sh'
+            echo 'catalog fetch -token-file ~/.github-token -exclude-file ~/.go-desktop-retired -out inventory.json'
+            echo 'catalog check'
+            echo 'catalog generate -site ../go-desktop.github.io -docs ../docs -profile ../.github -exclude-file ~/.go-desktop-retired'
+            echo '```'
+            echo
+            echo "Run [$GITHUB_RUN_ID]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)."
+          } > body.md
+
+          gh label create map-drift --color FBCA04 \
+            --description "The published map no longer matches GitHub" --force
+
+          # One issue, reopened and rewritten, rather than a new one every
+          # Monday: the finding is a state, not an event, and fifty issues
+          # saying the same thing is how a real one stops being read.
+          n=$(gh issue list --repo "$GITHUB_REPOSITORY" --label map-drift \
+                --state all --limit 1 --json number --jq '.[0].number // empty')
+          if [ -n "$n" ]; then
+            gh issue edit "$n" --repo "$GITHUB_REPOSITORY" --title "$title" --body-file body.md
+            gh issue reopen "$n" --repo "$GITHUB_REPOSITORY" 2>/dev/null || true
+            echo "updated issue #$n"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --label map-drift \
+              --title "$title" --body-file body.md
+          fi
+
+      - name: Fail only when the tool itself failed
+        if: steps.drift.outputs.rc != '0' && steps.drift.outputs.rc != '3'
+        run: |
+          echo "::error::catalog drift exited ${{ steps.drift.outputs.rc }}"
+          exit 1
