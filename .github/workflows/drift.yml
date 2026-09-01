@@ -43,7 +43,7 @@ jobs:
           MAP_TOKEN: ${{ secrets.MAP_TOKEN }}
           MAP_RETIRED: ${{ secrets.MAP_RETIRED }}
         run: |
-          set -uo pipefail
+          set -u
           umask 077
           printf '%s' "$MAP_TOKEN" > "$RUNNER_TEMP/token"
           # The retirement list is a secret for the same reason it is not in the
@@ -51,6 +51,10 @@ jobs:
           # to carry. The tool looks for it at ~/.go-desktop-retired by default
           # and REFUSES to fetch without it, so putting it where the default
           # finds it is also what keeps the refusal meaningful.
+          #
+          # MAP_RETIRED holds the NAMES ONLY, not the local file's header. A
+          # multiline secret is masked line by line, and a header line that is
+          # just "#" made Actions replace every "#" in the log with ***.
           printf '%s\n' "$MAP_RETIRED" > "$HOME/.go-desktop-retired"
 
           # BUILT, not `go run`: go run collapses every non-zero exit to 1 and
@@ -58,8 +62,11 @@ jobs:
           # telling 3 (a finding) from 1 (the tool broke), so go run would make
           # a broken token look exactly like drift, and drift look broken.
           go build -o "$RUNNER_TEMP/catalog" ./cmd/catalog
-          "$RUNNER_TEMP/catalog" drift -token-file "$RUNNER_TEMP/token" > report.txt 2>&1
-          rc=$?
+          # `|| rc=$?` rather than a bare call: Actions runs this with bash -e,
+          # so exit 3 -- the status this whole step exists to read -- would end
+          # the script before rc was ever assigned. It did, on the first run.
+          rc=0
+          "$RUNNER_TEMP/catalog" drift -token-file "$RUNNER_TEMP/token" > report.txt 2>&1 || rc=$?
           rm -f "$RUNNER_TEMP/token" "$HOME/.go-desktop-retired"
 
           cat report.txt
