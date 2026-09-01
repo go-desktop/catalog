@@ -91,13 +91,20 @@ organisations not on the map (1):
   + go-remoteexec
 repositories the map does not count (1):
   + go-xrkit/depth3d
+pages published since, which the map still shows as absent (2):
+  + go-gtk/docs
+  + go-gtk/site
 
 the fresh view does not reconcile:
   holds public code but is in no family: go-remoteexec
 ```
 
-It compares only what a reader sees — `IsCode` repositories — so a docs site or
-a repository going private is not a finding. Exit status is **0** for no drift,
+It compares what a reader sees: the `IsCode` repositories behind every count, and
+the landing page and documentation site behind the two link cells. A repository
+going private, or an organisation gaining a `brand` repository, is not a finding.
+The page columns were added after the first pass missed them — six sites were
+published, no count moved, and the map went on printing a dash in cells that had
+become links. Exit status is **0** for no drift,
 **3** for drift found, **1** for the tool failing. Those are three answers, not
 two, because a scheduled job has to tell "the map is behind" from "the token
 expired". **Build the binary to see it**: `go run` collapses every non-zero

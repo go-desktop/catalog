@@ -51,21 +51,61 @@ func TestCompareInventories(t *testing.T) {
 	if want := []string{"go-gfx/colour"}; !equal(d.GoneRepos, want) {
 		t.Errorf("GoneRepos = %v, want %v", d.GoneRepos, want)
 	}
+	// The docs site is not a counted repository -- but it IS a cell the map
+	// prints, so it belongs under pages rather than under repositories.
+	if want := []string{"go-gfx/docs"}; !equal(d.NewPages, want) {
+		t.Errorf("NewPages = %v, want %v", d.NewPages, want)
+	}
+	if len(d.GonePages) != 0 {
+		t.Errorf("GonePages = %v, want none", d.GonePages)
+	}
 	if d.Empty() {
-		t.Error("Empty() on a drift with four findings")
+		t.Error("Empty() on a drift with five findings")
 	}
 	got := d.Report()
 	for _, want := range []string{
 		"+ go-arrives", "- go-leaves", "+ go-gfx/raster", "- go-gfx/colour",
+		"+ go-gfx/docs",
 	} {
 		if !strings.Contains(got, want) {
 			t.Errorf("Report() is missing %q:\n%s", want, got)
 		}
 	}
-	// A repository that only moved in or out of the publishing set must not be
-	// reported: nothing a reader sees changed.
-	if strings.Contains(got, "docs") || strings.Contains(got, "secret") {
-		t.Errorf("Report() names a repository the map does not count:\n%s", got)
+	// A private repository changes no cell on any page.
+	if strings.Contains(got, "secret") {
+		t.Errorf("Report() names a repository nothing publishes:\n%s", got)
+	}
+	// And the docs site is not counted as a repository gained.
+	if strings.Contains(got, "+ go-gfx/docs\n  + ") || strings.Contains(strings.SplitN(got, "pages published", 2)[0], "go-gfx/docs") {
+		t.Errorf("the docs site was reported as a repository:\n%s", got)
+	}
+}
+
+// A landing page or a documentation site appearing is the finding that has no
+// count behind it: no repository the map counts has moved, every rule still
+// reconciles, and the only thing wrong is a dash in a cell that should now be a
+// link. Losing one is the same in reverse.
+func TestCompareInventoriesFindsPublishedPages(t *testing.T) {
+	was := Inventory{"go-a": {{Org: "go-a", Name: "lib"}, {Org: "go-a", Name: "go-a.github.io"}},
+		"go-b": {{Org: "go-b", Name: "lib"}, {Org: "go-b", Name: "docs"}}}
+	now := Inventory{"go-a": {{Org: "go-a", Name: "lib"}, {Org: "go-a", Name: "docs"}},
+		"go-b": {{Org: "go-b", Name: "lib"}}}
+	d := CompareInventories(was, now)
+	if want := []string{"go-a/docs"}; !equal(d.NewPages, want) {
+		t.Errorf("NewPages = %v, want %v", d.NewPages, want)
+	}
+	if want := []string{"go-a/site", "go-b/docs"}; !equal(d.GonePages, want) {
+		t.Errorf("GonePages = %v, want %v", d.GonePages, want)
+	}
+	// None of this is a repository the map counts.
+	if len(d.NewRepos) != 0 || len(d.GoneRepos) != 0 {
+		t.Errorf("publishing repositories were counted: new=%v gone=%v", d.NewRepos, d.GoneRepos)
+	}
+	got := d.Report()
+	for _, want := range []string{"published since", "published no longer", "- go-a/site", "+ go-a/docs"} {
+		if !strings.Contains(got, want) {
+			t.Errorf("Report() is missing %q:\n%s", want, got)
+		}
 	}
 }
 
