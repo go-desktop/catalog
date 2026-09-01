@@ -311,6 +311,78 @@
       "language": "Go"
     }
   ],
+  "go-ansible": [
+    {
+      "org": "go-ansible",
+      "name": "cli",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-ansible",
+      "name": "connection",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-ansible",
+      "name": "facts",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-ansible",
+      "name": "galaxy",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-ansible",
+      "name": "inventory",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-ansible",
+      "name": "modules",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-ansible",
+      "name": "playbook",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-ansible",
+      "name": "template",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-ansible",
+      "name": "vars",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-ansible",
+      "name": "vault",
+      "private": false,
+      "archived": false,
+      "fork": false
+    }
+  ],
   "go-asmgen": [
     {
       "org": "go-asmgen",
@@ -2358,7 +2430,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-gitsafe",
@@ -2405,6 +2478,14 @@
     }
   ],
   "go-gtk": [
+    {
+      "org": "go-gtk",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
     {
       "org": "go-gtk",
       "name": "gtk4",
@@ -2629,6 +2710,14 @@
       "private": false,
       "archived": false,
       "fork": false
+    },
+    {
+      "org": "go-images",
+      "name": "depth",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-images",
@@ -2954,6 +3043,14 @@
     },
     {
       "org": "go-macos",
+      "name": "coreml",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
       "name": "diskarbitration",
       "private": false,
       "archived": false,
@@ -3018,6 +3115,14 @@
     {
       "org": "go-macos",
       "name": "localauthentication",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
+      "name": "metal",
       "private": false,
       "archived": false,
       "fork": false,
@@ -13095,6 +13200,14 @@
     {
       "org": "go-webengine",
       "name": "engine",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-webengine",
+      "name": "esbuildsandbox",
       "private": false,
       "archived": false,
       "fork": false,
