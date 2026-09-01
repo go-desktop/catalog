@@ -391,7 +391,7 @@
     {
       "key": "config",
       "title": "Configuration management",
-      "blurb": "The Puppet stack, in Go, without a Ruby runtime.",
+      "blurb": "The Puppet and Ansible stacks, in Go, without a Ruby or Python runtime.",
       "orgs": [
         {
           "org": "go-puppet",
@@ -428,6 +428,10 @@
         {
           "org": "go-augeas",
           "role": "The Augeas engine: a config tree, path expressions and lenses."
+        },
+        {
+          "org": "go-ansible",
+          "role": "Ansible: inventory, variable precedence, Jinja2-compatible templating, connection and become plugins, the module protocol, and the playbook engine."
         }
       ]
     },
