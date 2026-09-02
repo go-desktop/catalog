@@ -506,6 +506,13 @@
     },
     {
       "org": "go-attest",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-attest",
       "name": "docs",
       "private": false,
       "archived": false,
@@ -600,6 +607,13 @@
       "archived": false,
       "fork": false,
       "language": "Go"
+    },
+    {
+      "org": "go-avkit",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
     },
     {
       "org": "go-avkit",
@@ -2870,6 +2884,13 @@
     },
     {
       "org": "go-keyring",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-keyring",
       "name": "docs",
       "private": false,
       "archived": false,
@@ -3111,6 +3132,13 @@
     },
     {
       "org": "go-macos",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-macos",
       "name": "brightness",
       "private": false,
       "archived": false,
@@ -3333,6 +3361,13 @@
       "archived": false,
       "fork": false,
       "language": "JavaScript"
+    },
+    {
+      "org": "go-mswin",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
     },
     {
       "org": "go-mswin",
@@ -3838,6 +3873,13 @@
       "archived": false,
       "fork": false,
       "language": "Go"
+    },
+    {
+      "org": "go-pdfkit",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
     },
     {
       "org": "go-pdfkit",
@@ -4398,7 +4440,8 @@
       "name": ".github",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "JavaScript"
     },
     {
       "org": "go-remoteexec",
@@ -12088,6 +12131,13 @@
     },
     {
       "org": "go-ruby-widgets",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-ruby-widgets",
       "name": "docs",
       "private": false,
       "archived": false,
@@ -12292,6 +12342,13 @@
       "archived": false,
       "fork": false,
       "language": "JavaScript"
+    },
+    {
+      "org": "go-scss",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
     },
     {
       "org": "go-scss",
@@ -12971,6 +13028,13 @@
     },
     {
       "org": "go-versions",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-versions",
       "name": "docs",
       "private": false,
       "archived": false,
@@ -13372,6 +13436,13 @@
     },
     {
       "org": "go-widgets",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-widgets",
       "name": "bricolint",
       "private": false,
       "archived": false,
@@ -13749,6 +13820,13 @@
     },
     {
       "org": "nano-container-linux",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "nano-container-linux",
       "name": "dnsctl",
       "private": false,
       "archived": false,
@@ -13821,6 +13899,13 @@
     {
       "org": "openweft",
       "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "openweft",
+      "name": "docs",
       "private": false,
       "archived": false,
       "fork": false
