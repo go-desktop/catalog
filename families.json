@@ -41,6 +41,18 @@
         {
           "org": "wasmdesk",
           "role": "A desktop in the browser — a Wayland-inspired compositor and window manager, a dock, a login portal, OCI app packaging and a coreutils suite."
+        },
+        {
+          "org": "go-gnulinux",
+          "role": "Linux's system interfaces in pure Go: hidraw and the authentication factors built on it — the Linux third of the platform layer, beside go-macos and go-mswin."
+        },
+        {
+          "org": "go-authn",
+          "role": "Proving a person is present: the FIDO client-to-authenticator protocol spoken to a security key on any OS, and the rule that decides whether enough factors answered."
+        },
+        {
+          "org": "go-aiquota",
+          "role": "A menu-bar application on the toolkit: AI usage quotas across several accounts, read through one go-plugin contract with a plugin per provider."
         }
       ]
     },

@@ -311,6 +311,68 @@
       "language": "Go"
     }
   ],
+  "go-aiquota": [
+    {
+      "org": "go-aiquota",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-aiquota",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-aiquota",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-aiquota",
+      "name": "go-aiquota.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    },
+    {
+      "org": "go-aiquota",
+      "name": "plugin-chatgpt",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-aiquota",
+      "name": "plugin-claude",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-aiquota",
+      "name": "proto",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-aiquota",
+      "name": "tray",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    }
+  ],
   "go-ansible": [
     {
       "org": "go-ansible",
@@ -331,14 +393,8 @@
       "name": "cli",
       "private": false,
       "archived": false,
-      "fork": false
-    },
-    {
-      "org": "go-ansible",
-      "name": "connection",
-      "private": false,
-      "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-ansible",
@@ -352,7 +408,8 @@
       "name": "facts",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-ansible",
@@ -366,7 +423,8 @@
       "name": "go-ansible.github.io",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "HTML"
     },
     {
       "org": "go-ansible",
@@ -381,14 +439,16 @@
       "name": "modules",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-ansible",
       "name": "playbook",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-ansible",
@@ -589,6 +649,54 @@
       "archived": false,
       "fork": false,
       "language": "HTML"
+    }
+  ],
+  "go-authn": [
+    {
+      "org": "go-authn",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-authn",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-authn",
+      "name": "fido",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-authn",
+      "name": "go-authn.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    },
+    {
+      "org": "go-authn",
+      "name": "keyfactor",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-authn",
+      "name": "mfa",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     }
   ],
   "go-avkit": [
@@ -2510,6 +2618,46 @@
       "language": "CSS"
     }
   ],
+  "go-gnulinux": [
+    {
+      "org": "go-gnulinux",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-gnulinux",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-gnulinux",
+      "name": "factors",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-gnulinux",
+      "name": "fido",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-gnulinux",
+      "name": "go-gnulinux.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    }
+  ],
   "go-graphdrawing": [
     {
       "org": "go-graphdrawing",
@@ -3147,6 +3295,14 @@
     },
     {
       "org": "go-macos",
+      "name": "coreaudio",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
       "name": "coreml",
       "private": false,
       "archived": false,
@@ -3167,6 +3323,22 @@
       "private": false,
       "archived": false,
       "fork": false
+    },
+    {
+      "org": "go-macos",
+      "name": "factors",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
+      "name": "fido",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-macos",
@@ -3378,6 +3550,14 @@
     },
     {
       "org": "go-mswin",
+      "name": "factors",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-mswin",
       "name": "go-mswin.github.io",
       "private": false,
       "archived": false,
@@ -3387,6 +3567,14 @@
     {
       "org": "go-mswin",
       "name": "screencapture",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-mswin",
+      "name": "webauthn",
       "private": false,
       "archived": false,
       "fork": false,
@@ -3927,6 +4115,14 @@
       "archived": false,
       "fork": false,
       "language": "HTML"
+    },
+    {
+      "org": "go-pdfkit",
+      "name": "html2pdf",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-pdfkit",
