@@ -52,7 +52,7 @@
         },
         {
           "org": "go-authn",
-          "role": "Proving a person is present: the FIDO client-to-authenticator protocol spoken to a security key on any OS, and the rule that decides whether enough factors answered."
+          "role": "Who somebody is, and what proves it — a federation's worth of identity in pure Go with no cgo: one directory model over a database, a file or LDAP, and the LDAP server that publishes it; Kerberos both ways, issuing tickets from that directory and accepting them where gokrb5 will not build; SAML as a service provider in RENATER or eduGAIN, and an OIDC provider in front of such a federation; the relying-party and token-verification halves of OpenID Connect; SSH user certificates on the GÉANT/EuroHPC CA profile with revocation lists distributed signed and expiring, beside X.509 CRLs; ACME and on-disk sources for a daemon's own TLS certificate; and the factors a policy asks for — a security key over FIDO CTAP, TOTP, WireGuard keys — with the rule that decides whether enough of them answered."
         },
         {
           "org": "go-aiquota",
@@ -71,11 +71,11 @@
         },
         {
           "org": "go-images",
-          "role": "Image processing at scikit-image scope."
+          "role": "Image processing at scikit-image scope, plus the decoders the standard library does not have or does differently: Photoshop PSD composites, and forks of image/gif, image/jpeg and image/png that upsample four-component chroma the way libjpeg does and can report what a truncated stream did decode, so a half-arrived picture still shows. And one that is not processing at all: depth from a single photograph, and the second eye synthesised from it."
         },
         {
           "org": "go-avkit",
-          "role": "An audio/video toolkit — MP4/ISO-BMFF and Matroska/WebM demuxing."
+          "role": "An audio/video toolkit: MP4/ISO-BMFF, Matroska/WebM and MPEG-TS onto one model, demuxed and muxed — and under it the bitstreams themselves, H.264 and H.265 read down to clause 8.2's picture order counts, VP8 and VP9, over the primitives they share rather than once per codec: RBSP and Exp-Golomb bit reading, NAL framing, and the boolean arithmetic decoder VP8 and VP9 have in common."
         },
         {
           "org": "go-streamkit",
@@ -134,7 +134,7 @@
         },
         {
           "org": "go-richdoc",
-          "role": "One rich-document model, and the converters that read and write it — Markdown, LaTeX and reStructuredText."
+          "role": "One rich-document model, and everything that reads or writes it. Both directions for the markup people edit — Markdown, LaTeX, reStructuredText — and one direction for the formats people are handed: HTML and XHTML, EPUB 2 and 3, Kindle MOBI, FictionBook 2, RFC 5322 mail with its MIME parts, and CSV, JSON, XML or plain text. A format is added by writing one reader against that model, not by writing a converter to each of the others."
         },
         {
           "org": "go-odf",
@@ -332,7 +332,7 @@
       "orgs": [
         {
           "org": "go-compressions",
-          "role": "LZFSE, LZ4, deflate and BLAKE3, with the CLIs that go with them."
+          "role": "The codecs and the halves of them that are missing elsewhere: LZFSE, LZ4 and DEFLATE wire-compatible with compress/flate both ways, a bzip2 encoder the standard library does not have, and readers for the formats it never grew — .Z, lzip, LZO1X — plus BLAKE3 and b3sum, and the CLIs that go with them. Correctness is judged against the thing itself: the official BLAKE3 vectors, compress/bzip2, and macOS's own libcompression asked what the bytes should be."
         },
         {
           "org": "go-deltasync",
@@ -355,7 +355,7 @@
         },
         {
           "org": "go-filesystems",
-          "role": "Filesystem-format drivers — ext4, xfs, btrfs, zfs, apfs, ntfs, exfat, fat32, iso9660, squashfs and more — plus UEFI variable management and a format prober. And the other direction: NFSv3, SFTP and WebDAV servers that export any of them, so an image can be mounted by the host rather than only read by a program."
+          "role": "One Filesystem interface, and everything that can sit on either side of it. Underneath, the formats: ext4, xfs, btrfs, zfs, apfs, ntfs, exfat, fat32, ffs, ufs, hfsplus, iso9660, squashfs, UEFI variables, a blkid-style prober — and archives read as filesystems rather than unpacked, cab, cpio, rar, rpm, 7z (which also writes), xar and WARC, with one extractor that sniffs the format from the bytes and follows multi-volume sets. Above it, the servers that export any of them — NFSv3, SMB2, SFTP, WebDAV and an S3 object API — so an image is mounted by the host instead of only read by a program. And between the two: a host directory confined with os.Root, a read-only filesystem made writable through a spool, and the same filesystem served across a connection."
         },
         {
           "org": "go-diskimages",
@@ -398,7 +398,7 @@
         },
         {
           "org": "cloud-boot",
-          "role": "Booting the machine: a TamaGo UEFI payload, a unified kernel image, an init, kernels, ISOs, SEV-SNP."
+          "role": "Booting the machine: a TamaGo UEFI payload, a pure-UEFI loader that finds the distro kernel at runtime, a unified kernel image, an init, kernels, ISOs, a virtio-net driver, SEV-SNP attestation, and Windows boot-manager test infrastructure. Two of its repositories are neither bootloader nor kernel but the TinyGo runtime files without which GOARCH=riscv64 and GOARCH=loong64 cannot produce a baremetal UEFI binary at all — the prerequisite, kept where it is needed rather than waited on upstream."
         },
         {
           "org": "nano-container-linux",
