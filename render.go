@@ -96,6 +96,81 @@ func docsCell(o ResolvedOrg) string {
 	return fmt.Sprintf("[docs](https://%s.github.io/docs/)", o.Name)
 }
 
+// The documentation sidebar is ordered by Hugo front-matter weights. They are
+// constants here rather than curated, because the order is a property of the
+// site's structure and the family pages' weights follow from families.json's
+// own order. These values are the ones the pages are published with, so a
+// regeneration leaves the sidebar exactly as it is.
+const (
+	weightIndex    = 10 // the ecosystem overview
+	weightFinding  = 20 // hand-written, never generated
+	weightStandard = 30 // hand-written, never generated
+	weightFamilies = 40 // the families section index
+	// Family pages run from weightFirstFamily upwards, in families.json order.
+	weightFirstFamily = 50
+	weightStep        = 10
+)
+
+// weightGems and weightReserved sit after the last family page.
+//
+// ⛔ They are COMPUTED, not constants. As constants (220 and 230) adding an
+// eighteenth family would have given it weight 220 and silently tied it with
+// the gems page, and a tie in Hugo's ordering is resolved by title — so the
+// sidebar would have reordered itself for a reason nobody could see in the
+// diff.
+func (c *Catalog) weightGems() int {
+	return weightFirstFamily + len(c.Families)*weightStep
+}
+
+func (c *Catalog) weightReserved() int { return c.weightGems() + weightStep }
+
+// mkdocsSlug reproduces python-markdown's heading-id rule, which is what the
+// documentation site's anchors were minted with before it moved to Hugo.
+//
+// ⛔ THE TWO RULES DISAGREE, and an anchor is a URL somebody may have saved.
+// Python-Markdown DROPS punctuation and then collapses the whitespace left
+// behind into ONE hyphen; goldmark keeps one hyphen per space. So
+// "Graphics, images & media" is `graphics-images-media` under MkDocs and
+// `graphics-images--media` under Hugo. Every generated heading therefore
+// carries its MkDocs id explicitly, which needs
+// markup.goldmark.parser.attribute.block in the site's config — already set.
+func mkdocsSlug(title string) string {
+	var cleaned strings.Builder
+	for _, r := range strings.ToLower(title) {
+		switch {
+		case r >= 'a' && r <= 'z', r >= '0' && r <= '9', r == '_', r == '-':
+			cleaned.WriteRune(r)
+		case r == ' ', r == '\t':
+			cleaned.WriteRune(' ')
+		default:
+			// Punctuation is removed outright, leaving whatever space
+			// surrounded it to be collapsed below.
+			if r > 127 {
+				// A non-ASCII letter is kept; only symbols are dropped, and
+				// the em dash this ecosystem writes in titles is a symbol.
+				if !strings.ContainsRune("—–—…·«»", r) {
+					cleaned.WriteRune(r)
+				} else {
+					cleaned.WriteRune(' ')
+				}
+			}
+		}
+	}
+	return strings.Join(strings.Fields(cleaned.String()), "-")
+}
+
+// frontMatter renders the Hugo front matter every generated page needs. The
+// nav title is often shorter than the heading ("Ruby gems" against "Ruby gems
+// — one organisation each"), so it is passed separately rather than derived.
+func frontMatter(navTitle string, weight int) string {
+	return fmt.Sprintf("---\ntitle: %q\nweight: %d\n---\n\n", navTitle, weight)
+}
+
+// heading renders an H1 carrying its MkDocs anchor.
+func heading(title string) string {
+	return fmt.Sprintf("# %s {#%s}\n\n", title, mkdocsSlug(title))
+}
+
 // Page renders f as a documentation page.
 //
 // It hangs off the resolved family rather than taking a key off the catalogue,
@@ -103,7 +178,9 @@ func docsCell(o ResolvedOrg) string {
 // cannot fail is better than one whose failure branch no test can reach.
 func (f ResolvedFamily) Page() []byte {
 	var b strings.Builder
-	fmt.Fprintf(&b, "# %s\n\n%s\n\n", f.Title, f.Blurb)
+	b.WriteString(frontMatter(f.Title, f.Weight))
+	b.WriteString(heading(f.Title))
+	fmt.Fprintf(&b, "%s\n\n", f.Blurb)
 	b.WriteString("| Organisation | Repos | Site | Docs | What it holds |\n")
 	b.WriteString("| --- | --- | --- | --- | --- |\n")
 	for _, o := range f.Orgs {
@@ -119,7 +196,8 @@ func (f ResolvedFamily) Page() []byte {
 // the alphabetical table.
 func (c *Catalog) GemsPage() []byte {
 	var b strings.Builder
-	b.WriteString("# Ruby gems — one organisation each\n\n")
+	b.WriteString(frontMatter("Ruby gems", c.weightGems()))
+	b.WriteString(heading("Ruby gems — one organisation each"))
 	b.WriteString(strings.TrimSpace(c.GemsIntro))
 	b.WriteString("\n\n")
 	b.WriteString("| Gem | Organisation |\n| --- | --- |\n")
@@ -212,14 +290,15 @@ func (c *Catalog) ProfileREADME() []byte {
 // siblings outside the map.
 func (c *Catalog) ReservedPage() []byte {
 	var b strings.Builder
-	b.WriteString("# Held, not yet built\n\n")
+	b.WriteString(frontMatter("Held, not yet built", c.weightReserved()))
+	b.WriteString(heading("Held, not yet built"))
 	b.WriteString(c.expand(c.ReservedIntro))
 	b.WriteString("\n\n| Organisation | Intended for |\n| --- | --- |\n")
 	for _, r := range c.Reserved {
 		fmt.Fprintf(&b, "| [`%s`](https://github.com/%s) | %s |\n", r.Org, r.Org, r.For)
 	}
 	if len(c.NotGo) > 0 {
-		b.WriteString("\n## Not in this map\n\n")
+		b.WriteString("\n## Not in this map {#not-in-this-map}\n\n")
 		b.WriteString("These are real and maintained; they are simply not part of the Go library\n")
 		b.WriteString("ecosystem this site maps, and are counted nowhere on it.\n\n")
 		b.WriteString("| Organisation | What it is |\n| --- | --- |\n")
@@ -232,6 +311,8 @@ func (c *Catalog) ReservedPage() []byte {
 
 // DocsIndexPage renders the documentation home page. Its headline is the size of
 // the ecosystem, which is exactly the sentence that must not be hand-kept.
+// Its body is curated prose in families.json, which carries its own headings
+// and cross-page links; only the front matter is added here.
 func (c *Catalog) DocsIndexPage() []byte {
-	return []byte(c.expand(c.DocsIndex) + "\n")
+	return []byte(frontMatter("The ecosystem", weightIndex) + c.expand(c.DocsIndex) + "\n")
 }

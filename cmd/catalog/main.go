@@ -41,6 +41,11 @@ func main() { osExit(run(os.Args[1:], os.Stdout, os.Stderr)) }
 // name list a published map would contradict by carrying it.
 const defaultRetired = ".go-desktop-retired"
 
+// docsContent is where the documentation site keeps its pages. Hugo reads
+// content/en (the site declares languages.en.contentDir); the MkDocs tree this
+// replaced kept them under docs/.
+const docsContent = "content/en"
+
 // retiredPath answers where the default retirement list lives, as a seam. A test
 // cannot get there through the environment: os.UserHomeDir reads HOME on unix
 // and USERPROFILE on Windows, so a test that set one passed on two platforms and
@@ -359,18 +364,27 @@ func cmdGenerate(args []string, out io.Writer) error {
 		}
 	}
 	if *docs != "" {
+		// ⛔ content/en, NOT docs/. The documentation site moved from MkDocs to
+		// Hugo + Hextra, and nothing updated this tool: it went on writing the
+		// MkDocs tree, which Hugo does not read. A regeneration would have
+		// created a stale docs/ directory and left the pages a reader actually
+		// sees untouched — the map would have stopped updating in silence,
+		// with every check still green.
+		//
+		// The index is _index.md because Hugo's section home is named that,
+		// and the family pages keep their own names under families/.
 		for _, f := range c.Families {
-			if err := write(filepath.Join(*docs, "docs", "families", f.Key+".md"), f.Page()); err != nil {
+			if err := write(filepath.Join(*docs, docsContent, "families", f.Key+".md"), f.Page()); err != nil {
 				return err
 			}
 		}
-		if err := write(filepath.Join(*docs, "docs", "gems.md"), c.GemsPage()); err != nil {
+		if err := write(filepath.Join(*docs, docsContent, "gems.md"), c.GemsPage()); err != nil {
 			return err
 		}
-		if err := write(filepath.Join(*docs, "docs", "reserved.md"), c.ReservedPage()); err != nil {
+		if err := write(filepath.Join(*docs, docsContent, "reserved.md"), c.ReservedPage()); err != nil {
 			return err
 		}
-		if err := write(filepath.Join(*docs, "docs", "index.md"), c.DocsIndexPage()); err != nil {
+		if err := write(filepath.Join(*docs, docsContent, "_index.md"), c.DocsIndexPage()); err != nil {
 			return err
 		}
 	}
