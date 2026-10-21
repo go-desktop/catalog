@@ -31,6 +31,10 @@ type ResolvedFamily struct {
 	Title string
 	Blurb string
 	Orgs  []ResolvedOrg
+	// Weight is the page's position in the documentation sidebar. It is
+	// derived from the family's position in families.json rather than curated
+	// there, so adding a family cannot leave a gap or a collision behind.
+	Weight int
 }
 
 // ResolvedOrg is one organisation as published.
@@ -83,8 +87,11 @@ func Build(c *Classification, inv Inventory) (*Catalog, error) {
 		Reserved:       c.Reserved,
 		NotGo:          c.NotGo,
 	}
-	for _, f := range c.Families {
-		rf := ResolvedFamily{Key: f.Key, Title: f.Title, Blurb: f.Blurb}
+	for i, f := range c.Families {
+		rf := ResolvedFamily{
+			Key: f.Key, Title: f.Title, Blurb: f.Blurb,
+			Weight: weightFirstFamily + i*weightStep,
+		}
 		for _, m := range f.Orgs {
 			if !inv.Has(m.Org) {
 				return nil, fmt.Errorf("%s is classified under %q but does not exist", m.Org, f.Key)

@@ -170,3 +170,58 @@ func TestDocsIndexPage(t *testing.T) {
 		t.Errorf("docs index page = %q", out)
 	}
 }
+
+// TestMkdocsSlugMatchesThePublishedAnchors pins the heading-id rule against
+// the anchors the documentation site is actually serving.
+//
+// These are not invented examples: each left-hand side is a heading on a
+// published page and each right-hand side is the id that page carries, minted
+// by python-markdown before the site moved to Hugo. The two slug rules
+// disagree — goldmark would write `graphics-images--media` for the first,
+// with two hyphens — so an anchor somebody saved only keeps working while
+// this function reproduces the old rule.
+func TestMkdocsSlugMatchesThePublishedAnchors(t *testing.T) {
+	for _, c := range []struct{ title, want string }{
+		{"Graphics, images & media", "graphics-images-media"},
+		{"Ruby gems — one organisation each", "ruby-gems-one-organisation-each"},
+		{"The pure-Go ecosystem", "the-pure-go-ecosystem"},
+		{"Held, not yet built", "held-not-yet-built"},
+		{"How the map is organised", "how-the-map-is-organised"},
+		{"Not in this map", "not-in-this-map"},
+		// A non-ASCII LETTER is kept, unlike a non-ASCII symbol: the rule
+		// drops punctuation, not alphabets.
+		{"Café numérique", "café-numérique"},
+	} {
+		if got := mkdocsSlug(c.title); got != c.want {
+			t.Errorf("mkdocsSlug(%q) = %q, want %q", c.title, got, c.want)
+		}
+	}
+}
+
+// TestGeneratedPagesCarryFrontMatterAndAnchors checks the two things Hugo
+// needs and MkDocs did not: front matter naming the page and its position, and
+// an explicit id on the heading.
+func TestGeneratedPagesCarryFrontMatterAndAnchors(t *testing.T) {
+	c := renderFixture(t)
+	for _, f := range c.Families {
+		page := string(f.Page())
+		if !strings.HasPrefix(page, "---\ntitle: ") {
+			t.Errorf("%s page has no front matter: %.40q", f.Key, page)
+		}
+		if !strings.Contains(page, "{#"+mkdocsSlug(f.Title)+"}") {
+			t.Errorf("%s page heading carries no anchor", f.Key)
+		}
+		if f.Weight < weightFirstFamily {
+			t.Errorf("%s page weight %d is above the families section", f.Key, f.Weight)
+		}
+	}
+	for name, page := range map[string][]byte{
+		"gems":     c.GemsPage(),
+		"reserved": c.ReservedPage(),
+		"index":    c.DocsIndexPage(),
+	} {
+		if !strings.HasPrefix(string(page), "---\ntitle: ") {
+			t.Errorf("%s page has no front matter", name)
+		}
+	}
+}

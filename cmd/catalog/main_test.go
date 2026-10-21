@@ -156,11 +156,11 @@ func TestGenerate(t *testing.T) {
 		}
 	}
 	for _, rel := range []string{
-		filepath.Join("docs", "families", "desktop.md"),
-		filepath.Join("docs", "families", "graphics.md"),
-		filepath.Join("docs", "gems.md"),
-		filepath.Join("docs", "reserved.md"),
-		filepath.Join("docs", "index.md"),
+		filepath.Join("content", "en", "families", "desktop.md"),
+		filepath.Join("content", "en", "families", "graphics.md"),
+		filepath.Join("content", "en", "gems.md"),
+		filepath.Join("content", "en", "reserved.md"),
+		filepath.Join("content", "en", "_index.md"),
 	} {
 		if _, err := os.Stat(filepath.Join(docs, rel)); err != nil {
 			t.Errorf("docs is missing %s: %v", rel, err)
@@ -243,7 +243,7 @@ func TestGenerateErrors(t *testing.T) {
 
 	// The same for the documentation side: the family pages land, gems.md cannot.
 	partialDocs := t.TempDir()
-	if err := os.MkdirAll(filepath.Join(partialDocs, "docs", "gems.md"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(partialDocs, "content", "en", "gems.md"), 0o755); err != nil {
 		t.Fatal(err)
 	}
 	if code, out, _ := exec("generate", "-classification", cl, "-inventory", inv, "-docs", partialDocs); code != 1 ||
@@ -253,7 +253,7 @@ func TestGenerateErrors(t *testing.T) {
 
 	// And once more one step later: gems.md lands, reserved.md cannot.
 	lastDocs := t.TempDir()
-	if err := os.MkdirAll(filepath.Join(lastDocs, "docs", "reserved.md"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(lastDocs, "content", "en", "reserved.md"), 0o755); err != nil {
 		t.Fatal(err)
 	}
 	if code, out, _ := exec("generate", "-classification", cl, "-inventory", inv, "-docs", lastDocs); code != 1 ||
@@ -261,9 +261,9 @@ func TestGenerateErrors(t *testing.T) {
 		t.Errorf("reserved.md write should fail after gems.md: code=%d out=%q", code, out)
 	}
 
-	// And the last of them: index.md.
+	// And the last of them: _index.md, Hugo's name for a section home.
 	indexDocs := t.TempDir()
-	if err := os.MkdirAll(filepath.Join(indexDocs, "docs", "index.md"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(indexDocs, "content", "en", "_index.md"), 0o755); err != nil {
 		t.Fatal(err)
 	}
 	if code, out, _ := exec("generate", "-classification", cl, "-inventory", inv, "-docs", indexDocs); code != 1 ||

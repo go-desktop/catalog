@@ -23,6 +23,10 @@
           "role": "Icon and logo packs as embedded pure-Go SVG data — Simple Icons brand marks, Devicon, Material and Seti file types, vscode-icons, and Iconoir. One repository per pack, so a program embeds the set it draws and not the other five; the drawing itself is go-gfx's `svg` package."
         },
         {
+          "org": "go-appdirs",
+          "role": "Where a file belongs on the host: the durable per-user directory a program should write to, chosen per platform, for artefacts that must outlive a run and must never land inside a repository."
+        },
+        {
           "org": "go-thumbnail",
           "role": "The freedesktop Thumbnail Managing Standard cache."
         },
@@ -48,7 +52,7 @@
         },
         {
           "org": "go-authn",
-          "role": "Proving a person is present: the FIDO client-to-authenticator protocol spoken to a security key on any OS, and the rule that decides whether enough factors answered."
+          "role": "Who somebody is, and what proves it — a federation's worth of identity in pure Go with no cgo: one directory model over a database, a file or LDAP, and the LDAP server that publishes it; Kerberos both ways, issuing tickets from that directory and accepting them where gokrb5 will not build; SAML as a service provider in RENATER or eduGAIN, and an OIDC provider in front of such a federation; the relying-party and token-verification halves of OpenID Connect; SSH user certificates on the GÉANT/EuroHPC CA profile with revocation lists distributed signed and expiring, beside X.509 CRLs; ACME and on-disk sources for a daemon's own TLS certificate; and the factors a policy asks for — a security key over FIDO CTAP, TOTP, WireGuard keys — with the rule that decides whether enough of them answered."
         },
         {
           "org": "go-aiquota",
@@ -67,11 +71,11 @@
         },
         {
           "org": "go-images",
-          "role": "Image processing at scikit-image scope."
+          "role": "Image processing at scikit-image scope, plus the decoders the standard library does not have or does differently: Photoshop PSD composites, and forks of image/gif, image/jpeg and image/png that upsample four-component chroma the way libjpeg does and can report what a truncated stream did decode, so a half-arrived picture still shows. And one that is not processing at all: depth from a single photograph, and the second eye synthesised from it."
         },
         {
           "org": "go-avkit",
-          "role": "An audio/video toolkit — MP4/ISO-BMFF and Matroska/WebM demuxing."
+          "role": "An audio/video toolkit: MP4/ISO-BMFF, Matroska/WebM and MPEG-TS onto one model, demuxed and muxed — and under it the bitstreams themselves, H.264 and H.265 read down to clause 8.2's picture order counts, VP8 and VP9, over the primitives they share rather than once per codec: RBSP and Exp-Golomb bit reading, NAL framing, and the boolean arithmetic decoder VP8 and VP9 have in common."
         },
         {
           "org": "go-streamkit",
@@ -84,6 +88,18 @@
         {
           "org": "go-xrkit",
           "role": "XR glasses: head orientation, stereo frame packing, flat, equirectangular and fisheye projection, a 360° screen ribbon, a graded catalogue of what each headset can show — plus a player, a virtual desktop on the ribbon, and Android capture."
+        },
+        {
+          "org": "go-viture",
+          "role": "The VITURE headsets go-xrkit drives: the Beast and the Luma Ultra, spoken to directly with no vendor library."
+        },
+        {
+          "org": "go-xreal",
+          "role": "The XREAL Air family's USB packet protocol, the other half of what go-xrkit reads head orientation from."
+        },
+        {
+          "org": "go-videodsp",
+          "role": "Planar YUV to RGBA, the conversion every video decoder in the map ends with, kept in one place rather than once per codec."
         }
       ]
     },
@@ -118,7 +134,7 @@
         },
         {
           "org": "go-richdoc",
-          "role": "One rich-document model, and the converters that read and write it — Markdown, LaTeX and reStructuredText."
+          "role": "One rich-document model, and everything that reads or writes it. Both directions for the markup people edit — Markdown, LaTeX, reStructuredText — and one direction for the formats people are handed: HTML and XHTML, EPUB 2 and 3, Kindle MOBI, FictionBook 2, RFC 5322 mail with its MIME parts, and CSV, JSON, XML or plain text. A format is added by writing one reader against that model, not by writing a converter to each of the others."
         },
         {
           "org": "go-odf",
@@ -127,6 +143,14 @@
         {
           "org": "go-rtf",
           "role": "RTF, in and out of the richdoc model."
+        },
+        {
+          "org": "go-ooxml",
+          "role": "Word, Excel and PowerPoint into the richdoc model: one container — the Open Packaging Conventions, kept separate because docx, xlsx and pptx all sit on it — and three vocabularies above it."
+        },
+        {
+          "org": "go-slides",
+          "role": "Marp-compatible slide decks, with Go template interpolation and slide kinds, and the VS Code extension that previews and exports them."
         }
       ]
     },
@@ -241,7 +265,7 @@
     {
       "key": "numerics",
       "title": "CPU, SIMD & numerics",
-      "blurb": "Getting the machine's width out of pure Go, on all six 64-bit targets.",
+      "blurb": "Getting the machine's width out of pure Go, on all six 64-bit targets — and the scientific stack built on top of it, measured against NumPy, SciPy and mpmath rather than against itself.",
       "orgs": [
         {
           "org": "go-asmgen",
@@ -258,6 +282,46 @@
         {
           "org": "go-fft",
           "role": "Fast Fourier transforms at numpy and scipy accuracy, without FFTW."
+        },
+        {
+          "org": "go-numerics",
+          "role": "The three pieces a numerical program reaches for after the array: special functions (gamma, beta, erf, Bessel, zeta), optimisation and root finding, and quadrature with ODE solvers including the stiff ones (Radau, BDF)."
+        },
+        {
+          "org": "go-statistics",
+          "role": "Probability distributions, descriptive statistics and hypothesis tests, with accuracy measured against mpmath rather than against another Go implementation."
+        },
+        {
+          "org": "go-approx",
+          "role": "Interpolation, splines and smoothing, and polynomials in the Chebyshev, Legendre, Hermite and Laguerre bases — validated against SciPy and NumPy."
+        },
+        {
+          "org": "go-sparse",
+          "role": "Sparse matrices, the orderings that make them tractable (RCM, AMD, COLAMD), and iterative solvers."
+        },
+        {
+          "org": "go-dsp",
+          "role": "Signal processing: filter design and filtering, spectral estimation, resampling and peak finding, following SciPy and MATLAB."
+        },
+        {
+          "org": "go-bignum",
+          "role": "Correctly rounded elementary functions and constants on math/big.Float, at any precision and in every rounding mode — what the accuracy of everything above is checked against."
+        },
+        {
+          "org": "go-dataframe",
+          "role": "Labelled columnar tables: DataFrame and Series, CSV, Parquet and Arrow, group-by, joins and time series."
+        },
+        {
+          "org": "go-plot",
+          "role": "Matplotlib-class figures for the stack above, to SVG, PNG and the screen, with real LaTeX in labels."
+        },
+        {
+          "org": "go-notebook",
+          "role": "Notebooks over that stack: a reactive compiled kernel that keeps its values and orders cells by what they use, and a browser playground that interprets the cells in WebAssembly while the libraries they call stay compiled."
+        },
+        {
+          "org": "go-scikit",
+          "role": "The parity programme for the stack as a whole — an inventory, a bibliography and a measured status against MATLAB and Mathematica — plus its Ruby bindings."
         }
       ]
     },
@@ -268,7 +332,7 @@
       "orgs": [
         {
           "org": "go-compressions",
-          "role": "LZFSE, LZ4, deflate and BLAKE3, with the CLIs that go with them."
+          "role": "The codecs and the halves of them that are missing elsewhere: LZFSE, LZ4 and DEFLATE wire-compatible with compress/flate both ways, a bzip2 encoder the standard library does not have, and readers for the formats it never grew — .Z, lzip, LZO1X — plus BLAKE3 and b3sum, and the CLIs that go with them. Correctness is judged against the thing itself: the official BLAKE3 vectors, compress/bzip2, and macOS's own libcompression asked what the bytes should be."
         },
         {
           "org": "go-deltasync",
@@ -291,11 +355,15 @@
         },
         {
           "org": "go-filesystems",
-          "role": "Filesystem-format drivers — ext4, xfs, btrfs, zfs, apfs, ntfs, exfat, fat32, iso9660, squashfs and more — plus UEFI variable management and a format prober. And the other direction: NFSv3, SFTP and WebDAV servers that export any of them, so an image can be mounted by the host rather than only read by a program."
+          "role": "One Filesystem interface, and everything that can sit on either side of it. Underneath, the formats: ext4, xfs, btrfs, zfs, apfs, ntfs, exfat, fat32, ffs, ufs, hfsplus, iso9660, squashfs, UEFI variables, a blkid-style prober — and archives read as filesystems rather than unpacked, cab, cpio, rar, rpm, 7z (which also writes), xar and WARC, with one extractor that sniffs the format from the bytes and follows multi-volume sets. Above it, the servers that export any of them — NFSv3, SMB2, SFTP, WebDAV and an S3 object API — so an image is mounted by the host instead of only read by a program. And between the two: a host directory confined with os.Root, a read-only filesystem made writable through a spool, and the same filesystem served across a connection."
         },
         {
           "org": "go-diskimages",
           "role": "Disk-image formats: qcow2, raw, dmg, tart-oci, in either direction."
+        },
+        {
+          "org": "go-fileshare",
+          "role": "The product go-filesystems' servers make possible: one configuration and one binary sharing a disk image over SMB, NFS, WebDAV and SFTP, with an OIDC portal, per-server tokens, a file explorer and an admin console across many servers."
         },
         {
           "org": "go-fsctl",
@@ -330,7 +398,7 @@
         },
         {
           "org": "cloud-boot",
-          "role": "Booting the machine: a TamaGo UEFI payload, a unified kernel image, an init, kernels, ISOs, SEV-SNP."
+          "role": "Booting the machine: a TamaGo UEFI payload, a pure-UEFI loader that finds the distro kernel at runtime, a unified kernel image, an init, kernels, ISOs, a virtio-net driver, SEV-SNP attestation, and Windows boot-manager test infrastructure. Two of its repositories are neither bootloader nor kernel but the TinyGo runtime files without which GOARCH=riscv64 and GOARCH=loong64 cannot produce a baremetal UEFI binary at all — the prerequisite, kept where it is needed rather than waited on upstream."
         },
         {
           "org": "nano-container-linux",
@@ -527,6 +595,21 @@
           "role": "The generator. It reads the live GitHub organisation list and reconciles it against a curated classification, then writes the landing configuration, the family pages, the gem list and this profile. The reconciliation is the point: an organisation that holds code but is in no family fails the build, so the index cannot quietly omit something that exists."
         }
       ]
+    },
+    {
+      "key": "workshop",
+      "title": "The workshop",
+      "blurb": "Tools that act on the ecosystem rather than inside it: they read every repository, and the thing they protect is that a claim made about all of them is measured rather than remembered.",
+      "orgs": [
+        {
+          "org": "go-fleettools",
+          "role": "Sweeps across the whole map, each answering one question and refusing to answer it vaguely: which default branches are red, which modules declare a toolchain floor below the one a fix needs, which installed tools were built with an older compiler, which repositories decode an image or a ZIP entry with no ceiling, which landing page is the odd one out — plus the shared landing design itself, a mutation runner that proves a test can fail, and a checks-waiter that refuses to call an empty check list a pass."
+        },
+        {
+          "org": "go-agentsync",
+          "role": "Coordination for sessions that share one machine: leases on repositories so two of them do not edit the same tree, a per-repository mailbox, and a memory index written back and read again, because an entry that reports success and then vanishes is indistinguishable from one never written."
+        }
+      ]
     }
   ],
   "reserved": [
@@ -588,5 +671,5 @@
   "readme_standards": "| | |\n| --- | --- |\n| **`CGO_ENABLED=0`** | No cgo, and no shelling out to a command-line tool in place of a library. A dependency is a Go module or it is written. |\n| **Six 64-bit targets** | amd64, arm64, riscv64, loong64, ppc64le, s390x — native where runners exist, under qemu-user otherwise. s390x is big-endian, which keeps every on-disk and on-wire encoding honest. |\n| **100% statement coverage** | A CI gate, error branches included. A skipped test is not a passing one: jobs fail when a toolchain is missing rather than turning green quietly. |\n| **Measured, not asserted** | Performance claims come with a benchmark against the reference implementation; format claims come with a byte comparison against it. Decoders are fuzzed. |\n| **One landing, one docs site** | A Hugo landing at `<org>.github.io` and versioned MkDocs Material docs at `<org>.github.io/docs/`, same brand, light/dark/system theme toggle. |\n| **BSD-3-Clause** | Every repository, every organisation. |",
   "reserved_intro": "These organisation names are reserved and empty. They are listed so the map has no\nsilent gaps: an empty organisation is not a shipped one, and a name that looks like\na capability is the easiest way to believe a capability exists.",
   "readme_outro": "Counts are the public repositories that hold code; `.github`, `brand`, `docs` and\n`<org>.github.io` are excluded. This file is generated by\n[`go-desktop/catalog`](https://github.com/go-desktop/catalog) from the live GitHub\norganisation list — edit `families.json` there, not this page. BSD-3-Clause · brand\nassets in [go-desktop/brand](https://github.com/go-desktop/brand).",
-  "docs_index": "# The pure-Go ecosystem\n\n**{{orgs}} organisations. {{repos}} public code repositories. No C anywhere.**\n\n`go-desktop` holds no library. It holds the index — a way to find a capability\nwithout already knowing which organisation owns it — and\n[the tool](https://github.com/go-desktop/catalog) that generates it, so that no\nnumber on these pages is typed by hand.\n\nEvery library in the map is written in Go and compiled with `CGO_ENABLED=0`. That\nis not a stylistic preference. It is what makes one binary cross-compile to six\narchitectures, run inside a browser as WebAssembly, and boot on bare metal without\na libc — three things a single cgo dependency takes away permanently.\n\n## How the map is organised\n\n**One organisation per domain, one repository per capability.** A program that\nneeds an ext4 reader takes an ext4 reader, not a storage framework. This is why\nthere are {{orgs}} organisations rather than a handful of monorepos: the unit of reuse\nis the capability, and a capability that lives in its own module can be depended\non without dragging in the rest of its family.\n\nThe consequence to be aware of is that the map itself has to be maintained — which\nis what this site is for. Before building anything, look here first: the recurring\nfailure mode in an ecosystem this wide is rebuilding something that already exists\none organisation over.\n\n## Where to start\n\n- **[Find a capability](finding.md)** — a lookup from what you need to where it lives.\n- **[What every repository is held to](standards.md)** — the conformance standard, in full.\n- The {{families}} families, in the navigation on the left.\n- **[Ruby gems](gems.md)** — the {{gems}} per-gem organisations, alphabetically.\n- **[Held, not yet built](reserved.md)** — the names that are held but hold nothing.\n\n## Reading a count\n\nEvery repository count on this site is the number of **public repositories that\nhold code**. The four infrastructure repositories every organisation carries —\n`.github`, `brand`, `docs` and `<org>.github.io` — are excluded, because counting\nthem would inflate a one-library organisation to five.\n\nCounts were measured against the live GitHub organisation list rather than\nrecalled, and the generated pages carry no hand-typed numbers."
+  "docs_index": "# The pure-Go ecosystem {#the-pure-go-ecosystem}\n\n**{{orgs}} organisations. {{repos}} public code repositories. No C anywhere.**\n\n`go-desktop` holds no library. It holds the index — a way to find a capability\nwithout already knowing which organisation owns it — and\n[the tool](https://github.com/go-desktop/catalog) that generates it, so that no\nnumber on these pages is typed by hand.\n\nEvery library in the map is written in Go and compiled with `CGO_ENABLED=0`. That\nis not a stylistic preference. It is what makes one binary cross-compile to six\narchitectures, run inside a browser as WebAssembly, and boot on bare metal without\na libc — three things a single cgo dependency takes away permanently.\n\n## How the map is organised {#how-the-map-is-organised}\n\n**One organisation per domain, one repository per capability.** A program that\nneeds an ext4 reader takes an ext4 reader, not a storage framework. This is why\nthere are {{orgs}} organisations rather than a handful of monorepos: the unit of reuse\nis the capability, and a capability that lives in its own module can be depended\non without dragging in the rest of its family.\n\nThe consequence to be aware of is that the map itself has to be maintained — which\nis what this site is for. Before building anything, look here first: the recurring\nfailure mode in an ecosystem this wide is rebuilding something that already exists\none organisation over.\n\n## Where to start {#where-to-start}\n\n- **[Find a capability]({{< relref \"finding.md\" >}})** — a lookup from what you need to where it lives.\n- **[What every repository is held to]({{< relref \"standards.md\" >}})** — the conformance standard, in full.\n- The {{families}} families, in the navigation on the left.\n- **[Ruby gems]({{< relref \"gems.md\" >}})** — the {{gems}} per-gem organisations, alphabetically.\n- **[Held, not yet built]({{< relref \"reserved.md\" >}})** — the names that are held but hold nothing.\n\n## Reading a count {#reading-a-count}\n\nEvery repository count on this site is the number of **public repositories that\nhold code**. The four infrastructure repositories every organisation carries —\n`.github`, `brand`, `docs` and `<org>.github.io` — are excluded, because counting\nthem would inflate a one-library organisation to five.\n\nCounts were measured against the live GitHub organisation list rather than\nrecalled, and the generated pages carry no hand-typed numbers."
 }
