@@ -50,6 +50,39 @@ func TestHugoTOML(t *testing.T) {
 	}
 }
 
+// The landing imports go-fleettools/landingkit for the shared design, and this
+// function writes hugo.toml WHOLE — so the import and the brand block can only
+// live here. Added to the landing by hand they would survive exactly until the
+// next `catalog generate`, which is the silent kind of regression: the site
+// would keep building, with its own stylesheet back and nobody told.
+func TestHugoTOMLCarriesTheLandingKit(t *testing.T) {
+	out := string(renderFixture(t).HugoTOML())
+	for _, want := range []string{
+		"[module]",
+		"[[module.imports]]",
+		`path = "github.com/go-fleettools/landingkit"`,
+		"[params.brand]",
+		// base and bright are the logo gradient's two stops. They are the
+		// only brand values a reader can check against static/img/logo.svg
+		// without re-deriving the rest, so they are the two pinned here.
+		`base = "#1e40af"`,
+		`bright = "#3b82f6"`,
+	} {
+		if !strings.Contains(out, want) {
+			t.Errorf("hugo.toml is missing %q", want)
+		}
+	}
+	// Neutrals belong to the shared sheet. The kit removed the means to
+	// override them precisely because two landings had grown surface tints
+	// that drifted from the reference; re-adding one here would be invisible
+	// until someone compared the rendered pages.
+	for _, unwanted := range []string{"surface", "--bg", "line ="} {
+		if strings.Contains(out, unwanted) {
+			t.Errorf("hugo.toml carries %q: neutrals belong to the kit's sheet, not to a landing", unwanted)
+		}
+	}
+}
+
 func TestEcosystemTOML(t *testing.T) {
 	out := string(renderFixture(t).EcosystemTOML())
 	for _, want := range []string{`"json",`, `"stdlib",`, `"go-quake2",`, "gem_repos = 2"} {
