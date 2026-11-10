@@ -241,12 +241,24 @@
     },
     {
       "key": "ruby",
-      "title": "Ruby, in Go",
-      "blurb": "A Ruby virtual machine, its object model, and one organisation per gem it needs.",
+      "title": "Languages, in Go",
+      "blurb": "Other languages' runtimes, written in pure Go so they embed in a Go program and compile to WebAssembly: a Ruby virtual machine with one organisation per gem it needs, and interpreters for Julia, R and C.",
       "orgs": [
         {
           "org": "go-embedded-ruby",
           "role": "The Ruby virtual machine — YARV bytecode, the object model, the core library, and the rbgo interpreter."
+        },
+        {
+          "org": "go-embedded-julia",
+          "role": "A Julia interpreter in pure Go, embeddable and WebAssembly-ready."
+        },
+        {
+          "org": "go-embedded-r",
+          "role": "An embeddable R interpreter in pure Go, checked against GNU R 4.6.2 by an oracle harness rather than against itself."
+        },
+        {
+          "org": "go-embedded-c",
+          "role": "C in pure Go: an oracle harness and a C-to-wasm32 compiler, so a notebook cell can hold C."
         },
         {
           "org": "go-composites",
@@ -322,6 +334,10 @@
         {
           "org": "go-scikit",
           "role": "The parity programme for the stack as a whole — an inventory, a bibliography and a measured status against MATLAB and Mathematica — plus its Ruby bindings."
+        },
+        {
+          "org": "go-geometry",
+          "role": "Computational geometry ported from SciPy and Qhull: robust predicates after Shewchuk, Delaunay and Voronoi, convex hulls, k-d trees, every scipy.spatial.distance metric, and rotations with Slerp."
         }
       ]
     },
@@ -403,6 +419,10 @@
         {
           "org": "nano-container-linux",
           "role": "A minimal container host — OCI initrd and PXE boot, a DNS daemon, an OpenPubKey agent."
+        },
+        {
+          "org": "go-redfish",
+          "role": "A self-contained client for the DMTF Redfish API of a server's BMC, reading what a node draws out of band."
         }
       ]
     },
@@ -412,8 +432,8 @@
       "blurb": "Building every dependency from source, signing it, and saying where it came from.",
       "orgs": [
         {
-          "org": "go-pkgx",
-          "role": "A pure-Go pkgx: the package manager, the bottle installer, the bk recipe builder, and the CI factory that publishes signed bottles."
+          "org": "go-zpkg",
+          "role": "A pure-Go package manager: the installer, the bottle builder, the recipe builder, and the CI factory that publishes signed bottles. Formerly go-pkgx; the organisation was renamed and its repositories transferred, so `pkgx` became `zpkgx` and the store moved from ~/.pkgx to ~/.zpkg."
         },
         {
           "org": "go-attest",
@@ -465,6 +485,32 @@
         {
           "org": "claimward",
           "role": "A WireGuard VPN with OIDC: the server, the client, and desktop apps for macOS, Linux and Windows."
+        },
+        {
+          "org": "go-wasmcontainers",
+          "role": "A container engine for WASI workloads, speaking the Docker Engine API: the engine, a Containerfile builder, Compose, a terminal playground, a dashboard, a classroom relay, and GPU access through wasi-nn and wasi:webgpu."
+        }
+      ]
+    },
+    {
+      "key": "llm",
+      "title": "LLM serving",
+      "blurb": "Putting a model behind an interface, measuring what the interface costs, and keeping what must not leave out of the request.",
+      "orgs": [
+        {
+          "org": "go-llmflow",
+          "role": "An inference gateway, its measuring tools — an interleaved A/B overhead bench and a recording fake vLLM checked against a real one — AWS SigV4 signing and event-stream decoding, and checksum-validated PII recognisers."
+        }
+      ]
+    },
+    {
+      "key": "workplace",
+      "title": "Calendaring & workplace APIs",
+      "blurb": "Clients for the services an organisation already runs, so a room or a calendar is scriptable from Go.",
+      "orgs": [
+        {
+          "org": "go-zoom",
+          "role": "A client and CLI for the Zoom Calendar API, booking Zoom Rooms as event resources."
         }
       ]
     },
@@ -613,6 +659,10 @@
     }
   ],
   "reserved": [
+    {
+      "org": "go-pkgx",
+      "for": "Renamed to go-zpkg on 2026-11-09; all eight repositories were TRANSFERRED, not deleted (go-pkgx/packages answers as go-zpkg/packages, and pkgx itself as zpkgx). The name is held so the map shows a rename rather than a disappearance."
+    },
     {
       "org": "go-graphdrawing",
       "for": "Graph-drawing algorithms — Sugiyama layering, force-directed placement, trees. Measured and deliberately deferred: pgf's graphdrawing is used by 5 documents in a 10,025-talk corpus."
