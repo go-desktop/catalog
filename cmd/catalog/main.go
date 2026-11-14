@@ -401,13 +401,23 @@ func cmdGenerate(args []string, out io.Writer) error {
 		return err
 	}
 	var problems []catalog.LinkProblem
+	var counts []catalog.CountProblem
 	for _, root := range []string{*docs, *site, *profile} {
 		if root == "" {
 			continue
 		}
-		problems = append(problems, checkTree(os.DirFS(root), root, inventory, retired)...)
+		l, n := checkTree(os.DirFS(root), root, inventory, c, retired)
+		problems = append(problems, l...)
+		counts = append(counts, n...)
 	}
 	if err := catalog.LinkReport(problems); err != nil {
+		return err
+	}
+	// A count has no 404, so it needs its own pass over the same bytes. Both
+	// are reported before the summary: a page naming a dead organisation and a
+	// page stating a total the map no longer holds are the same kind of
+	// failure — something published that nothing regenerates.
+	if err := catalog.CountReport(counts); err != nil {
 		return err
 	}
 
@@ -437,8 +447,9 @@ func loadExclusions(path string) (catalog.Exclusions, error) {
 // and did nothing on Windows, where the coverage gate then failed; a seam the
 // standard library already provides is better than a test that only runs on
 // two thirds of the matrix.
-func checkTree(fsys fs.FS, label string, inv catalog.Inventory, retired catalog.Exclusions) []catalog.LinkProblem {
+func checkTree(fsys fs.FS, label string, inv catalog.Inventory, c *catalog.Catalog, retired catalog.Exclusions) ([]catalog.LinkProblem, []catalog.CountProblem) {
 	var out []catalog.LinkProblem
+	var counts []catalog.CountProblem
 	// A page that cannot be read is reported alongside the dead links rather
 	// than returned as an error: it is the same kind of finding — something
 	// wrong with the published pages — and one report is easier to act on than
@@ -458,8 +469,15 @@ func checkTree(fsys fs.FS, label string, inv catalog.Inventory, retired catalog.
 			}
 			return nil
 		}
+		// ⛔ .yaml AND .yml BELONG HERE, and their absence was a blind spot in
+		// both checks. The stale pair of totals found on 2026-11-10 lived in
+		// go-desktop/docs' hugo.yaml, which this walk never opened — and so
+		// does that site's editURL base, which names a repository that does
+		// not exist, so every "Edit this page on GitHub" link is a 404 that no
+		// check could see. A read-back that skips a configuration format skips
+		// exactly the file nothing else regenerates.
 		switch filepath.Ext(path) {
-		case ".md", ".html", ".toml":
+		case ".md", ".html", ".toml", ".yaml", ".yml":
 		default:
 			return nil
 		}
@@ -471,7 +489,8 @@ func checkTree(fsys fs.FS, label string, inv catalog.Inventory, retired catalog.
 			return nil
 		}
 		out = append(out, inv.CheckLinks(filepath.Join(label, path), b, retired)...)
+		counts = append(counts, c.CheckCounts(filepath.Join(label, path), b)...)
 		return nil
 	})
-	return out
+	return out, counts
 }

@@ -11,6 +11,8 @@ import (
 	"strings"
 	"testing"
 	"testing/fstest"
+
+	"github.com/go-desktop/catalog"
 )
 
 // classification is the smallest input Build accepts: two families, one
@@ -540,14 +542,14 @@ func TestGenerateSkipsBuildOutput(t *testing.T) {
 // paths uncovered — and the coverage gate, which runs on all three, went red.
 func TestCheckTreeSurfacesReadFailures(t *testing.T) {
 	t.Run("a directory that will not open", func(t *testing.T) {
-		got := checkTree(refusingFS{fail: "."}, "docs", nil, nil)
+		got, _ := checkTree(refusingFS{fail: "."}, "docs", nil, &catalog.Catalog{}, nil)
 		if len(got) != 1 || !strings.Contains(got[0].Reason, "could not be read") {
 			t.Fatalf("a walk that fails must be reported, not swallowed: %v", got)
 		}
 	})
 	t.Run("a page that will not read", func(t *testing.T) {
 		fsys := fstest.MapFS{"finding.md": &fstest.MapFile{Data: []byte("x")}}
-		got := checkTree(refusingFS{FS: fsys, fail: "finding.md"}, "docs", nil, nil)
+		got, _ := checkTree(refusingFS{FS: fsys, fail: "finding.md"}, "docs", nil, &catalog.Catalog{}, nil)
 		if len(got) != 1 || !strings.Contains(got[0].Reason, "could not be read") {
 			t.Fatalf("a page that cannot be read must be reported: %v", got)
 		}
