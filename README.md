@@ -155,6 +155,49 @@ catalog generate -site ../go-desktop.github.io -docs ../docs -profile ../.github
   -exclude-file ~/.go-desktop-retired
 ```
 
+### A count has no 404
+
+The same pass fails on a **stated total the map no longer holds**. `hugo.yaml`
+said *"287 organisations and 564 public code repositories"* while
+`content/en/_index.md`, generated from the same inventory, said 324 and 812 on
+the same page — and that string is `<meta name="description">`, so the stale
+pair was the one search results showed. The link check could not help: a count
+has no 404.
+
+⛔ **The obvious version of this check is wrong**, which is why it is narrow.
+An integer before "organisations" matches nine strings across the three
+surfaces: two stale, three correct-and-generated, and four that must never
+fire — `195 gem organisations` (a correct **subset**), `116 repositories
+holding a runner`, and two counts of the organisations that run Renovate (a
+different population). Four false positives against two findings is a guard
+that gets switched off. So two rules separate them, and neither needs a list of
+which files are hand-written, because such a list goes stale too:
+
+- **the headline pair** — a count of organisations *and* one of public code
+  repositories within 160 characters, which a lone integer is not. The window
+  spans a line wrap, since the generated index wraps that sentence;
+- **an unqualified noun** — the number must sit immediately before it, so
+  "195 **gem** organisations" is not a claim about the total.
+
+### `.yaml` is in the walk
+
+It was not, and both checks were blind to it. `.md`, `.html` and `.toml` were
+read; the file that is **neither generated nor read** is a configuration file,
+and that is where both defects of 2026-11-10 lived. Adding the extension
+surfaced a second one on its first run:
+
+```
+catalog: 1 dead link(s) in the hand-written pages:
+  ../gd-docs/hugo.yaml: go-desktop/edit — no such repository
+```
+
+That was the docs site's `editURL` base, so every *"Edit this page on GitHub"*
+link was a 404 — against a repository named `edit` that does not exist, at a
+path with the language doubled (`content/en/en/…`). Fixed in `go-desktop/docs`;
+the same mistake is in 77 of the 100 Hextra docs repositories on this machine's
+canonical clone farm, 66 of them including the missing repository segment, and
+that half is filed for the fleet rather than swept from here.
+
 One coupling remains: adding a family here also needs a line in the documentation
 repository's `mkdocs.yml` nav, or its page builds but is unreachable. MkDocs
 reports it as an omitted file rather than an error, so check the build output.
