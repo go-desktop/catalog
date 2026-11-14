@@ -11,6 +11,8 @@ import (
 	"strings"
 	"testing"
 	"testing/fstest"
+
+	"github.com/go-desktop/catalog"
 )
 
 // classification is the smallest input Build accepts: two families, one
@@ -455,6 +457,36 @@ func TestGenerateRejectsADeadLink(t *testing.T) {
 	}
 }
 
+// TestGenerateRejectsAStaleCount: a dead link has a 404 and a stale count has
+// nothing, so it needs its own refusal.
+//
+// ⛔ THE FIXTURE IS A .yaml ON PURPOSE. That extension was not in the walk at
+// all, so neither check opened one — and go-desktop/docs' hugo.yaml, which is
+// where the real stale pair lived for three refreshes, is exactly that. A page
+// this generator never writes, in a format it never read.
+func TestGenerateRejectsAStaleCount(t *testing.T) {
+	_, cl, inv := inputs(t)
+	dir := t.TempDir()
+	docs := filepath.Join(dir, "docs")
+	if err := os.MkdirAll(docs, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	cfg := filepath.Join(docs, "hugo.yaml")
+	body := "params:\n  description: \"A map of 999 organisations and 998 public code repositories.\"\n"
+	if err := os.WriteFile(cfg, []byte(body), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	code, _, errs := exec("generate", "-classification", cl, "-inventory", inv, "-docs", docs)
+	if code != 1 {
+		t.Fatalf("a stated total the map does not hold must fail the run: code=%d stderr=%q", code, errs)
+	}
+	for _, want := range []string{"hugo.yaml", "999", "998"} {
+		if !strings.Contains(errs, want) {
+			t.Errorf("the message must name the file and both halves it read, missing %q: %q", want, errs)
+		}
+	}
+}
+
 // TestGenerateRejectsAnArchivedRepo: the other half of the same failure — the
 // organisation is still in the map, but the repository behind the link is not
 // live.
@@ -540,14 +572,14 @@ func TestGenerateSkipsBuildOutput(t *testing.T) {
 // paths uncovered — and the coverage gate, which runs on all three, went red.
 func TestCheckTreeSurfacesReadFailures(t *testing.T) {
 	t.Run("a directory that will not open", func(t *testing.T) {
-		got := checkTree(refusingFS{fail: "."}, "docs", nil, nil)
+		got, _ := checkTree(refusingFS{fail: "."}, "docs", nil, &catalog.Catalog{}, nil)
 		if len(got) != 1 || !strings.Contains(got[0].Reason, "could not be read") {
 			t.Fatalf("a walk that fails must be reported, not swallowed: %v", got)
 		}
 	})
 	t.Run("a page that will not read", func(t *testing.T) {
 		fsys := fstest.MapFS{"finding.md": &fstest.MapFile{Data: []byte("x")}}
-		got := checkTree(refusingFS{FS: fsys, fail: "finding.md"}, "docs", nil, nil)
+		got, _ := checkTree(refusingFS{FS: fsys, fail: "finding.md"}, "docs", nil, &catalog.Catalog{}, nil)
 		if len(got) != 1 || !strings.Contains(got[0].Reason, "could not be read") {
 			t.Fatalf("a page that cannot be read must be reported: %v", got)
 		}
