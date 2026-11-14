@@ -83,6 +83,27 @@ func TestHugoTOMLCarriesTheLandingKit(t *testing.T) {
 	}
 }
 
+// The hero row and the architectures line are the kit's, and the row is
+// written by this generator, not by hand in the landing: a hand edit of
+// hugo.toml would vanish at the next generate.
+func TestHugoTOMLCarriesTheHeroRowAndGoarch(t *testing.T) {
+	out := string(renderFixture(t).HugoTOML())
+	for _, want := range []string{
+		"[params.mantra]",
+		`goarch = ["amd64", "arm64", "riscv64", "loong64", "ppc64le", "s390x"]`,
+		`kind  = "docs"`,
+		`kind  = "link"`,
+		`kind  = "github"`,
+	} {
+		if !strings.Contains(out, want) {
+			t.Errorf("hugo.toml is missing %q", want)
+		}
+	}
+	if got := strings.Count(out, "[[params.cta]]"); got != 3 {
+		t.Errorf("hugo.toml has %d [[params.cta]] entries, want 3", got)
+	}
+}
+
 func TestEcosystemTOML(t *testing.T) {
 	out := string(renderFixture(t).EcosystemTOML())
 	for _, want := range []string{`"json",`, `"stdlib",`, `"go-quake2",`, "gem_repos = 2"} {

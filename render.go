@@ -85,6 +85,25 @@ const landingKit = `# The go-* landings' shared design. The partials (styles.htm
   statsEnd = "#d0e1fd"
   bandText = "#e0ebfe"
 
+# The architectures the fleet's CI runs its tests on: native where runners
+# exist, under qemu-user otherwise (the standards section says the same).
+[params.mantra]
+  goarch = ["amd64", "arm64", "riscv64", "loong64", "ppc64le", "s390x"]
+
+# The hero's buttons, rendered by landingkit's cta.html in the kit's order.
+[[params.cta]]
+  kind  = "docs"
+  href  = "https://go-desktop.github.io/docs/"
+  label = "Read the documentation →"
+[[params.cta]]
+  kind  = "link"
+  href  = "#map"
+  label = "Browse the map"
+[[params.cta]]
+  kind  = "github"
+  href  = "https://github.com/go-desktop"
+  label = "GitHub"
+
 `
 
 func (c *Catalog) HugoTOML() []byte {
