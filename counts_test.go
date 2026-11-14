@@ -109,6 +109,43 @@ func TestAPageWithNoClaimIsSilent(t *testing.T) {
 	}
 }
 
+// ⛔ THE HALVES CAN BE WRITTEN IN EITHER ORDER, and the quoted claim must hold
+// both. An earlier version took the organisation count's START as the end of
+// the span, so a pair written repositories-first quoted itself with the
+// organisations cut off — the message named a pair and showed one half.
+func TestARepositoryCountWrittenFirstIsStillQuotedWhole(t *testing.T) {
+	c := mapAt(324, 812)
+	got := c.CheckCounts("f", []byte("It holds 564 public code repositories across 287 organisations today."))
+	if len(got) != 1 {
+		t.Fatalf("got %d problems, want 1: %v", len(got), got)
+	}
+	if got[0].Orgs != 287 || got[0].Repos != 564 {
+		t.Errorf("read %d/%d, want 287/564", got[0].Orgs, got[0].Repos)
+	}
+	for _, want := range []string{"564 public code repositories", "287 organisations"} {
+		if !strings.Contains(got[0].Claim, want) {
+			t.Errorf("the quoted claim drops %q: %s", want, got[0].Claim)
+		}
+	}
+}
+
+// A number longer than an int is somebody's identifier or a typo, not a claim
+// about this map. Both halves are parsed, so both refusals need a case: a
+// silent skip is the right answer and an overflow panic would not be.
+func TestANumberTooLongForAnIntIsNotAClaim(t *testing.T) {
+	c := mapAt(324, 812)
+	for _, tc := range []struct{ name, text string }{
+		{"the repositories half", "99999999999999999999999 public code repositories and 287 organisations"},
+		{"the organisations half", "99999999999999999999999 organisations and 564 public code repositories"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := c.CheckCounts("f", []byte(tc.text)); len(got) != 0 {
+				t.Errorf("flagged an unparseable number as a claim: %v", got)
+			}
+		})
+	}
+}
+
 func TestCountReportIsSilentOnNothingAndNamesEveryProblem(t *testing.T) {
 	if err := CountReport(nil); err != nil {
 		t.Errorf("CountReport(nil) = %v, want nil", err)

@@ -457,6 +457,36 @@ func TestGenerateRejectsADeadLink(t *testing.T) {
 	}
 }
 
+// TestGenerateRejectsAStaleCount: a dead link has a 404 and a stale count has
+// nothing, so it needs its own refusal.
+//
+// ⛔ THE FIXTURE IS A .yaml ON PURPOSE. That extension was not in the walk at
+// all, so neither check opened one — and go-desktop/docs' hugo.yaml, which is
+// where the real stale pair lived for three refreshes, is exactly that. A page
+// this generator never writes, in a format it never read.
+func TestGenerateRejectsAStaleCount(t *testing.T) {
+	_, cl, inv := inputs(t)
+	dir := t.TempDir()
+	docs := filepath.Join(dir, "docs")
+	if err := os.MkdirAll(docs, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	cfg := filepath.Join(docs, "hugo.yaml")
+	body := "params:\n  description: \"A map of 999 organisations and 998 public code repositories.\"\n"
+	if err := os.WriteFile(cfg, []byte(body), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	code, _, errs := exec("generate", "-classification", cl, "-inventory", inv, "-docs", docs)
+	if code != 1 {
+		t.Fatalf("a stated total the map does not hold must fail the run: code=%d stderr=%q", code, errs)
+	}
+	for _, want := range []string{"hugo.yaml", "999", "998"} {
+		if !strings.Contains(errs, want) {
+			t.Errorf("the message must name the file and both halves it read, missing %q: %q", want, errs)
+		}
+	}
+}
+
 // TestGenerateRejectsAnArchivedRepo: the other half of the same failure — the
 // organisation is still in the map, but the repository behind the link is not
 // live.

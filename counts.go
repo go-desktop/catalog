@@ -84,25 +84,30 @@ func (c Catalog) CheckCounts(file string, text []byte) []CountProblem {
 
 	var out []CountProblem
 	for _, rm := range reposClaim.FindAllStringSubmatchIndex(flat, -1) {
+		// A number too long for an int is not a claim about this map; it is
+		// somebody's identifier or a typo, and guessing at it would be worse
+		// than leaving it alone.
 		repos, err := strconv.Atoi(flat[rm[2]:rm[3]])
 		if err != nil {
 			continue
 		}
-		om, orgs, ok := nearestOrgs(flat, rm[0])
+		o, ok := nearestOrgs(flat, rm[0])
 		if !ok {
 			continue // a repository count with no organisation count beside it
 		}
-		if orgs == c.TotalOrgs && repos == c.TotalRepos {
+		if o.n == c.TotalOrgs && repos == c.TotalRepos {
 			continue
 		}
-		lo, hi := om, rm[1]
-		if lo > hi {
-			lo, hi = rm[0], om
-		}
+		// The quoted claim spans BOTH halves whichever order they were
+		// written in. Taking the organisation count's start as the end of the
+		// span truncated the half that came second, so a pair written
+		// "812 public code repositories across 324 organisations" quoted
+		// itself without the organisations.
+		lo, hi := min(o.start, rm[0]), max(o.end, rm[1])
 		out = append(out, CountProblem{
 			File:   file,
 			Claim:  `"` + strings.TrimSpace(flat[lo:hi]) + `"`,
-			Orgs:   orgs,
+			Orgs:   o.n,
 			Repos:  repos,
 			Wanted: fmt.Sprintf("%d / %d", c.TotalOrgs, c.TotalRepos),
 		})
@@ -110,9 +115,15 @@ func (c Catalog) CheckCounts(file string, text []byte) []CountProblem {
 	return out
 }
 
-// nearestOrgs finds the organisation count closest to at, within pairWindow,
-// and returns where it starts.
-func nearestOrgs(flat string, at int) (start, orgs int, ok bool) {
+// orgsMatch is one organisation count: where it sits and what it says.
+type orgsMatch struct {
+	start, end, n int
+}
+
+// nearestOrgs finds the organisation count closest to at, within pairWindow.
+func nearestOrgs(flat string, at int) (orgsMatch, bool) {
+	var found orgsMatch
+	ok := false
 	best := -1
 	for _, m := range orgsClaim.FindAllStringSubmatchIndex(flat, -1) {
 		d := m[0] - at
@@ -123,14 +134,15 @@ func nearestOrgs(flat string, at int) (start, orgs int, ok bool) {
 			continue
 		}
 		if best < 0 || d < best {
+			// As above: a number too long for an int is not one of ours.
 			n, err := strconv.Atoi(flat[m[2]:m[3]])
 			if err != nil {
 				continue
 			}
-			best, start, orgs, ok = d, m[0], n, true
+			best, found, ok = d, orgsMatch{start: m[0], end: m[1], n: n}, true
 		}
 	}
-	return start, orgs, ok
+	return found, ok
 }
 
 // CountReport turns problems into one error naming every one of them, sorted
