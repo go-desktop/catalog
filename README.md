@@ -125,9 +125,10 @@ which is a secret for the same reason it is not in this repository.
 | --- | --- |
 | `<site>/hugo.toml` | one array-of-tables entry per family, with each organisation's measured counts |
 | `<site>/data/ecosystem.toml` | the gem organisations, the reserved names, the gem repository total |
-| `<docs>/docs/families/<key>.md` | one documentation page per family |
-| `<docs>/docs/gems.md` | the alphabetical gem table |
-| `<docs>/docs/reserved.md` | reserved names and the siblings outside the map |
+| `<docs>/content/en/_index.md` | the documentation home page and its headline counts |
+| `<docs>/content/en/families/<key>.md` | one documentation page per family |
+| `<docs>/content/en/gems.md` | the alphabetical gem table |
+| `<docs>/content/en/reserved.md` | reserved names and the siblings outside the map |
 | `<profile>/profile/README.md` | the organisation profile |
 
 Everything else on those sites — the layout, the capability lookup, the standards
@@ -194,13 +195,17 @@ catalog: 1 dead link(s) in the hand-written pages:
 That was the docs site's `editURL` base, so every *"Edit this page on GitHub"*
 link was a 404 — against a repository named `edit` that does not exist, at a
 path with the language doubled (`content/en/en/…`). Fixed in `go-desktop/docs`;
-the same mistake is in 77 of the 100 Hextra docs repositories on this machine's
-canonical clone farm, 66 of them including the missing repository segment, and
-that half is filed for the fleet rather than swept from here.
+the same mistake is in 75 of the 97 Hextra docs sites on this machine's canonical
+clone farm that render an edit link, 64 of them missing the repository segment.
+That is filed for the fleet as go-fleettools/fleettools#287, and
+`editurl --all` prints the correct base for each, rather than being swept from
+here. (An earlier version of this paragraph said 77 of 100 and 66: those counted
+sites that render no edit link at all.)
 
-One coupling remains: adding a family here also needs a line in the documentation
-repository's `mkdocs.yml` nav, or its page builds but is unreachable. MkDocs
-reports it as an omitted file rather than an error, so check the build output.
+Adding a family needs nothing outside this repository: the documentation site
+is Hugo with Hextra, whose sidebar is built from the pages under
+`content/en/families/`, so the page `generate` writes is reachable as soon as it
+exists. (The MkDocs site this replaced needed a `mkdocs.yml` nav line per family.)
 
 ## Standards
 

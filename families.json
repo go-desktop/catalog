@@ -57,6 +57,10 @@
         {
           "org": "go-aiquota",
           "role": "A menu-bar application on the toolkit: AI usage quotas across several accounts, read through one go-plugin contract with a plugin per provider."
+        },
+        {
+          "org": "go-aosp",
+          "role": "The Android side of the platform layer: what a Java host hands a CGO-free Go payload — DNS servers, HOME, TMPDIR, XDG_CACHE_HOME — so a Go binary inside an APK finds its directories the way it finds them on a desktop."
         }
       ]
     },
@@ -100,6 +104,10 @@
         {
           "org": "go-videodsp",
           "role": "Planar YUV to RGBA, the conversion every video decoder in the map ends with, kept in one place rather than once per codec."
+        },
+        {
+          "org": "go-perceptual",
+          "role": "Perceptual hashing, whatever the medium: the PDQ image hash with all eight dihedral variants from one transform, the TMK+PDQF video signature, Chromaprint's chroma features for audio ported stage by stage against the reference's own unit tests, the decode plumbing that feeds them, one CLI over all three, and a duplicate finder that reports and never deletes."
         }
       ]
     },
@@ -221,6 +229,10 @@
         {
           "org": "grpc-transports",
           "role": "gRPC where it is not supposed to go: over SSH, WireGuard, vsock, WebSocket and WebRTC."
+        },
+        {
+          "org": "go-turn",
+          "role": "STUN and TURN in pure Go: a relay for WebRTC peers, ephemeral credentials behind an OpenID Connect login, and a rendezvous so two peers meet with one link."
         }
       ]
     },
@@ -271,6 +283,10 @@
         {
           "org": "go-vet-analyzers",
           "role": "go vet analyzers that make the ecosystem's invariants a compile-time matter."
+        },
+        {
+          "org": "go-embedded-fortran",
+          "role": "Fortran in pure Go for go-notebook cells: an oracle harness, a front end, and the back end a measured gate decides."
         }
       ]
     },
@@ -338,6 +354,10 @@
         {
           "org": "go-geometry",
           "role": "Computational geometry ported from SciPy and Qhull: robust predicates after Shewchuk, Delaunay and Voronoi, convex hulls, k-d trees, every scipy.spatial.distance metric, and rotations with Slerp."
+        },
+        {
+          "org": "go-blas",
+          "role": "BLAS and LAPACK in pure Go, with the Fortran reference signatures and column-major storage across all four precisions: SIMD GEMM on six architectures, a stated error bound, and a netlib-exact option when bit parity is what is wanted."
         }
       ]
     },
@@ -392,6 +412,10 @@
         {
           "org": "go-encryptions",
           "role": "The modes underneath: CCM, XTS, ZFS crypto."
+        },
+        {
+          "org": "go-theca",
+          "role": "Key management for an encrypted volume, aware of the hardware key that unlocks it, with a portable desktop GUI for its containers built on the toolkit."
         }
       ]
     },
@@ -423,6 +447,10 @@
         {
           "org": "go-redfish",
           "role": "A self-contained client for the DMTF Redfish API of a server's BMC, reading what a node draws out of band."
+        },
+        {
+          "org": "go-binfmt",
+          "role": "The executable formats around a firmware image: ELF to flat binary, Motorola SREC, Intel HEX and U-Boot uImage, and a pure-Go patchelf that reads and edits an ELF's interpreter, RPATH/RUNPATH and DT_NEEDED."
         }
       ]
     },
@@ -489,6 +517,21 @@
         {
           "org": "go-wasmcontainers",
           "role": "A container engine for WASI workloads, speaking the Docker Engine API: the engine, a Containerfile builder, Compose, a terminal playground, a dashboard, a classroom relay, and GPU access through wasi-nn and wasi:webgpu."
+        },
+        {
+          "org": "go-supervise",
+          "role": "A cross-platform service supervisor for Linux, macOS and Windows, beside go-proc's PID-1 half. At design stage: the layered configuration compiles to a resolved plan or a typed refusal, and nothing is supervised yet."
+        }
+      ]
+    },
+    {
+      "key": "vcs",
+      "title": "Version control & forges",
+      "blurb": "Hosting Git itself: the wire protocol underneath, the forge around it, and the CI that runs on it.",
+      "orgs": [
+        {
+          "org": "go-vcs",
+          "role": "A light, secure Git forge — hosting, web UI, admin gRPC, Actions runners through GARM — standing on an owned implementation of the Git wire protocol v2 and pack files, fuzzed and measured against git itself, with a workflow engine that speaks the gitea-runner protocol and a local agent-facing daemon."
         }
       ]
     },
@@ -716,7 +759,12 @@
       "for": "A Ruby-facing wrapper for a social or feed client that already exists in Go."
     }
   ],
-  "not_go": [],
+  "not_go": [
+    {
+      "org": "ccdps",
+      "what": "The Plateau de Saclay Computing and Data Centre — an institutional landing page and its brand kit. It shares this account, not this ecosystem."
+    }
+  ],
   "readme_intro": "<p align=\"center\"><img src=\"https://raw.githubusercontent.com/go-desktop/brand/main/social/go-desktop.png\" alt=\"go-desktop\" width=\"720\"></p>\n\n# go-desktop\n\n**A map of one pure-Go ecosystem — {{summary}}, no C anywhere.**\n\nThis organisation holds no library. It holds the index — and the tool that\ngenerates it, so that no number on any of these pages is typed by hand.\n\nEvery library in the map is written in Go and compiled with `CGO_ENABLED=0`. That\nis not a stylistic preference: it is what makes one binary cross-compile to six\narchitectures, run inside a browser as WebAssembly, and boot on bare metal without\na libc. Where a good pure-Go library already exists it is used rather than\nrewritten; where the only option was a C library behind cgo, the capability was\nrebuilt.\n\nThe ecosystem is split into **one organisation per domain and one repository per\ncapability**, so a program that needs an ext4 reader takes an ext4 reader and not a\nstorage framework.\n\n🌐 **[go-desktop.github.io](https://go-desktop.github.io/)** — the same map, browsable · 📚 **[Documentation](https://go-desktop.github.io/docs/)** — with a [capability lookup](https://go-desktop.github.io/docs/latest/finding/): what you need, and the module that already does it.",
   "readme_standards": "| | |\n| --- | --- |\n| **`CGO_ENABLED=0`** | No cgo, and no shelling out to a command-line tool in place of a library. A dependency is a Go module or it is written. |\n| **Six 64-bit targets** | amd64, arm64, riscv64, loong64, ppc64le, s390x — native where runners exist, under qemu-user otherwise. s390x is big-endian, which keeps every on-disk and on-wire encoding honest. |\n| **100% statement coverage** | A CI gate, error branches included. A skipped test is not a passing one: jobs fail when a toolchain is missing rather than turning green quietly. |\n| **Measured, not asserted** | Performance claims come with a benchmark against the reference implementation; format claims come with a byte comparison against it. Decoders are fuzzed. |\n| **One landing, one docs site** | A Hugo landing at `<org>.github.io` and versioned MkDocs Material docs at `<org>.github.io/docs/`, same brand, light/dark/system theme toggle. |\n| **BSD-3-Clause** | Every repository, every organisation. |",
   "reserved_intro": "These organisation names are reserved and empty. They are listed so the map has no\nsilent gaps: an empty organisation is not a shipped one, and a name that looks like\na capability is the easiest way to believe a capability exists.",

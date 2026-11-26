@@ -58,6 +58,24 @@
       "fork": false
     }
   ],
+  "ccdps": [
+    {
+      "org": "ccdps",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "ccdps",
+      "name": "www",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    }
+  ],
   "claimward": [
     {
       "org": "claimward",
@@ -161,7 +179,7 @@
       "private": false,
       "archived": false,
       "fork": false,
-      "language": "CSS"
+      "language": "HTML"
     },
     {
       "org": "cloud-boot",
@@ -367,6 +385,14 @@
     },
     {
       "org": "go-agentsync",
+      "name": "agentscope",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-agentsync",
       "name": "agentsync",
       "private": false,
       "archived": false,
@@ -543,6 +569,16 @@
     {
       "org": "go-ansible",
       "name": "vault",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    }
+  ],
+  "go-aosp": [
+    {
+      "org": "go-aosp",
+      "name": "hostenv",
       "private": false,
       "archived": false,
       "fork": false,
@@ -819,6 +855,14 @@
     },
     {
       "org": "go-authn",
+      "name": "awscred",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-authn",
       "name": "brand",
       "private": false,
       "archived": false,
@@ -827,6 +871,14 @@
     {
       "org": "go-authn",
       "name": "bridge",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-authn",
+      "name": "cms",
       "private": false,
       "archived": false,
       "fork": false,
@@ -866,6 +918,14 @@
     },
     {
       "org": "go-authn",
+      "name": "harden",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-authn",
       "name": "kdc",
       "private": false,
       "archived": false,
@@ -874,7 +934,23 @@
     },
     {
       "org": "go-authn",
+      "name": "kdcd",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-authn",
       "name": "keyfactor",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-authn",
+      "name": "kinit",
       "private": false,
       "archived": false,
       "fork": false,
@@ -922,6 +998,14 @@
     },
     {
       "org": "go-authn",
+      "name": "pkcs12",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-authn",
       "name": "revocation",
       "private": false,
       "archived": false,
@@ -954,6 +1038,22 @@
     },
     {
       "org": "go-authn",
+      "name": "sdcreds",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-authn",
+      "name": "secretsource",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-authn",
       "name": "servercert",
       "private": false,
       "archived": false,
@@ -971,6 +1071,14 @@
     {
       "org": "go-authn",
       "name": "totp",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-authn",
+      "name": "webauthn",
       "private": false,
       "archived": false,
       "fork": false,
@@ -1113,6 +1221,14 @@
       "archived": false,
       "fork": false,
       "language": "Go"
+    },
+    {
+      "org": "go-avkit",
+      "name": "worker",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     }
   ],
   "go-bignum": [
@@ -1157,6 +1273,55 @@
       "language": "HTML"
     }
   ],
+  "go-binfmt": [
+    {
+      "org": "go-binfmt",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-binfmt",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-binfmt",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-binfmt",
+      "name": "elfpatch",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-binfmt",
+      "name": "fwimg",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-binfmt",
+      "name": "go-binfmt.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    }
+  ],
   "go-birdsite": [
     {
       "org": "go-birdsite",
@@ -1195,6 +1360,24 @@
       "archived": false,
       "fork": false,
       "language": "Go"
+    }
+  ],
+  "go-blas": [
+    {
+      "org": "go-blas",
+      "name": "blas",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-blas",
+      "name": "go-blas.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
     }
   ],
   "go-bootloaders": [
@@ -1776,6 +1959,14 @@
     },
     {
       "org": "go-compressions",
+      "name": "edonr",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Assembly"
+    },
+    {
+      "org": "go-compressions",
       "name": "go-compressions.github.io",
       "private": false,
       "archived": false,
@@ -1825,6 +2016,14 @@
     {
       "org": "go-compressions",
       "name": "lzo",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-compressions",
+      "name": "skein",
       "private": false,
       "archived": false,
       "fork": false,
@@ -1959,6 +2158,13 @@
       "archived": false,
       "fork": false,
       "language": "HTML"
+    },
+    {
+      "org": "go-crdt",
+      "name": "renovate-inherit-probe",
+      "private": true,
+      "archived": false,
+      "fork": false
     }
   ],
   "go-dataframe": [
@@ -2399,10 +2605,52 @@
       "private": false,
       "archived": false,
       "fork": false,
-      "language": "C"
+      "language": "Go"
     }
   ],
   "go-embedded-cpp": [],
+  "go-embedded-fortran": [
+    {
+      "org": "go-embedded-fortran",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-embedded-fortran",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Python"
+    },
+    {
+      "org": "go-embedded-fortran",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    },
+    {
+      "org": "go-embedded-fortran",
+      "name": "fortran",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-embedded-fortran",
+      "name": "go-embedded-fortran.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    }
+  ],
   "go-embedded-julia": [
     {
       "org": "go-embedded-julia",
@@ -2442,7 +2690,7 @@
       "private": false,
       "archived": false,
       "fork": false,
-      "language": "Go"
+      "language": "Julia"
     }
   ],
   "go-embedded-r": [
@@ -2539,10 +2787,26 @@
     },
     {
       "org": "go-encryptions",
+      "name": "argon2",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Assembly"
+    },
+    {
+      "org": "go-encryptions",
       "name": "brand",
       "private": false,
       "archived": false,
       "fork": false
+    },
+    {
+      "org": "go-encryptions",
+      "name": "camellia",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-encryptions",
@@ -2555,6 +2819,14 @@
     {
       "org": "go-encryptions",
       "name": "ccm",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-encryptions",
+      "name": "ctr",
       "private": false,
       "archived": false,
       "fork": false,
@@ -2577,11 +2849,67 @@
     },
     {
       "org": "go-encryptions",
+      "name": "hmac",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-encryptions",
+      "name": "kdfbudget",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-encryptions",
+      "name": "kuznyechik",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-encryptions",
+      "name": "serpent",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Assembly"
+    },
+    {
+      "org": "go-encryptions",
+      "name": "streebog",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-encryptions",
+      "name": "twofish",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-encryptions",
       "name": "unixcrypt",
       "private": false,
       "archived": false,
       "fork": false,
       "language": "Go"
+    },
+    {
+      "org": "go-encryptions",
+      "name": "whirlpool",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Assembly"
     },
     {
       "org": "go-encryptions",
@@ -2798,7 +3126,8 @@
       "name": "brand",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-fde",
@@ -2844,7 +3173,16 @@
       "name": "veracrypt",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-fde",
+      "name": "zed",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     }
   ],
   "go-fem": [
@@ -2941,6 +3279,14 @@
       "archived": false,
       "fork": false,
       "language": "JavaScript"
+    },
+    {
+      "org": "go-fileshare",
+      "name": "automount",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-fileshare",
@@ -3049,6 +3395,14 @@
     },
     {
       "org": "go-filesystems",
+      "name": "cfb",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-filesystems",
       "name": "cpio",
       "private": false,
       "archived": false,
@@ -3113,6 +3467,13 @@
     },
     {
       "org": "go-filesystems",
+      "name": "go-smb2",
+      "private": false,
+      "archived": false,
+      "fork": true
+    },
+    {
+      "org": "go-filesystems",
       "name": "hfsplus",
       "private": false,
       "archived": false,
@@ -3146,6 +3507,14 @@
     {
       "org": "go-filesystems",
       "name": "iso9660",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-filesystems",
+      "name": "kerneljudge",
       "private": false,
       "archived": false,
       "fork": false,
@@ -3495,6 +3864,14 @@
       "archived": false,
       "fork": false,
       "language": "HTML"
+    },
+    {
+      "org": "go-freedesktop",
+      "name": "gvfs",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-freedesktop",
@@ -4269,6 +4646,13 @@
     },
     {
       "org": "go-images",
+      "name": "heif",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-images",
       "name": "images",
       "private": false,
       "archived": false,
@@ -4824,6 +5208,14 @@
     },
     {
       "org": "go-macos",
+      "name": "netfs",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
       "name": "notify",
       "private": false,
       "archived": false,
@@ -4857,6 +5249,14 @@
     {
       "org": "go-macos",
       "name": "servicemanagement",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-macos",
+      "name": "sessionwatch",
       "private": false,
       "archived": false,
       "fork": false,
@@ -5451,7 +5851,7 @@
       "private": false,
       "archived": false,
       "fork": false,
-      "language": "HTML"
+      "language": "Go"
     },
     {
       "org": "go-numerics",
@@ -5667,6 +6067,14 @@
     },
     {
       "org": "go-pdfkit",
+      "name": "bentogap",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-pdfkit",
       "name": "brand",
       "private": false,
       "archived": false,
@@ -5818,6 +6226,56 @@
     {
       "org": "go-pdfkit",
       "name": "xfa",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    }
+  ],
+  "go-perceptual": [
+    {
+      "org": "go-perceptual",
+      "name": "chroma",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-perceptual",
+      "name": "dedupe",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-perceptual",
+      "name": "media",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-perceptual",
+      "name": "pdq",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-perceptual",
+      "name": "perceptual",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-perceptual",
+      "name": "tmk",
       "private": false,
       "archived": false,
       "fork": false,
@@ -6418,6 +6876,14 @@
     {
       "org": "go-richdoc",
       "name": "rst",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-richdoc",
+      "name": "rtf",
       "private": false,
       "archived": false,
       "fork": false,
@@ -14484,6 +14950,14 @@
     },
     {
       "org": "go-simd",
+      "name": "boxfilter",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-simd",
       "name": "brand",
       "private": false,
       "archived": false,
@@ -14515,6 +14989,22 @@
     {
       "org": "go-simd",
       "name": "floats",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-simd",
+      "name": "gf256",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-simd",
+      "name": "gf65536",
       "private": false,
       "archived": false,
       "fork": false,
@@ -14691,6 +15181,16 @@
       "language": "TypeScript"
     }
   ],
+  "go-slides-usercontent": [
+    {
+      "org": "go-slides-usercontent",
+      "name": "go-slides-usercontent.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    }
+  ],
   "go-slurmstack": [
     {
       "org": "go-slurmstack",
@@ -14712,7 +15212,8 @@
       "name": "go-slurmstack.github.io",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "HTML"
     },
     {
       "org": "go-slurmstack",
@@ -14849,6 +15350,16 @@
     {
       "org": "go-streamkit",
       "name": "streamkit",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    }
+  ],
+  "go-supervise": [
+    {
+      "org": "go-supervise",
+      "name": "supervisor",
       "private": false,
       "archived": false,
       "fork": false,
@@ -15043,6 +15554,55 @@
       "language": "Go"
     }
   ],
+  "go-theca": [
+    {
+      "org": "go-theca",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-theca",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-theca",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-theca",
+      "name": "go-theca.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    },
+    {
+      "org": "go-theca",
+      "name": "gui",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-theca",
+      "name": "theca",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    }
+  ],
   "go-thumbnail": [
     {
       "org": "go-thumbnail",
@@ -15072,7 +15632,7 @@
       "private": false,
       "archived": false,
       "fork": false,
-      "language": "CSS"
+      "language": "HTML"
     },
     {
       "org": "go-thumbnail",
@@ -15197,6 +15757,14 @@
     },
     {
       "org": "go-tpm2",
+      "name": "nvcounter",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-tpm2",
       "name": "tis",
       "private": false,
       "archived": false,
@@ -15214,6 +15782,46 @@
     {
       "org": "go-tpm2",
       "name": "validate",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    }
+  ],
+  "go-turn": [
+    {
+      "org": "go-turn",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-turn",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-turn",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-turn",
+      "name": "go-turn.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    },
+    {
+      "org": "go-turn",
+      "name": "turn",
       "private": false,
       "archived": false,
       "fork": false,
@@ -15304,6 +15912,70 @@
     {
       "org": "go-units",
       "name": "go-units.github.io",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "HTML"
+    }
+  ],
+  "go-vcs": [
+    {
+      "org": "go-vcs",
+      "name": ".github",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "JavaScript"
+    },
+    {
+      "org": "go-vcs",
+      "name": "actions",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-vcs",
+      "name": "agentd",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-vcs",
+      "name": "brand",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Python"
+    },
+    {
+      "org": "go-vcs",
+      "name": "docs",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-vcs",
+      "name": "forge",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-vcs",
+      "name": "gitproto",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-vcs",
+      "name": "go-vcs.github.io",
       "private": false,
       "archived": false,
       "fork": false,
@@ -15406,6 +16078,14 @@
       "archived": false,
       "fork": false,
       "language": "JavaScript"
+    },
+    {
+      "org": "go-videodsp",
+      "name": "kernels",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "go-videodsp",
@@ -15861,6 +16541,14 @@
       "archived": false,
       "fork": false,
       "language": "HTML"
+    },
+    {
+      "org": "go-webengine",
+      "name": "webtest",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
     }
   ],
   "go-widgets": [
@@ -16033,6 +16721,13 @@
     },
     {
       "org": "go-widgets",
+      "name": "tabler-icons",
+      "private": false,
+      "archived": false,
+      "fork": false
+    },
+    {
+      "org": "go-widgets",
       "name": "textinput",
       "private": false,
       "archived": false,
@@ -16066,6 +16761,14 @@
     {
       "org": "go-widgets",
       "name": "vcs",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "go-widgets",
+      "name": "vt",
       "private": false,
       "archived": false,
       "fork": false,
@@ -16278,7 +16981,7 @@
     },
     {
       "org": "go-zpkg",
-      "name": "bottle",
+      "name": "artifact",
       "private": false,
       "archived": false,
       "fork": false,
@@ -16324,7 +17027,7 @@
     },
     {
       "org": "go-zpkg",
-      "name": "pantry-overlay",
+      "name": "recipes",
       "private": false,
       "archived": false,
       "fork": false,
@@ -16340,7 +17043,7 @@
     },
     {
       "org": "go-zpkg",
-      "name": "zbk",
+      "name": "zpkb",
       "private": false,
       "archived": false,
       "fork": false,
@@ -16348,7 +17051,7 @@
     },
     {
       "org": "go-zpkg",
-      "name": "zpkgm",
+      "name": "zpkm",
       "private": false,
       "archived": false,
       "fork": false,
@@ -16356,7 +17059,7 @@
     },
     {
       "org": "go-zpkg",
-      "name": "zpkgx",
+      "name": "zpkx",
       "private": false,
       "archived": false,
       "fork": false,
@@ -16763,6 +17466,14 @@
     },
     {
       "org": "openweft",
+      "name": "weft-ha-dcs",
+      "private": false,
+      "archived": false,
+      "fork": false,
+      "language": "Go"
+    },
+    {
+      "org": "openweft",
       "name": "weft-ha-forgejo",
       "private": false,
       "archived": false,
@@ -17034,7 +17745,8 @@
       "name": "weft-proto",
       "private": false,
       "archived": false,
-      "fork": false
+      "fork": false,
+      "language": "Go"
     },
     {
       "org": "openweft",
